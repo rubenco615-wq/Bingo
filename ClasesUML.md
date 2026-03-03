@@ -1,17 +1,52 @@
-##  Diagrama UML
+##  Diagrama UML – Versión Mejorada con Interfaz
 
 ```mermaid
 classDiagram
 
+%% INTERFAZ
+
+class Participante {
+    <<interface>>
+    + marcarNumero(int numero)
+    + getCarton() Carton
+    + getNombre() String
+}
+
+%% CLASES CONCRETAS
+
+class Jugador {
+    - String nombre
+    - Carton carton
+    + marcarNumero(int numero)
+    + getCarton()
+    + getNombre()
+}
+
+class Maquina {
+    - String nombre
+    - Carton carton
+    + marcarNumero(int numero)
+    + getCarton()
+    + getNombre()
+}
+
+Participante <|.. Jugador
+Participante <|.. Maquina
+
+%% CLASE PRINCIPAL
+
 class Juego {
-    - Jugador jugador
-    - Maquina maquina
+    - List~Participante~ participantes
     - Bombo bombo
     - Temporizador temporizador
+    - boolean partidaActiva
     + iniciarPartida()
+    + extraerNumero()
     + comprobarVictoria()
     + finalizarPartida()
 }
+
+%% Bombo
 
 class Bombo {
     - List~Integer~ numerosDisponibles
@@ -20,37 +55,29 @@ class Bombo {
     + quedanNumeros() boolean
 }
 
+%% Carton
+
 class Carton {
     - int[][] numeros
     - boolean[][] marcados
     + generarCarton()
+    + contieneNumero(int numero) boolean
     + marcarNumero(int numero)
-    + tieneNumero(int numero) boolean
     + comprobarLinea() boolean
     + comprobarBingo() boolean
 }
 
-class Jugador {
-    - String nombre
-    - Carton carton
-    + marcarNumero(int numero)
-}
-
-class Maquina {
-    + marcarAutomatico(int numero)
-}
+%% Temporizador
 
 class Temporizador {
-    - int intervalo
+    - int intervaloSegundos
     + iniciar()
     + detener()
 }
 
-Jugador <|-- Maquina
-Jugador --> Carton
-Maquina --> Carton
-Juego --> Jugador
-Juego --> Maquina
+%% RELACIONES
+
+Juego --> Participante
 Juego --> Bombo
 Juego --> Temporizador
-Bombo --> "0..90" Integer
+Participante --> Carton
