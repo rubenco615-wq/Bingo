@@ -1,4 +1,4 @@
-package clases;
+package clases.model;
 
 public class Jugador implements Participante {
 

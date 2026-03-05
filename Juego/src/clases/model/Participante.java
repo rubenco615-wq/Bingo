@@ -1,4 +1,4 @@
-package clases;
+package clases.model;
 
 // Interfaz que deben implementar todos los participantes del bingo
 // Tanto el jugador humano como la máquina deben implementarla

@@ -1,4 +1,4 @@
-package clases;
+package clases.Main;
 
 public class Main {
 
