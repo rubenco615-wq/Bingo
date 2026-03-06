@@ -31,10 +31,6 @@ public class Juego {
         Jugador jugador = new Jugador(nombreJugador);
         participantes.add(jugador);
 
-        // Creamos la máquina
-        Maquina maquina = new Maquina("Máquina");
-        participantes.add(maquina);
-
         // Marcamos la partida como activa
         partidaActiva = true;
         ultimoNumero = 0;
