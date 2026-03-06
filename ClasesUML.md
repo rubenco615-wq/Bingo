@@ -44,6 +44,7 @@ class Juego {
     + extraerNumero()
     + comprobarVictoria()
     + finalizarPartida()
+    + notificarNumeroExtraido(int numero)
 }
 
 %% Bombo
@@ -75,9 +76,40 @@ class Temporizador {
     + detener()
 }
 
+%% INTERFAZ GRAFICA
+
+class VentanaPrincipal {
+    - Juego juego
+    - PanelCarton panelJugador
+    - PanelCarton panelMaquina
+    - JLabel numeroActual
+    - JTextArea historialNumeros
+    - JButton botonIniciar
+    + iniciarPartida()
+    + mostrarNumero(int numero)
+    + actualizarHistorial(int numero)
+    + solicitarMarcarNumero(int numero)
+    + mostrarMensajeLinea(String ganador)
+    + mostrarMensajeBingo(String ganador)
+    + mostrarError(String mensaje)
+    + finalizarPartida()
+}
+
+class PanelCarton {
+    - Carton carton
+    - JButton[][] botonesNumeros
+    - Color colorMarcado
+    - Color colorNoMarcado
+    + actualizarVista()
+    + marcarBotonVisualmente(int numero)
+    + resaltarLinea(int fila)
+}
+
 %% RELACIONES
 
 Juego --> Participante
 Juego --> Bombo
 Juego --> Temporizador
 Participante --> Carton
+VentanaPrincipal --> Juego
+VentanaPrincipal --> PanelCarton
