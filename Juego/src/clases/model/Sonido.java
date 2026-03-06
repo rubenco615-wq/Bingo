@@ -4,10 +4,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
 
-/**
- * El encargado de cargar sonidos desde la carpeta resources y hacerlos sonar.
- * Maneja la música de fondo y los efectos de sonido
- */
+// El encargado de cargar sonidos desde la carpeta resources y hacerlos sonar.
+// Maneja la música de fondo y los efectos de sonido
 public class Sonido {
     private static final String DIR = "resources/sounds/";
     private static Clip musicaFondo;

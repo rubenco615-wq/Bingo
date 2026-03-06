@@ -6,8 +6,9 @@ import java.util.HashSet;
 
 /**
  * Representa el bombo físico del bingo.
- * Contiene bolas del 1 al 90 y se encarga de mezclarlas y entregarlas.
+ * Contiene bolas del 1 al 90 y se encarga de mezclarlas y entregarlas
  */
+
 public class Bombo {
     // Lista de números que todavía están dentro del bombo
     private ArrayList<Integer> numerosDisponibles;
@@ -23,15 +24,13 @@ public class Bombo {
         for (int i = 1; i <= 90; i++) {
             numerosDisponibles.add(i);
         }
-        // Mezclamos (barajamos) las bolas para que salgan al azar
+        // Mezclamos las bolas para que salgan al azar
         Collections.shuffle(numerosDisponibles);
     }
 
-    /**
-     * Saca la primera bola disponible de la lista y la guarda en los extraídos.
-     * 
-     * @return El número que ha salido, o -1 si el bombo está vacío.
-     */
+    // Saca la primera bola disponible de la lista y la guarda en los extraídos.
+    // Return El número que ha salido, o -1 si el bombo está vacío.
+
     public int sacarNumero() {
         if (numerosDisponibles.isEmpty())
             return -1;
@@ -43,12 +42,12 @@ public class Bombo {
         return num;
     }
 
-    /** Comprueba rápidamente si una bola ya ha salido antes */
+    // Comprueba rápidamente si una bola ya ha salido antes
     public boolean contieneExtraido(int numero) {
         return numerosExtraidos.contains(numero);
     }
 
-    /** ¿Quedan bolas en el bombo? */
+    // ¿Quedan bolas en el bombo?
     public boolean isEmpty() {
         return numerosDisponibles.isEmpty();
     }

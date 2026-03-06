@@ -1,19 +1,16 @@
 package clases.model;
 
-/**
- * Representa a un jugador de la partida (ya sea humano o la máquina).
- * Implementa la interfaz Participante para poder agruparlos fácilmente.
- */
+// es o el jugador o la maquina.
 public class Jugador implements Participante {
-    private String nombre; // Ej: "Juan" o "Máquina"
-    private Carton carton; // El cartón de bingo que le toca
+    private String nombre;
+    private Carton carton;
 
     public Jugador(String nombre) {
         this.nombre = nombre;
-        this.carton = new Carton(); // Al crear al jugador, se le da un cartón nuevo
+        this.carton = new Carton();// cuando creas el jugador le das un carton
     }
 
-    /** Busca el número en su cartón y lo marca si lo tiene */
+    // Busca el número en su cartón y lo marca si lo tiene
     @Override
     public void marcarNumero(int numero) {
         carton.marcarNumero(numero);
