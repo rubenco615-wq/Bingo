@@ -2,45 +2,54 @@ package clases.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
-// bombo del bingo
-// Contiene los números del 1 al 90 y va sacándolos uno a uno
+/**
+ * Representa el bombo físico del bingo.
+ * Contiene bolas del 1 al 90 y se encarga de mezclarlas y entregarlas.
+ */
 public class Bombo {
-    // Lista con los números que todavía no han salido
-    ArrayList<Integer> numerosDisponibles;
+    // Lista de números que todavía están dentro del bombo
+    private ArrayList<Integer> numerosDisponibles;
 
-    // Lista con los números que ya han sido extraídos
-    ArrayList<Integer> numerosExtraidos;
+    // Conjunto rápido (HashSet) para saber al instante si un número ya ha salido
+    private HashSet<Integer> numerosExtraidos;
 
-    // Constructor: llena el bombo con los números del 1 al 75
     public Bombo() {
-        numerosDisponibles = new ArrayList<Integer>();
-        numerosExtraidos = new ArrayList<Integer>();
+        numerosDisponibles = new ArrayList<>();
+        numerosExtraidos = new HashSet<>();
 
-        // Añadimos todos los números del 1 al 90 (bingo español)
+        // Llenamos el bombo con las bolas del 1 al 90
         for (int i = 1; i <= 90; i++) {
             numerosDisponibles.add(i);
         }
-
-        // Los mezclamos aleatoriamente
+        // Mezclamos (barajamos) las bolas para que salgan al azar
         Collections.shuffle(numerosDisponibles);
     }
 
-    // Extrae un número del bombo (sin repetir)
-    // Devuelve -1 si no quedan números
-    public int extraerNumero() {
-        if (!quedanNumeros()) {
-            return -1; // No quedan números disponibles
-        }
+    /**
+     * Saca la primera bola disponible de la lista y la guarda en los extraídos.
+     * 
+     * @return El número que ha salido, o -1 si el bombo está vacío.
+     */
+    public int sacarNumero() {
+        if (numerosDisponibles.isEmpty())
+            return -1;
 
-        // Sacamos el primer número de la lista y lo movemos a extraídos
-        int numero = numerosDisponibles.remove(0);
-        numerosExtraidos.add(numero);
-        return numero;
+        // Quitamos la primera bola
+        int num = numerosDisponibles.remove(0);
+        // La registramos como "ya ha salido"
+        numerosExtraidos.add(num);
+        return num;
     }
 
-    // Comprueba si todavía quedan números por salir
-    public boolean quedanNumeros() {
-        return numerosDisponibles.size() > 0;
+    /** Comprueba rápidamente si una bola ya ha salido antes */
+    public boolean contieneExtraido(int numero) {
+        return numerosExtraidos.contains(numero);
+    }
+
+    /** ¿Quedan bolas en el bombo? */
+    public boolean isEmpty() {
+        return numerosDisponibles.isEmpty();
     }
 }

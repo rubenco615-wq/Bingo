@@ -2,170 +2,167 @@ package clases.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
-// 3 filas x 9 columnas, con 15 números (5 por fila, 4 celdas vacías por fila)
-
+/**
+ * Representa un único cartón de Bingo, con 3 filas y 9 columnas.
+ * Contiene la lógica matemática para generarse cumpliendo las normas
+ * (5 números por fila, columnas ordenadas) y es capaz de autocorregirse
+ * (línea/bingo).
+ */
 public class Carton {
 
-    // Matriz con los números del cartón (0 = celda vacía)
-    int[][] numeros;
+    private int[][] numeros; // Guarda el número en sí (0 significa hueco vacío)
+    private boolean[][] marcados; // Guarda True si ese número ya está tachado
 
-    // Matriz para saber qué números están marcados
-    boolean[][] marcados;
-
-    // Constructor: genera el cartón automáticamente
     public Carton() {
         numeros = new int[3][9];
         marcados = new boolean[3][9];
         generarCarton();
     }
 
-    // Genera el cartón: 3 filas, 9 columnas, 15 números
-    // Los números de cada columna están ordenados de menor a mayor
-    public void generarCarton() {
-        Random random = new Random();
+    // --- Getters simples para que la Interfaz pueda dibujar ---
 
-        // Rangos de números para cada columna
+    public int getNumero(int fila, int col) {
+        return numeros[fila][col];
+    }
+
+    public boolean isMarcado(int fila, int col) {
+        return marcados[fila][col];
+    }
+
+    // --- Motor Mágico de Creación de Cartones ---
+
+    /**
+     * Rellena las casillas vacías usando probabilidades y listas
+     * de manera que cumpla las de un verdadero cartón europeo.
+     */
+    private void generarCarton() {
+        Random random = new Random();
+        // Los rangos legales de las columnas de un cartón
+        // 1ra (1-9), 2da (10-19), 3ra (20-29)...
         int[] minCol = { 1, 10, 20, 30, 40, 50, 60, 70, 80 };
         int[] maxCol = { 9, 19, 29, 39, 49, 59, 69, 79, 90 };
-
-        // Restricciones: exactamente 5 números por fila, máximo 2 por columna
         boolean[][] tieneNumero;
         boolean generacionOk;
 
+        // Fase 1: Decidir DÓNDE van a ir los números (los huecos llenos y vacíos)
         do {
             tieneNumero = new boolean[3][9];
             int[] usosColumna = new int[9];
             generacionOk = true;
-
             for (int fila = 0; fila < 3; fila++) {
-                // Columnas disponibles: las que todavía no se han usado 2 veces
-                ArrayList<Integer> disponibles = new ArrayList<Integer>();
+                List<Integer> disponibles = new ArrayList<>();
+                // Filtramos las columnas, no puede haber más de 2 números en una
                 for (int col = 0; col < 9; col++) {
-                    if (usosColumna[col] < 2) {
+                    if (usosColumna[col] < 2)
                         disponibles.add(col);
-                    }
                 }
-
-                // Si no hay suficientes columnas libres, reintentamos todo
                 if (disponibles.size() < 5) {
-                    generacionOk = false;
+                    generacionOk = false; // El cartón ha fallado matemáticamente, repetimos
                     break;
                 }
-
-                // Barajamos y elegimos las primeras 5 columnas para esta fila
+                // Elegimos 5 columnas al azar para esta fila
                 Collections.shuffle(disponibles);
                 for (int i = 0; i < 5; i++) {
-                    int col = disponibles.get(i);
-                    tieneNumero[fila][col] = true;
-                    usosColumna[col]++;
+                    int c = disponibles.get(i);
+                    tieneNumero[fila][c] = true;
+                    usosColumna[c]++;
                 }
             }
         } while (!generacionOk);
 
-        // generar los números para cada celda
-        // Usamos una lista de listas para evitar números repetidos en la misma columna
-        ArrayList<ArrayList<Integer>> usadosPorColumna = new ArrayList<ArrayList<Integer>>();
-        for (int col = 0; col < 9; col++) {
-            usadosPorColumna.add(new ArrayList<Integer>());
-        }
+        List<List<Integer>> usadosPorColumna = new ArrayList<>();
+        for (int col = 0; col < 9; col++)
+            usadosPorColumna.add(new ArrayList<>());
 
+        // Fase 2: Rellenar los huecos elegidos con números reales
         for (int fila = 0; fila < 3; fila++) {
             for (int col = 0; col < 9; col++) {
                 if (tieneNumero[fila][col]) {
-                    // un número no repetido dentro del rango de esa columna
                     int numero;
+                    // Genera un número hasta que tengamos uno que no haya salido ya en la columna
                     do {
                         numero = random.nextInt(maxCol[col] - minCol[col] + 1) + minCol[col];
                     } while (usadosPorColumna.get(col).contains(numero));
-
                     numeros[fila][col] = numero;
                     usadosPorColumna.get(col).add(numero);
-                } else {
-                    numeros[fila][col] = 0;
                 }
-                marcados[fila][col] = false;
             }
         }
 
-        // ordenar cada columna de menor a mayor
+        // Fase 3: Ordenar los números de cada columna de menor a mayor (como en la vida
+        // real)
         for (int col = 0; col < 9; col++) {
-
-            ArrayList<Integer> valores = new ArrayList<Integer>();
-            ArrayList<Integer> filasConNumero = new ArrayList<Integer>();
-
+            List<Integer> valores = new ArrayList<>();
+            List<Integer> filas = new ArrayList<>();
             for (int fila = 0; fila < 3; fila++) {
                 if (numeros[fila][col] != 0) {
                     valores.add(numeros[fila][col]);
-                    filasConNumero.add(fila);
+                    filas.add(fila);
                 }
             }
-
-            // Ordenamos los valores de menor a mayor
             Collections.sort(valores);
-
-            // Los volvemos a colocar en sus filas, ya ordenados
-            for (int i = 0; i < valores.size(); i++) {
-                numeros[filasConNumero.get(i)][col] = valores.get(i);
-            }
+            for (int i = 0; i < valores.size(); i++)
+                numeros[filas.get(i)][col] = valores.get(i);
         }
     }
 
-    // Comprueba si el cartón contiene un número determinado
+    // --- Mecánica de Juego ---
+
+    /** Escanea todo el cartón para ver si el número que pasas está dentro */
     public boolean contieneNumero(int numero) {
-        for (int fila = 0; fila < 3; fila++) {
-            for (int col = 0; col < 9; col++) {
-                if (numeros[fila][col] == numero) {
+        for (int[] filaObj : numeros) {
+            for (int n : filaObj) {
+                if (n == numero)
                     return true;
-                }
             }
         }
         return false;
     }
 
-    // Marca el número en el cartón si lo contiene
+    /** Busca el número y, si lo encuentra, lo tacha (pone marcados a true) */
     public void marcarNumero(int numero) {
         for (int fila = 0; fila < 3; fila++) {
             for (int col = 0; col < 9; col++) {
-                if (numeros[fila][col] == numero) {
+                if (numeros[fila][col] == numero)
                     marcados[fila][col] = true;
-                }
             }
         }
     }
 
-    // Comprueba si hay línea: una fila completa con todos sus números marcados
-    // (las celdas vacías no cuentan)
+    /**
+     * Recorre fila a fila. Si encuentra una fila que no está vacía
+     * y TODOS sus números están tachados -> Devuelve True
+     */
     public boolean comprobarLinea() {
         for (int fila = 0; fila < 3; fila++) {
-            boolean filaCompleta = true;
-            boolean filaVacia = true;
-
+            boolean completa = true, vacia = true;
             for (int col = 0; col < 9; col++) {
                 if (numeros[fila][col] != 0) {
-                    filaVacia = false;
+                    vacia = false; // La fila tiene cosas
                     if (!marcados[fila][col]) {
-                        filaCompleta = false;
+                        completa = false; // Hemos topado con un número destapado
                         break;
                     }
                 }
             }
-
-            if (!filaVacia && filaCompleta) {
+            if (!vacia && completa)
                 return true;
-            }
         }
         return false;
     }
 
-    // Comprueba si hay bingo: todos los 15 números marcados
+    /**
+     * Recorre todo el cartón. Si encuentra AL MENOS UN NÚMERO
+     * sin marcar, fracasa. Si pasa todo el test, es que has ganado.
+     */
     public boolean comprobarBingo() {
         for (int fila = 0; fila < 3; fila++) {
             for (int col = 0; col < 9; col++) {
-                if (numeros[fila][col] != 0 && !marcados[fila][col]) {
+                if (numeros[fila][col] != 0 && !marcados[fila][col])
                     return false;
-                }
             }
         }
         return true;

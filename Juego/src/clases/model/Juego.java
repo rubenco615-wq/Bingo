@@ -1,109 +1,65 @@
 package clases.model;
 
 import java.util.ArrayList;
-import clases.Vista.*;
+import java.util.List;
 
-// Aquí se gestiona la partida, los jugadores, el bombo y el temporizador
+/**
+ * Clase que gestiona la lógica principal de la partida.
+ * Conoce quiénes juegan (humanos y máquina) y controla de dónde salen las bolas
+ * (el bombo).
+ */
 public class Juego {
-
-    ArrayList<Participante> participantes;
-    Bombo bombo;
-    Temporizador temporizador;
-    boolean partidaActiva;
-    int ultimoNumero;
+    private List<Participante> participantes; // Lista con el Humano y la Máquina
+    private Bombo bombo; // El bombo que reparte los números
+    private boolean partidaActiva; // True si estamos jugando, False si no
 
     public Juego() {
-        participantes = new ArrayList<Participante>();
-        bombo = new Bombo();
+        participantes = new ArrayList<>();
         partidaActiva = false;
-        ultimoNumero = 0;
     }
 
-    // Inicia la partida: añade jugador y máquina, activa la partida
+    /** Prepara y arranca una partida nueva */
     public void iniciarPartida(String nombreJugador) {
-        // Limpiamos la lista por si hubiera una partida anterior
         participantes.clear();
 
-        // Creamos el bombo nuevo
+        // Siempre juegan 2 participantes: tú y el ordenador
+        participantes.add(new Jugador(nombreJugador));
+        participantes.add(new Jugador("Máquina"));
+
+        // Creamos un bombo nuevo y mezclado
         bombo = new Bombo();
-
-        // Creamos el jugador con el nombre dado
-        Jugador jugador = new Jugador(nombreJugador);
-        participantes.add(jugador);
-
-        // Marcamos la partida como activa
         partidaActiva = true;
-        ultimoNumero = 0;
     }
 
-    // Extrae un número del bombo.
-    // Devuelve el número extraído, o -1 si no quedan números
-    public int extraerNumero() {
-        if (!partidaActiva || !bombo.quedanNumeros()) {
-            return -1;
-        }
-
-        // Sacamos el número del bombo
-        int numero = bombo.extraerNumero();
-        ultimoNumero = numero;
-
-        return numero;
-    }
-
-    // Comprueba si un número ya ha sido extraído del bombo
-    public boolean esNumeroExtraido(int numero) {
-        return bombo.numerosExtraidos.contains(numero);
-    }
-
-    // Comprueba si algún participante ha ganado (línea o bingo)
-    // Devuelve el participante ganador o null si nadie ha ganado
-    public Participante comprobarVictoria() {
-        for (int i = 0; i < participantes.size(); i++) {
-            Participante p = participantes.get(i);
-            if (p.getCarton().comprobarBingo()) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    // Comprueba si algún participante tiene línea
-    // Devuelve el participante con línea o null
-    public Participante comprobarLinea() {
-        for (int i = 0; i < participantes.size(); i++) {
-            Participante p = participantes.get(i);
-            if (p.getCarton().comprobarLinea()) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    // Finaliza la partida
+    /** Marca la partida como terminada (impide seguir sacando o marcando bolas) */
     public void finalizarPartida() {
         partidaActiva = false;
-        if (temporizador != null) {
-            temporizador.detener();
-        }
     }
 
-    // Devuelve el jugador humano
+    /** Saca el siguiente número del bombo. Devuelve -1 si hay error o está vacío */
+    public int extraerNumero() {
+        if (!partidaActiva || bombo == null)
+            return -1;
+        return bombo.sacarNumero();
+    }
+
+    /** Devuelve true si un número específico ya salió del bombo en esta partida */
+    public boolean esNumeroExtraido(int numero) {
+        return bombo != null && bombo.contieneExtraido(numero);
+    }
+
+    // --- Getters de ayuda para saber quién es quién ---
+
+    /** Obtiene al participante [0] (siempre es el humano) */
     public Participante getJugador() {
-        if (participantes.size() > 0) {
-            return participantes.get(0);
-        }
-        return null;
+        return participantes.isEmpty() ? null : participantes.get(0);
     }
 
-    // Devuelve la máquina
+    /** Obtiene al participante [1] (siempre es la CPU) */
     public Participante getMaquina() {
-        if (participantes.size() > 1) {
-            return participantes.get(1);
-        }
-        return null;
+        return participantes.size() > 1 ? participantes.get(1) : null;
     }
 
-    // Comprueba si la partida está activa
     public boolean isPartidaActiva() {
         return partidaActiva;
     }
