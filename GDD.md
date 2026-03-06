@@ -2,8 +2,8 @@
 
 - [1. Concepto de Alto Nivel (The Pitch):](#1-concepto-de-alto-nivel-the-pitch)
   - [Concepto](#concepto)
-  - [Navarrativa](#narrativa)
-  - [MVP (Minimum Viable Product)](#mvp-(-minimum-viable-product-))
+  - [Narrativa](#narrativa)
+  - [MVP (Minimum Viable Product)](#mvp-minimum-viable-product)
 - [2. Mecánicas de Juego (Gameplay):](#2-mecánicas-de-juego-gameplay)
   - [Objetivo del Juego](#objetivo-del-juego)
   - [Estructura de la Partida](#estructura-de-la-partida)
@@ -48,7 +48,7 @@ Esta versión inicial describe los elementos básicos necesarios para que el jue
 
 Las mejoras futuras estarán indicadas con el tag:
 
-> **[OMSI] (Out of MVP Scope Improvement)**
+&gt; **[OMSI] (Out of MVP Scope Improvement)**
 
 # 2. Mecánicas de Juego (Gameplay)
 
@@ -64,19 +64,20 @@ Gana quien consiga Bingo primero.
 2. Se generan automáticamente:
    - Cartón del jugador
    - Cartón de la máquina
+     
 3. Comienza la extracción automática de números.
 
 Cada vez que se extrae un número:
 
 - Se añade al historial.
-- La máquina lo marca automáticamente si lo tiene.
+- La máquina marca automáticamente si lo tiene.
 - El jugador debe marcarlo manualmente si lo tiene.
 
 Tras cada extracción:
 
 - Se comprueba si hay Línea.
 - Se comprueba si hay Bingo.
-- Si alguien consigue Bingo -> Finaliza la partida.
+- Si alguien consigue Bingo -&gt; Finaliza la partida.
 
 
 ##  Core Loop
@@ -84,8 +85,9 @@ Tras cada extracción:
 - Esperar X segundos
 - Extraer número no repetido
 - Mostrar número en pantalla
+- Notificar a participantes del nuevo número
 - Máquina marca automáticamente
-- Jugador puede marcar manualmente
+- Jugador puede marcar manualmente (haciendo clic)
 - Comprobar condiciones de victoria
 - Repetir hasta que haya ganador
 
@@ -100,10 +102,18 @@ Tras cada extracción:
 
 Cada cartón tiene:
 - 15 números aleatorios
-- Sin repetirse
+- Sin repetidos
 - Distribuidos en formato tradicional (3 filas x 9 columnas)
 
 ## Marcado de Números
+
+### Flujo de Marcado:
+
+1. El sistema notifica a ambos participantes que un número ha sido extraído
+2. La máquina marca automáticamente en su cartón
+3. El jugador debe hacer clic en el número de su cartón para marcarlo
+4. La ventana solicita al objeto Jugador que marque el número
+5. El Jugador valida y marca su propio cartón
 
 ### Jugador
 
@@ -115,7 +125,7 @@ El sistema validará:
 - Que pertenezca al cartón
 - Que no esté ya marcado
 
-Si no cumple condiciones -> Mensaje de error
+Si no cumple condiciones -&gt; Mensaje de error
 
 ### Máquina
 
@@ -128,13 +138,13 @@ Si no cumple condiciones -> Mensaje de error
 
 Se consigue cuando se completa una fila.
 
-> No finaliza la partida (solo mensaje informativo).
+&gt; No finaliza la partida (solo mensaje informativo).
 
 ### Bingo
 
 Se consigue cuando todos los números del cartón están marcados.
 
-> Finaliza la partida inmediatamente.
+&gt; Finaliza la partida inmediatamente.
 
 ##  Fin de la Partida
 
@@ -164,6 +174,8 @@ Se aplicará Programación Orientada a Objetos (POO).
 - Bombo
 - Numero (opcional)
 - Temporizador
+- VentanaPrincipal
+- PanelCarton
 
 ##  Separación por paquetes
 
@@ -171,35 +183,43 @@ Se aplicará Programación Orientada a Objetos (POO).
 - com.bingo.model
 - com.bingo.ui
 
-
 ## Responsabilidades
 
-- Juego: Controla el flujo general.
+- Juego: Controla el flujo general, extrae números y notifica a participantes.
 - Bombo: Gestiona números disponibles y extracción.
 - Carton: Contiene números y lógica de marcado.
-- Jugador: Gestiona interacción manual.
+- Jugador: Gestiona interacción manual, valida y marca su propio cartón.
 - Maquina: Hereda de Jugador pero marca automáticamente.
+- VentanaPrincipal: Interfaz gráfica, muestra información y captura eventos.
+- PanelCarton: Representación visual del cartón, sin lógica de negocio.
+
+## Flujo de Marcado (Arquitectura)
+
+VentanaPrincipal -> Jugador -> Carton
+VentanaPrincipal -> Maquina -> Carton
+
+La ventana nunca accede directamente al Cartón. Siempre a través del Participante.
 
 # 4. Bucle de Juego (Game Loop)
 
 ## Pantalla de Inicio
 
 - Título del juego
-- Botón “Nueva Partida”
-- Botón “Salir”
+- Botón "Nueva Partida"
+- Botón "Salir"
 
 ## Pantalla de Partida
 
 Elementos:
 - Número actual extraído
 - Historial de números
-- Cartón del jugador
-- Cartón de la máquina (visible o parcial)
+- Cartón del jugador interactivo
+- Cartón de la máquina (visualización básica)
 - Mensajes del sistema
 
 ## Flujo
 
-Inicio → Generación cartones → Extracción automática → Comprobaciones → Victoria → Reinicio.
+Inicio -> Generación cartones -> Extracción automática -> Notificación a participantes -> Marcado automático (máquina) -> Marcado manual (jugador) -> Comprobaciones -> Victoria -> Reinicio.
 
 # 5. Contenido
 
@@ -210,6 +230,7 @@ Inicio → Generación cartones → Extracción automática → Comprobaciones �
 - Validaciones
 - Mensajes de error
 - Comprobación de línea y bingo
+- Arquitectura con separación de responsabilidades
 
 # [OMSI] Mejoras Futuras
 
@@ -244,6 +265,14 @@ Inicio → Generación cartones → Extracción automática → Comprobaciones �
 
 ### Al hacer clic en un número del cartón:
 
-- Si ha salido → se marca.
-- Si no ha salido → mensaje de error.
-- Si ya está marcado → mensaje informativo.
+- La ventana solicita al objeto Jugador que marque el número
+- El Jugador verifica si el número ha salido y pertenece a su cartón
+- Si es válido, el Jugador marca su Cartón interno
+- El Cartón notifica el cambio visual a través de la ventana
+
+### Validaciones del sistema:
+
+- Que el número haya sido extraído previamente
+- Que el número pertenezca al cartón del jugador
+- Que el número no esté ya marcado
+- Si no cumple condiciones -> Mensaje de error
