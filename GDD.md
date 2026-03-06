@@ -100,8 +100,8 @@ Tras cada extracción:
 
 Cada cartón tiene:
 - 15 números aleatorios
-- Sin repetidos
-- Distribuidos en formato tradicional (3 filas x 5 columnas)
+- Sin repetirse
+- Distribuidos en formato tradicional (3 filas x 9 columnas)
 
 ## Marcado de Números
 
