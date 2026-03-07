@@ -47,13 +47,25 @@ public class PantallaInicio extends JFrame {
             }
         });
 
-        // Al pulsar el botón: cerramos la pantalla de inicio y abrimos el juego
+        // Al pulsar el botón: cambiamos el contenido de la ventana al juego
         botonJugar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // cerramos esta ventana
-                VentanaJuego ventanaJuego = new VentanaJuego();
-                ventanaJuego.setVisible(true); // abrimos el juego
+                // Removemos el panel de inicio
+                getContentPane().removeAll();
+
+                // Añadimos el juego (ahora un JPanel)
+                VentanaJuego panelJuego = new VentanaJuego();
+                add(panelJuego);
+
+                // Ajustamos la ventana para el juego
+                setTitle("BingoSwingJunior - ¡A jugar!");
+                setSize(1250, 620); // Tamaño adecuado para el panel de juego
+                setLocationRelativeTo(null); // Recentramos
+
+                // Refrescamos la interfaz
+                revalidate();
+                repaint();
             }
         });
 

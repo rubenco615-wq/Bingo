@@ -8,10 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * La ventana principal donde ocurre toda la acción.
+ * El panel principal donde ocurre toda la acción.
  * Es la que "une" la lógica de Juego.java con los dibujos de los Paneles.
  */
-public class VentanaJuego extends JFrame {
+public class VentanaJuego extends JPanel {
 
     private Juego juego;
     // Paneles visuales que componen la ventana
@@ -25,10 +25,6 @@ public class VentanaJuego extends JFrame {
     private Temporizador timerAuto;
 
     public VentanaJuego() {
-        setTitle("BingoSwingJunior - ¡A jugar!");
-        setSize(1250, 590);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setLayout(new BorderLayout(8, 8));
 
         juego = new Juego(); // Creamos la lógica en la sombra
