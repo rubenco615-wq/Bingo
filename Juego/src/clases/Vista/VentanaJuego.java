@@ -3,14 +3,10 @@ package clases.Vista;
 import clases.model.Carton;
 import clases.model.Juego;
 import clases.model.Sonido;
-import clases.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * El panel principal donde ocurre toda la acción.
- * Es la que "une" la lógica de Juego.java con los dibujos de los Paneles.
- */
+// El panel principal donde ocurre toda la acción.
 public class VentanaJuego extends JPanel {
 
     private Juego juego;
@@ -56,10 +52,6 @@ public class VentanaJuego extends JPanel {
         Sonido.reproducirBGM("juego.wav");
     }
 
-    /**
-     * Asocia qué ocurre cuando interactúas con la interfaz visual.
-     * (Ej: qué pasa si pulsas "Extraer" o activas el "Auto")
-     */
     private void registrarEventos() {
         botones.getBotonIniciar().addActionListener(e -> {
             String nombre = DialogosJuego.pedirNombre(this).trim();
@@ -124,9 +116,6 @@ public class VentanaJuego extends JPanel {
         }
     }
 
-    /**
-     * Se dispara cuando haces clic con el ratón sobre un número de tu cartón.
-     */
     private void marcarCeldaJugador(int indice) {
         if (!juego.isPartidaActiva())
             return;
@@ -138,8 +127,7 @@ public class VentanaJuego extends JPanel {
         if (num == 0 || c.isMarcado(fila, col))
             return; // Era un hueco vacío o ya lo habías marcado
 
-        // Has pulsado un número que aún no ha salido del bombo (marcado erróneo,
-        // parpadeo rojo)
+        // Has pulsado un número que aún no ha salido del bombo
         if (!juego.esNumeroExtraido(num)) {
             panelCartonJugador.getCeldas()[indice].setBackground(new Color(255, 70, 70));
             new Timer(350, ev -> {
@@ -158,9 +146,6 @@ public class VentanaJuego extends JPanel {
         verificarPremios(c, juego.getJugador().getNombre());
     }
 
-    /**
-     * Tira del bombo real en la sombra y canta el número por pantalla.
-     */
     private void procesarExtraccion() {
         if (!juego.isPartidaActiva())
             return;
@@ -190,19 +175,18 @@ public class VentanaJuego extends JPanel {
         }).start();
     }
 
-    /**
-     * Mira un cartón en concreto y lanza pompas si has hecho línea o terminado.
-     */
+    // Mira un cartón en concreto y lanza pompas si has hecho línea o terminado.
+
     private void verificarPremios(Carton c, String nombre) {
         if (!yaHayLineaEnPartida && c.comprobarLinea()) {
             yaHayLineaEnPartida = true;
             historial.escribirLog("¡LÍNEA! " + nombre);
-            Sonido.reproducirLinea(); // FX
+            Sonido.reproducirLinea();
             DialogosJuego.mostrarLinea(this, nombre);
         }
         if (c.comprobarBingo()) {
             historial.escribirLog("¡BINGO! " + nombre);
-            Sonido.reproducirBingo(); // FX Final
+            Sonido.reproducirBingo();
             DialogosJuego.mostrarBingo(this, nombre);
             finalizarJuego("BINGO de " + nombre + "!");
         }

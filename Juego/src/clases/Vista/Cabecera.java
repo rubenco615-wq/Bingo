@@ -3,31 +3,32 @@ package clases.Vista;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * La cabecera (arriba del todo) donde sale el Número Extraído GIGANTE
- * y donde están los controles del modo Automático y la leyenda de colores.
- */
+// Panel superior que muestra el número extraído
 public class Cabecera extends JPanel {
-    private JLabel labelNumero;
-    private JCheckBox chkAutoExtraccion;
-    private JSpinner spinnerVelocidad;
+    private static final Color BG_COLOR = new Color(25, 25, 55);
+    private static final Color GOLD = new Color(255, 215, 0);
 
+    private final JLabel labelNumero;
+    private final JCheckBox chkAutoExtraccion;
+    private final JSpinner spinnerVelocidad;
+
+    // Crea la cabecera con el visor de números y los ajustes de velocidad.
     public Cabecera() {
         setLayout(new BorderLayout());
-        setBackground(new Color(25, 25, 55));
+        setBackground(BG_COLOR);
         setBorder(BorderFactory.createEmptyBorder(8, 15, 4, 15));
 
         labelNumero = new JLabel("--", SwingConstants.CENTER);
         labelNumero.setFont(new Font("Arial", Font.BOLD, 72));
-        labelNumero.setForeground(new Color(255, 215, 0));
+        labelNumero.setForeground(GOLD);
         add(labelNumero, BorderLayout.CENTER);
 
         JPanel pAuto = new JPanel(new FlowLayout(FlowLayout.CENTER, 14, 2));
-        pAuto.setBackground(new Color(25, 25, 55));
+        pAuto.setBackground(BG_COLOR);
 
         chkAutoExtraccion = new JCheckBox("⏱ Auto");
         chkAutoExtraccion.setFont(new Font("Arial", Font.BOLD, 13));
-        chkAutoExtraccion.setBackground(new Color(25, 25, 55));
+        chkAutoExtraccion.setBackground(BG_COLOR);
         chkAutoExtraccion.setForeground(Color.WHITE);
         chkAutoExtraccion.setEnabled(false);
 
@@ -46,6 +47,10 @@ public class Cabecera extends JPanel {
         pAuto.add(spinnerVelocidad);
         pAuto.add(lblSeg);
         add(pAuto, BorderLayout.SOUTH);
+    }
+
+    public void setNumero(int num) {
+        labelNumero.setText(String.format("%02d", num));
     }
 
     public void setNumero(String txt) {

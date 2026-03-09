@@ -3,20 +3,19 @@ package clases.Vista;
 import javax.swing.*;
 import java.awt.*;
 
-// ventana que se utiliza para mostrar si sacas linea o bingo
 public class DialogoPremio extends JDialog {
 
     public DialogoPremio(Frame p, String title, String msg, Color bg) {
         super(p, title, true);
-        //
         setUndecorated(true);
 
         JPanel main = new JPanel(new BorderLayout(15, 15));
         main.setBackground(bg);
         main.setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
 
-        JLabel lbl = new JLabel("<html><div style='text-align:center;'>" + msg.replace("\n", "<br>") + "</div></html>",
-                SwingConstants.CENTER);
+        String htmlMsg = String.format("<html><div style='text-align:center;'>%s</div></html>",
+                msg.replace("\n", "<br>"));
+        JLabel lbl = new JLabel(htmlMsg, SwingConstants.CENTER);
         lbl.setFont(new Font("Segoe UI", Font.BOLD, 28));
         lbl.setForeground(Color.WHITE);
         lbl.setBorder(BorderFactory.createEmptyBorder(30, 40, 10, 40));

@@ -3,22 +3,24 @@ package clases.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-/**
- * Representa el bombo físico del bingo.
- * Contiene bolas del 1 al 90 y se encarga de mezclarlas y entregarlas
- */
+//Representa el bombo físico del bingo.
+//Contiene bolas del 1 al 90 y se encarga de mezclarlas y entregarlas.
 
 public class Bombo {
     // Lista de números que todavía están dentro del bombo
-    private ArrayList<Integer> numerosDisponibles;
+    private final List<Integer> numerosDisponibles;
 
-    // Conjunto rápido (HashSet) para saber al instante si un número ya ha salido
-    private HashSet<Integer> numerosExtraidos;
+    // Conjunto rápido para saber al instante si un número ya ha salido
+    private final Set<Integer> numerosExtraidos;
+
+    // Inicializa el bombo con 90 números y los mezcla.
 
     public Bombo() {
-        numerosDisponibles = new ArrayList<>();
-        numerosExtraidos = new HashSet<>();
+        this.numerosDisponibles = new ArrayList<>();
+        this.numerosExtraidos = new HashSet<>();
 
         // Llenamos el bombo con las bolas del 1 al 90
         for (int i = 1; i <= 90; i++) {
@@ -28,26 +30,21 @@ public class Bombo {
         Collections.shuffle(numerosDisponibles);
     }
 
-    // Saca la primera bola disponible de la lista y la guarda en los extraídos.
-    // Return El número que ha salido, o -1 si el bombo está vacío.
-
+    // sacar los numeros del bombo
     public int sacarNumero() {
-        if (numerosDisponibles.isEmpty())
+        if (numerosDisponibles.isEmpty()) {
             return -1;
+        }
 
-        // Quitamos la primera bola
         int num = numerosDisponibles.remove(0);
-        // La registramos como "ya ha salido"
         numerosExtraidos.add(num);
         return num;
     }
 
-    // Comprueba rápidamente si una bola ya ha salido antes
     public boolean contieneExtraido(int numero) {
         return numerosExtraidos.contains(numero);
     }
 
-    // ¿Quedan bolas en el bombo?
     public boolean isEmpty() {
         return numerosDisponibles.isEmpty();
     }

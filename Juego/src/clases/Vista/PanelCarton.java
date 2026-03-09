@@ -3,12 +3,9 @@ package clases.Vista;
 import clases.model.Carton;
 import clases.model.Participante;
 import javax.swing.*;
-import javax.swing.*;
 import java.awt.*;
 
-/**
- * Representa visualmente un cartón de bingo (3 filas x 9 columnas).
- */
+// Representa visualmente un cartón de bingo (3 filas x 9 columnas).
 public class PanelCarton extends JPanel {
 
     private JLabel labelTitulo;
@@ -58,9 +55,7 @@ public class PanelCarton extends JPanel {
         return celdas;
     }
 
-    /**
-     * Sincroniza el dibujo del cartón con los datos reales del Participante.
-     */
+    // Sincroniza el dibujo del cartón con los datos reales del Participante.
     public void actualizarCarton(Participante p, boolean activa) {
         if (p == null) {
             for (JButton b : celdas) {
@@ -78,7 +73,7 @@ public class PanelCarton extends JPanel {
 
             if (num == 0) {
                 celdas[i].setText("");
-                celdas[i].setBackground(new Color(210, 210, 225)); // Grisáceo para huecos
+                celdas[i].setBackground(new Color(210, 210, 225)); // Gris para huecos
                 celdas[i].setEnabled(false);
             } else {
                 celdas[i].setText(String.valueOf(num));

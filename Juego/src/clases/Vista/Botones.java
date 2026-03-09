@@ -3,12 +3,11 @@ package clases.Vista;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * La barrita inferior de la ventana que contiene los 3 botones principales:
- * Iniciar Partida, Extraer Número y Finalizar.
- */
+// Panel inferior que contiene los controles principales del juego.
 public class Botones extends JPanel {
-    private JButton botonIniciar, botonExtraer, botonFinalizar;
+    private final JButton botonIniciar;
+    private final JButton botonExtraer;
+    private final JButton botonFinalizar;
 
     public Botones() {
         setLayout(new FlowLayout(FlowLayout.CENTER, 15, 8));
@@ -46,6 +45,7 @@ public class Botones extends JPanel {
         b.setFocusPainted(false);
         b.setPreferredSize(new Dimension(180, 40));
         b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        b.setBorder(BorderFactory.createRaisedBevelBorder());
         return b;
     }
 }

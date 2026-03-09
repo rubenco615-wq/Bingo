@@ -4,22 +4,25 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
 
-// El encargado de cargar sonidos desde la carpeta resources y hacerlos sonar.
-// Maneja la música de fondo y los efectos de sonido
+// poner la musica en cada sitio
 public class Sonido {
     private static final String DIR = "resources/sounds/";
     private static Clip musicaFondo;
 
+    // Reproduce un archivo de música en bucle.
     public static void reproducirBGM(String file) {
-        detenerBGM(); // Para la anterior si la hay
+        detenerBGM();
         try {
             File f = new File(DIR + file);
-            if (!f.exists())
+            if (!f.exists()) {
+                System.err.println("Archivo de audio no encontrado: " + f.getAbsolutePath());
                 return;
+            }
             musicaFondo = AudioSystem.getClip();
             musicaFondo.open(AudioSystem.getAudioInputStream(f));
             musicaFondo.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            System.err.println("Error al reproducir BGM: " + e.getMessage());
         }
     }
 
@@ -30,15 +33,18 @@ public class Sonido {
         }
     }
 
+    // Reproduce un efecto de sonido de corta duración una sola vez.
     private static void reproducirSFX(String file) {
         try {
             File f = new File(DIR + file);
-            if (!f.exists())
+            if (!f.exists()) {
                 return;
+            }
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(f));
             clip.start();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            System.err.println("Error al reproducir SFX: " + e.getMessage());
         }
     }
 

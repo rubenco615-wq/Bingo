@@ -5,9 +5,10 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+// Diálogo interactivo para solicitar el nombre del jugador al iniciar una nueva partida.
 public class DialogoNombre extends JDialog {
     private String nombre = "Jugador";
-    private JTextField txtNombre;
+    private final JTextField txtNombre;
 
     public DialogoNombre(Frame p) {
         super(p, "Nuevo Jugador", true);
@@ -41,9 +42,11 @@ public class DialogoNombre extends JDialog {
         btnEntrar.addActionListener(e -> aceptar());
 
         txtNombre.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     aceptar();
+                }
             }
         });
 
@@ -58,8 +61,10 @@ public class DialogoNombre extends JDialog {
     }
 
     private void aceptar() {
-        if (!txtNombre.getText().trim().isEmpty())
-            nombre = txtNombre.getText().trim();
+        String input = txtNombre.getText().trim();
+        if (!input.isEmpty()) {
+            nombre = input;
+        }
         dispose();
     }
 

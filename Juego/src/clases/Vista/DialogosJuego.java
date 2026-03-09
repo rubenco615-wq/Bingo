@@ -3,6 +3,7 @@ package clases.Vista;
 import javax.swing.*;
 import java.awt.*;
 
+// Utilidades para mostrar cuadros de diálogo estándar de Swing.
 public class DialogosJuego {
 
     private DialogosJuego() {
