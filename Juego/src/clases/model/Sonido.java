@@ -49,8 +49,6 @@ public class Sonido {
         }
     }
 
-    // Métodos públicos para cada situación
-
     // Música en bucle para la pantalla inicial.
     public static void reproducirPantallaInicial() {
         reproducirBGM("Audio_PantallaInicial_1.wav");

@@ -26,7 +26,7 @@ public class Cabecera extends JPanel {
         JPanel pAuto = new JPanel(new FlowLayout(FlowLayout.CENTER, 14, 2));
         pAuto.setBackground(BG_COLOR);
 
-        chkAutoExtraccion = new JCheckBox("⏱ Auto");
+        chkAutoExtraccion = new JCheckBox("Auto");
         chkAutoExtraccion.setFont(new Font("Arial", Font.BOLD, 13));
         chkAutoExtraccion.setBackground(BG_COLOR);
         chkAutoExtraccion.setForeground(Color.WHITE);
@@ -39,7 +39,7 @@ public class Cabecera extends JPanel {
 
         JLabel lblInfo = new JLabel("Velocidad:");
         lblInfo.setForeground(Color.LIGHT_GRAY);
-        JLabel lblSeg = new JLabel("seg    | 🟦 Columnas   🟨 Marcado   🔴 Error");
+        JLabel lblSeg = new JLabel("seg    | Columnas    Marcado    Error");
         lblSeg.setForeground(Color.LIGHT_GRAY);
 
         pAuto.add(chkAutoExtraccion);
