@@ -90,15 +90,15 @@ public class PantallaInicio extends JFrame {
         Image imagen; // la imagen de fondo
 
         PanelFondo() {
-            // Intentamos cargar la imagen desde la carpeta resources
-            File archivoImagen = new File("resources/splash.png");
+            // Intentamos cargar la imagen desde la carpeta resources real
+            File archivoImagen = new File("Juego/src/resources/imagen/ChatGPT Image 2 mar 2026, 10_51_19.png");
             if (archivoImagen.exists()) {
                 imagen = new ImageIcon(archivoImagen.getAbsolutePath()).getImage();
                 System.out.println("Imagen de inicio cargada correctamente.");
             } else {
                 // Si no hay imagen, avisamos en consola (no es un error grave)
-                System.out.println("Aviso: no se encontró resources/splash.png");
-                System.out.println("Pon tu imagen ahí y reinicia. Se usará fondo por defecto.");
+                System.out.println("Aviso: no se encontró la imagen en Juego/src/resources/imagen/");
+                System.out.println("Se usará fondo por defecto.");
                 imagen = null;
             }
         }
@@ -130,7 +130,8 @@ public class PantallaInicio extends JFrame {
                 g2d.drawString("🎱 BINGO", getWidth() / 2 - 140, getHeight() / 2 - 60);
                 g2d.setColor(new Color(200, 200, 200));
                 g2d.setFont(new Font("Arial", Font.PLAIN, 16));
-                g2d.drawString("Pon tu imagen en: resources/splash.png", getWidth() / 2 - 160, getHeight() / 2 - 20);
+                g2d.drawString("Recurso esperado: Juego/src/resources/imagen/ChatGPT Image 2 mar 2026, 10_51_19.png",
+                        getWidth() / 2 - 200, getHeight() / 2 - 20);
             }
         }
     }

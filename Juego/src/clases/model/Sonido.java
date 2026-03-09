@@ -6,7 +6,7 @@ import java.io.File;
 
 public class Sonido {
     // Ruta base donde están los archivos de audio
-    private static final String DIR = "src/resources/";
+    private static final String DIR = "Juego/src/resources/";
     private static Clip musicaFondo;
 
     // Reproduce un archivo de música en bucle (BGM = Background Music).
