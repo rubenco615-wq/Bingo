@@ -3,7 +3,6 @@ package clases.Vista;
 import javax.swing.*;
 import java.awt.*;
 
-// clase para mostrar la ventana de si ganas linea o bingo
 public class DialogoPremio extends JDialog {
 
     public DialogoPremio(Frame p, String title, String msg, Color bg) {
@@ -14,7 +13,6 @@ public class DialogoPremio extends JDialog {
         main.setBackground(bg);
         main.setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
 
-        // Creamos un panel para meter las cosas dentro
         String htmlMsg = String.format("<html><div style='text-align:center;'>%s</div></html>",
                 msg.replace("\n", "<br>"));
         JLabel lbl = new JLabel(htmlMsg, SwingConstants.CENTER);
@@ -22,7 +20,6 @@ public class DialogoPremio extends JDialog {
         lbl.setForeground(Color.WHITE);
         lbl.setBorder(BorderFactory.createEmptyBorder(30, 40, 10, 40));
 
-        // crear el boton de genial
         JButton btn = new JButton("¡GENIAL!");
         btn.setFont(new Font("Segoe UI", Font.BOLD, 18));
         btn.setFocusPainted(false);
@@ -31,7 +28,6 @@ public class DialogoPremio extends JDialog {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.addActionListener(e -> dispose());
 
-        // crear el panel para el boton de genial
         JPanel pBtn = new JPanel();
         pBtn.setOpaque(false);
         pBtn.setBorder(BorderFactory.createEmptyBorder(0, 0, 25, 0));

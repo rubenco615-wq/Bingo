@@ -47,7 +47,7 @@ public class Carton {
             for (int f = 0; f < FILAS; f++) {
                 List<Integer> disponibles = new ArrayList<>();
                 for (int c = 0; c < COLUMNAS; c++) {
-                    // No más de 2 números por columna
+                    // No más de 2 números por columna (estándar para asegurar distribución)
                     if (usosColumna[c] < 2) {
                         disponibles.add(c);
                     }
@@ -119,7 +119,7 @@ public class Carton {
                     filasConNumero.add(f);
                 }
             }
-            // Ordena los números de menor a mayor
+
             Collections.sort(valores);
             for (int i = 0; i < valores.size(); i++) {
                 numeros[filasConNumero.get(i)][c] = valores.get(i);
@@ -173,7 +173,6 @@ public class Carton {
         return tieneNumeros;
     }
 
-    // comprobar si tiene bingo
     public boolean comprobarBingo() {
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLUMNAS; c++) {

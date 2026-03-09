@@ -9,6 +9,7 @@ import java.io.File;
 
 // Pantalla de inicio del juego
 // Muestra una imagen de fondo y un botón para empezar
+// Pon tu imagen en: resources/splash.png
 public class PantallaInicio extends JFrame {
 
     public PantallaInicio() {
@@ -26,18 +27,18 @@ public class PantallaInicio extends JFrame {
         panelFondo.setLayout(new GridBagLayout()); // para centrar el botón
 
         // Creamos el botón de jugar
-        JButton botonJugar = new JButton("¡ LUDOPATAS !");
+        JButton botonJugar = new JButton("¡ J U G A R !");
         botonJugar.setFont(new Font("Arial", Font.BOLD, 30));
         botonJugar.setBackground(new Color(255, 200, 0)); // amarillo dorado
         botonJugar.setForeground(new Color(20, 20, 20)); // texto oscuro
         botonJugar.setFocusPainted(false);
-        botonJugar.setPreferredSize(new Dimension(350, 100));
+        botonJugar.setPreferredSize(new Dimension(240, 65));
         botonJugar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(180, 140, 0), 3),
                 BorderFactory.createEmptyBorder(5, 15, 5, 15)));
         botonJugar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Cambia de color al pasar el ratón
+        // Efecto hover: cambia de color al pasar el ratón
         botonJugar.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -50,7 +51,7 @@ public class PantallaInicio extends JFrame {
             }
         });
 
-        // Al pulsar el botón cambiamos el contenido de la ventana al juego
+        // Al pulsar el botón: cambiamos el contenido de la ventana al juego
         botonJugar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,36 +61,42 @@ public class PantallaInicio extends JFrame {
                 // Removemos el panel de inicio
                 getContentPane().removeAll();
 
-                // Añadimos el juego
+                // Añadimos el juego (ahora un JPanel)
                 VentanaJuego panelJuego = new VentanaJuego();
                 add(panelJuego);
 
                 // Ajustamos la ventana para el juego
                 setTitle("BingoSwingJunior - ¡A jugar!");
-                setSize(1250, 620);
+                setSize(1250, 620); // Tamaño adecuado para el panel de juego
                 setLocationRelativeTo(null); // Recentramos
+
+                // Refrescamos la interfaz
                 revalidate();
                 repaint();
             }
         });
 
-        // Añadimos el botón al panel
+        // Añadimos el botón al panel (GridBagLayout lo centra automáticamente)
         panelFondo.add(botonJugar);
         add(panelFondo);
     }
 
-    // Pone la foto
+    // ---------------------------------------------------------------
+    // Panel interior que pinta la imagen de fondo
+    // Si no existe resources/splash.png pintamos un fondo oscuro
+    // ---------------------------------------------------------------
     class PanelFondo extends JPanel {
 
         Image imagen; // la imagen de fondo
 
         PanelFondo() {
-
+            // Intentamos cargar la imagen desde la carpeta resources real
             File archivoImagen = new File("Juego/src/resources/imagen/ChatGPT Image 2 mar 2026, 10_51_19.png");
             if (archivoImagen.exists()) {
                 imagen = new ImageIcon(archivoImagen.getAbsolutePath()).getImage();
                 System.out.println("Imagen de inicio cargada correctamente.");
             } else {
+                // Si no hay imagen, avisamos en consola (no es un error grave)
                 System.out.println("Aviso: no se encontró la imagen en Juego/src/resources/imagen/");
                 System.out.println("Se usará fondo por defecto.");
                 imagen = null;

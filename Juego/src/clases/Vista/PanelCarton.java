@@ -15,19 +15,17 @@ public class PanelCarton extends JPanel {
     public PanelCarton(String titulo, Color colorBase, boolean esMaquina) {
         setLayout(new BorderLayout(5, 5));
         setBackground(new Color(235, 235, 250));
-        // titulo del carton
+
         labelTitulo = new JLabel(titulo, SwingConstants.LEFT);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 14));
         labelTitulo.setForeground(colorBase);
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
         add(labelTitulo, BorderLayout.NORTH);
 
-        // crear el grid de 3x9
         grid = new JPanel(new GridLayout(3, 9, 4, 4));
         grid.setBackground(colorBase);
         grid.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
-        // crear los botones
         celdas = new JButton[27];
         for (int i = 0; i < 27; i++) {
             celdas[i] = new JButton("");
@@ -85,6 +83,7 @@ public class PanelCarton extends JPanel {
                     celdas[i].setBackground(new Color(255, 230, 100)); // Amarillo (Marcado)
                 } else {
                     celdas[i].setBackground(Color.WHITE);
+                    // Pista visual de columnas
                     if (col % 2 == 0)
                         celdas[i].setBackground(new Color(245, 250, 255));
                 }
