@@ -27,7 +27,7 @@ public class PantallaInicio extends JFrame {
         panelFondo.setLayout(new GridBagLayout()); // para centrar el botón
 
         // Creamos el botón de jugar
-        JButton botonJugar = new JButton("¡ J U G A R !");
+        JButton botonJugar = new JButton("");
         botonJugar.setFont(new Font("Arial", Font.BOLD, 30));
         botonJugar.setOpaque(false);
         botonJugar.setContentAreaFilled(false);
@@ -54,6 +54,7 @@ public class PantallaInicio extends JFrame {
 
         // Al pulsar el botón: cambiamos el contenido de la ventana al juego
         botonJugar.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Detenemos la música de la pantalla inicial
@@ -85,17 +86,13 @@ public class PantallaInicio extends JFrame {
         add(panelFondo);
     }
 
-    // ---------------------------------------------------------------
-    // Panel interior que pinta la imagen de fondo
-    // Si no existe resources/splash.png pintamos un fondo oscuro
-    // ---------------------------------------------------------------
     class PanelFondo extends JPanel {
 
         Image imagen; // la imagen de fondo
 
         PanelFondo() {
             // Intentamos cargar la imagen desde la carpeta resources real
-            File archivoImagen = new File("Juego/src/resources/imagen/ChatGPT Image 2 mar 2026, 10_51_19.png");
+            File archivoImagen = new File("Juego/src/resources/imagen/foto_inicio.png");
             if (archivoImagen.exists()) {
                 imagen = new ImageIcon(archivoImagen.getAbsolutePath()).getImage();
                 System.out.println("Imagen de inicio cargada correctamente.");
