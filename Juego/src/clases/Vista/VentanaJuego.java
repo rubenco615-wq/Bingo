@@ -185,10 +185,10 @@ public class VentanaJuego extends JPanel {
             DialogosJuego.mostrarLinea(this, nombre);
         }
         if (c.comprobarBingo()) {
+            finalizarJuego("BINGO de " + nombre + "!");
             historial.escribirLog("¡BINGO! " + nombre);
             Sonido.reproducirBingo();
             DialogosJuego.mostrarBingo(this, nombre);
-            finalizarJuego("BINGO de " + nombre + "!");
         }
     }
 
