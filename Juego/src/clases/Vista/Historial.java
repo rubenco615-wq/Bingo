@@ -14,11 +14,12 @@ public class Historial extends JPanel {
         setPreferredSize(new Dimension(175, 0));
         setBackground(new Color(235, 235, 250));
 
-        JLabel titulo = new JLabel("📋 Log", SwingConstants.CENTER);
+        // titulo del cuadro
+        JLabel titulo = new JLabel("Log", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 13));
         titulo.setForeground(new Color(25, 25, 55));
         add(titulo, BorderLayout.NORTH);
-
+        // el cuadro donde se escriben los numeros
         areaLog = new JTextArea();
         areaLog.setEditable(false);
         areaLog.setFont(new Font("Monospaced", Font.PLAIN, 11));
@@ -27,6 +28,7 @@ public class Historial extends JPanel {
         add(new JScrollPane(areaLog), BorderLayout.CENTER);
     }
 
+    // escribe los numeros en el cuadro
     public void escribirLog(String msj) {
         areaLog.append(msj + "\n");
         areaLog.setCaretPosition(areaLog.getDocument().getLength());

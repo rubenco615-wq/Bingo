@@ -3,7 +3,7 @@ package clases.model;
 import java.util.ArrayList;
 import java.util.List;
 
-// Gestiona la lógica principal y el estado de una partida de Bingo.
+// Gestiona la partida de bingo.
 public class Juego {
     private final List<Participante> participantes;
     private Bombo bombo;
