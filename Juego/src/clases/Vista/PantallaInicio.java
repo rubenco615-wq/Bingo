@@ -29,10 +29,11 @@ public class PantallaInicio extends JFrame {
         // Creamos el botón de jugar
         JButton botonJugar = new JButton("¡ J U G A R !");
         botonJugar.setFont(new Font("Arial", Font.BOLD, 30));
-        botonJugar.setBackground(new Color(255, 200, 0)); // amarillo dorado
-        botonJugar.setForeground(new Color(20, 20, 20)); // texto oscuro
+        botonJugar.setOpaque(false);
+        botonJugar.setContentAreaFilled(false);
+        botonJugar.setBorderPainted(false);
         botonJugar.setFocusPainted(false);
-        botonJugar.setPreferredSize(new Dimension(240, 65));
+        botonJugar.setPreferredSize(new Dimension(400, 100));
         botonJugar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(180, 140, 0), 3),
                 BorderFactory.createEmptyBorder(5, 15, 5, 15)));
@@ -76,8 +77,11 @@ public class PantallaInicio extends JFrame {
             }
         });
 
-        // Añadimos el botón al panel (GridBagLayout lo centra automáticamente)
-        panelFondo.add(botonJugar);
+        // GridBagConstraints controla la posición dentro del GridBagLayout
+        // Sube o baja el botón cambiando el valor de 'top' (margen superior en píxeles)
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new java.awt.Insets(150, 0, 0, 0); // 150px desde el centro hacia abajo
+        panelFondo.add(botonJugar, gbc);
         add(panelFondo);
     }
 
@@ -96,7 +100,7 @@ public class PantallaInicio extends JFrame {
                 imagen = new ImageIcon(archivoImagen.getAbsolutePath()).getImage();
                 System.out.println("Imagen de inicio cargada correctamente.");
             } else {
-                // Si no hay imagen, avisamos en consola (no es un error grave)
+                // Si no hay imagen, avisamos en consola
                 System.out.println("Aviso: no se encontró la imagen en Juego/src/resources/imagen/");
                 System.out.println("Se usará fondo por defecto.");
                 imagen = null;
@@ -127,10 +131,11 @@ public class PantallaInicio extends JFrame {
                 // Texto de ejemplo si no hay imagen
                 g2d.setColor(new Color(255, 215, 0));
                 g2d.setFont(new Font("Arial", Font.BOLD, 60));
-                g2d.drawString("🎱 BINGO", getWidth() / 2 - 140, getHeight() / 2 - 60);
+                g2d.drawString("BINGO", getWidth() / 2 - 140, getHeight() / 2 - 60);
                 g2d.setColor(new Color(200, 200, 200));
                 g2d.setFont(new Font("Arial", Font.PLAIN, 16));
-                g2d.drawString("Recurso esperado: Juego/src/resources/imagen/ChatGPT Image 2 mar 2026, 10_51_19.png",
+                g2d.drawString(
+                        "Recurso esperado: Juego/src/resources/imagen/ChatGPT Image 2 mar 2026, 10_51_19.png",
                         getWidth() / 2 - 200, getHeight() / 2 - 20);
             }
         }
