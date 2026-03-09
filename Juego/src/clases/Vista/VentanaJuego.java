@@ -23,7 +23,7 @@ public class VentanaJuego extends JPanel {
     public VentanaJuego() {
         setLayout(new BorderLayout(8, 8));
 
-        juego = new Juego(); // Creamos la lógica en la sombra
+        juego = new Juego();
 
         // Preparamos todas las piezas del puzzle visual
         cabecera = new Cabecera();
@@ -52,6 +52,7 @@ public class VentanaJuego extends JPanel {
         Sonido.reproducirCartones();
     }
 
+    // Registra los eventos de los botones
     private void registrarEventos() {
         botones.getBotonIniciar().addActionListener(e -> {
             String nombre = DialogosJuego.pedirNombre(this).trim();
@@ -137,12 +138,11 @@ public class VentanaJuego extends JPanel {
             return;
         }
 
-        // Si es legítimo, se marca de verdad
+        // Si es correcto se marca
         c.marcarNumero(num);
         historial.escribirLog("Marcas el " + num);
         panelCartonJugador.actualizarCarton(juego.getJugador(), true);
 
-        // Nos fijamos en si has conseguido ganar algo
         verificarPremios(c, juego.getJugador().getNombre());
     }
 
@@ -166,7 +166,7 @@ public class VentanaJuego extends JPanel {
             ((Timer) e.getSource()).stop();
             if (juego.isPartidaActiva() && juego.getMaquina() != null) {
                 Carton cm = juego.getMaquina().getCarton();
-                if (cm.contieneNumero(num)) { // Si la CPU lo tiene, lo tacha y mira si ha ganado
+                if (cm.contieneNumero(num)) { // Si la maquina lo tiene lo marca y mira si ha ganado
                     juego.getMaquina().marcarNumero(num);
                     panelCartonMaquina.actualizarCarton(juego.getMaquina(), true);
                     verificarPremios(cm, "Máquina");
@@ -175,8 +175,7 @@ public class VentanaJuego extends JPanel {
         }).start();
     }
 
-    // Mira un cartón en concreto y lanza pompas si has hecho línea o terminado.
-
+    // comprueba si ha conseguido las lineas o el bingo
     private void verificarPremios(Carton c, String nombre) {
         if (!yaHayLineaEnPartida && c.comprobarLinea()) {
             yaHayLineaEnPartida = true;
@@ -192,6 +191,7 @@ public class VentanaJuego extends JPanel {
         }
     }
 
+    // finaliza la partida
     private void finalizarJuego(String msg) {
         juego.finalizarPartida();
         if (timerAuto != null)
@@ -209,6 +209,7 @@ public class VentanaJuego extends JPanel {
         historial.escribirLog(msg);
     }
 
+    // actualiza los cartones con cada partida
     private void actualizarCartones() {
         panelCartonJugador.actualizarCarton(juego.getJugador(), juego.isPartidaActiva());
         panelCartonMaquina.actualizarCarton(juego.getMaquina(), juego.isPartidaActiva());
