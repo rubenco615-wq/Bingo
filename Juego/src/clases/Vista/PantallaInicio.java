@@ -1,5 +1,6 @@
 package clases.Vista;
 
+import clases.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,9 @@ public class PantallaInicio extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // centrar en pantalla
         setResizable(false);
+
+        // Música de la pantalla inicial en bucle
+        Sonido.reproducirPantallaInicial();
 
         // Añadimos el panel con imagen de fondo
         PanelFondo panelFondo = new PanelFondo();
@@ -51,6 +55,9 @@ public class PantallaInicio extends JFrame {
         botonJugar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Detenemos la música de la pantalla inicial
+                Sonido.detenerBGM();
+
                 // Removemos el panel de inicio
                 getContentPane().removeAll();
 

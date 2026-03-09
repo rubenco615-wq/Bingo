@@ -48,8 +48,8 @@ public class VentanaJuego extends JPanel {
         // Enganchamos botones con funciones
         registrarEventos();
 
-        // Cambiamos a la música de espera/juego nada más cargar la ventana
-        Sonido.reproducirBGM("juego.wav");
+        // Música de la pantalla de cartones/juego en bucle
+        Sonido.reproducirCartones();
     }
 
     private void registrarEventos() {
