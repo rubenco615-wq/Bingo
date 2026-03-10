@@ -187,7 +187,15 @@ public class VentanaJuego extends JPanel {
             finalizarJuego("BINGO de " + nombre + "!");
             historial.escribirLog("¡BINGO! " + nombre);
             Sonido.reproducirBingo();
-            DialogosJuego.mostrarBingo(this, nombre);
+
+            // Reemplazamos el diálogo por la pantalla de victoria completa
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            if (frame != null) {
+                frame.getContentPane().removeAll();
+                frame.add(new PanelVictoria(nombre));
+                frame.revalidate();
+                frame.repaint();
+            }
         }
     }
 
