@@ -33,7 +33,7 @@ public class PantallaInicio extends JFrame {
         botonJugar.setContentAreaFilled(false);
         botonJugar.setBorderPainted(false);
         botonJugar.setFocusPainted(false);
-        botonJugar.setPreferredSize(new Dimension(400, 100));
+        botonJugar.setPreferredSize(new Dimension(200, 100));
         botonJugar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(180, 140, 0), 3),
                 BorderFactory.createEmptyBorder(5, 15, 5, 15)));
