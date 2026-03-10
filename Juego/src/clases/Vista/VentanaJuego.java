@@ -140,7 +140,7 @@ public class VentanaJuego extends JPanel {
 
         // Si es correcto se marca
         c.marcarNumero(num);
-        historial.escribirLog("Marcas el " + num);
+        historial.escribirLog("Haz marcado el " + num);
         panelCartonJugador.actualizarCarton(juego.getJugador(), true);
 
         verificarPremios(c, juego.getJugador().getNombre());
@@ -153,12 +153,12 @@ public class VentanaJuego extends JPanel {
         int num = juego.extraerNumero();
         if (num == -1) {
             DialogosJuego.mostrarBomboVacio(this);
-            finalizarJuego("Bombo vacío. Fin.");
+            finalizarJuego("Ya no quedan más números. Fin.");
             return;
         }
 
         cabecera.setNumero(String.valueOf(num));
-        historial.escribirLog("Nº " + num + " ← ¡márcalo!");
+        historial.escribirLog("Nº " + num);
         actualizarCartones();
 
         // Tras 2 a 5 segundos falsos de "pensar", la máquina revisa su propio cartón
