@@ -182,6 +182,7 @@ public class VentanaJuego extends JPanel {
             historial.escribirLog("¡LÍNEA! " + nombre);
             Sonido.reproducirLinea();
             DialogosJuego.mostrarLinea(this, nombre);
+            Sonido.reproducirCartones(); // Reanudamos la música del juego tras cerrar el aviso
         }
         if (c.comprobarBingo()) {
             finalizarJuego("BINGO de " + nombre + "!");

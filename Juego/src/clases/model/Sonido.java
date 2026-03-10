@@ -49,8 +49,6 @@ public class Sonido {
         }
     }
 
-    // Métodos públicos para cada situación
-
     // Música en bucle para la pantalla inicial.
     public static void reproducirPantallaInicial() {
         reproducirBGM("Audio_PantallaInicial_1.wav");
@@ -63,6 +61,7 @@ public class Sonido {
 
     // Efecto de sonido cuando el jugador o la máquina hace línea.
     public static void reproducirLinea() {
+        detenerBGM(); // Paramos la música de fondo para que se oiga la línea
         reproducirSFX("Audio_Bingo_1.wav");
     }
 
