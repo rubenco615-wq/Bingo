@@ -58,7 +58,7 @@ public class VentanaJuego extends JPanel {
             String nombre = DialogosJuego.pedirNombre(this).trim();
             if (timerAuto != null)
                 timerAuto.detener();
-            cabecera.getChkAutoExtraccion().setSelected(false);
+            cabecera.getBtnAuto().setSelected(false);
 
             juego.iniciarPartida(nombre);
             yaHayLineaEnPartida = false;
@@ -69,7 +69,7 @@ public class VentanaJuego extends JPanel {
             botones.getBotonIniciar().setEnabled(false);
             botones.getBotonExtraer().setEnabled(true);
             botones.getBotonFinalizar().setEnabled(true);
-            cabecera.getChkAutoExtraccion().setEnabled(true);
+            cabecera.getBtnAuto().setEnabled(true);
             cabecera.getSpinnerVelocidad().setEnabled(true);
 
             historial.limpiarLog();
@@ -85,8 +85,8 @@ public class VentanaJuego extends JPanel {
         });
 
         // Configurar qué pasa al hacer clic en el cuadradito "Auto"
-        cabecera.getChkAutoExtraccion().addActionListener(e -> {
-            if (cabecera.getChkAutoExtraccion().isSelected()) {
+        cabecera.getBtnAuto().addActionListener(e -> {
+            if (cabecera.getBtnAuto().isSelected()) {
                 int s = (Integer) cabecera.getSpinnerVelocidad().getValue();
                 timerAuto = new Temporizador(s, ev -> procesarExtraccion());
                 timerAuto.iniciar();
@@ -100,9 +100,8 @@ public class VentanaJuego extends JPanel {
             }
         });
 
-        // Modificador de velocidad del bombo automático en tiempo real
         cabecera.getSpinnerVelocidad().addChangeListener(e -> {
-            if (cabecera.getChkAutoExtraccion().isSelected() && timerAuto != null) {
+            if (cabecera.getBtnAuto().isSelected() && timerAuto != null) {
                 int s = (Integer) cabecera.getSpinnerVelocidad().getValue();
                 timerAuto.cambiarIntervalo(s);
                 historial.escribirLog("Velocidad -> " + s + "s");
@@ -199,8 +198,8 @@ public class VentanaJuego extends JPanel {
             timerAuto.detener();
         actualizarCartones();
 
-        cabecera.getChkAutoExtraccion().setSelected(false);
-        cabecera.getChkAutoExtraccion().setEnabled(false);
+        cabecera.getBtnAuto().setSelected(false);
+        cabecera.getBtnAuto().setEnabled(false);
         cabecera.getSpinnerVelocidad().setEnabled(false);
         cabecera.resetNumero();
 

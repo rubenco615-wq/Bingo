@@ -9,7 +9,7 @@ public class Cabecera extends JPanel {
     private static final Color GOLD = new Color(255, 215, 0);
 
     private final JLabel labelNumero;
-    private final JCheckBox chkAutoExtraccion;
+    private final JToggleButton btnAuto;
     private final JSpinner spinnerVelocidad;
 
     // Crea la cabecera con el visor de números y los ajustes de velocidad.
@@ -26,11 +26,8 @@ public class Cabecera extends JPanel {
         JPanel pAuto = new JPanel(new FlowLayout(FlowLayout.CENTER, 14, 2));
         pAuto.setBackground(BG_COLOR);
 
-        chkAutoExtraccion = new JCheckBox("Auto");
-        chkAutoExtraccion.setFont(new Font("Arial", Font.BOLD, 13));
-        chkAutoExtraccion.setBackground(BG_COLOR);
-        chkAutoExtraccion.setForeground(Color.WHITE);
-        chkAutoExtraccion.setEnabled(false);
+        btnAuto = new JToggleButton("AUTO");
+        configurarBotonAuto();
 
         spinnerVelocidad = new JSpinner(new SpinnerNumberModel(3, 1, 15, 1));
         spinnerVelocidad.setFont(new Font("Arial", Font.BOLD, 13));
@@ -42,7 +39,7 @@ public class Cabecera extends JPanel {
         JLabel lblSeg = new JLabel("seg    |  Columnas    Marcado    Error");
         lblSeg.setForeground(Color.LIGHT_GRAY);
 
-        pAuto.add(chkAutoExtraccion);
+        pAuto.add(btnAuto);
         pAuto.add(lblInfo);
         pAuto.add(spinnerVelocidad);
         pAuto.add(lblSeg);
@@ -61,11 +58,37 @@ public class Cabecera extends JPanel {
         labelNumero.setText("--");
     }
 
-    public JCheckBox getChkAutoExtraccion() {
-        return chkAutoExtraccion;
+    public JToggleButton getBtnAuto() {
+        return btnAuto;
     }
 
     public JSpinner getSpinnerVelocidad() {
         return spinnerVelocidad;
+    }
+
+    private void configurarBotonAuto() {
+        btnAuto.setFont(new Font("Arial", Font.BOLD, 12));
+        btnAuto.setPreferredSize(new Dimension(80, 28));
+        btnAuto.setFocusPainted(false);
+        btnAuto.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnAuto.setEnabled(false);
+
+        // Estilo visual moderno
+        btnAuto.setBackground(new Color(60, 60, 90));
+        btnAuto.setForeground(Color.LIGHT_GRAY);
+        btnAuto.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 120)));
+
+        // Efecto visual al activarse
+        btnAuto.addActionListener(e -> {
+            if (btnAuto.isSelected()) {
+                btnAuto.setBackground(new Color(45, 120, 200));
+                btnAuto.setForeground(Color.WHITE);
+                btnAuto.setText("AUTO ON");
+            } else {
+                btnAuto.setBackground(new Color(60, 60, 90));
+                btnAuto.setForeground(Color.LIGHT_GRAY);
+                btnAuto.setText("AUTO");
+            }
+        });
     }
 }
