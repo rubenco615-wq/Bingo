@@ -15,7 +15,7 @@ public class Botones extends JPanel {
 
         botonIniciar = crearBoton(" Iniciar Partida", new Color(45, 170, 45));
         botonExtraer = crearBoton("Extraer Número", new Color(45, 95, 195));
-        botonFinalizar = crearBoton("Finalizar", new Color(190, 45, 45));
+        botonFinalizar = crearBoton("Finalizar Partida", new Color(190, 45, 45));
 
         botonExtraer.setEnabled(false);
         botonFinalizar.setEnabled(false);

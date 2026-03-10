@@ -13,7 +13,7 @@ import java.io.File;
 public class PantallaInicio extends JFrame {
 
     public PantallaInicio() {
-        setTitle("BingoSwingJunior - Inicio");
+        setTitle("LUDOVINGO");
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // centrar en pantalla
@@ -68,7 +68,7 @@ public class PantallaInicio extends JFrame {
                 add(panelJuego);
 
                 // Ajustamos la ventana para el juego
-                setTitle("BingoSwingJunior - ¡A jugar!");
+                setTitle("LUDOVINGO - ¡A jugar!");
                 setSize(1250, 620); // Tamaño adecuado para el panel de juego
                 setLocationRelativeTo(null); // Recentramos
 
