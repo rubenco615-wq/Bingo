@@ -24,7 +24,7 @@ public class PantallaInicio extends JFrame {
 
         // Añadimos el panel con imagen de fondo
         PanelFondo panelFondo = new PanelFondo();
-        panelFondo.setLayout(new GridBagLayout()); // para centrar el botón
+        panelFondo.setLayout(null); // Usar layout nulo para posiciones exactas y estables
 
         // Creamos el botón de jugar
         JButton botonJugar = new JButton("");
@@ -35,7 +35,7 @@ public class PantallaInicio extends JFrame {
         botonJugar.setFocusPainted(false);
         botonJugar.setPreferredSize(new Dimension(200, 100));
         botonJugar.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(180, 140, 0), 3),
+                BorderFactory.createLineBorder(new Color(180, 0, 0), 3),
                 BorderFactory.createEmptyBorder(5, 15, 5, 15)));
         botonJugar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -78,11 +78,46 @@ public class PantallaInicio extends JFrame {
             }
         });
 
-        // GridBagConstraints controla la posición dentro del GridBagLayout
-        // Sube o baja el botón cambiando el valor de 'top' (margen superior en píxeles)
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new java.awt.Insets(150, 0, 0, 0); // 150px desde el centro hacia abajo
-        panelFondo.add(botonJugar, gbc);
+        // --- Panel de Volumen ---
+        JPanel panelVolumen = new JPanel();
+        panelVolumen.setOpaque(false);
+        panelVolumen.setLayout(new BoxLayout(panelVolumen, BoxLayout.Y_AXIS));
+
+        JLabel etiquetaVolumen = new JLabel("Volumen Música");
+        etiquetaVolumen.setForeground(Color.WHITE);
+        etiquetaVolumen.setFont(new Font("Arial", Font.BOLD, 14));
+        etiquetaVolumen.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JSlider sliderVolumen = new JSlider(0, 100, 25); // 0 a 100, empieza en 75
+        sliderVolumen.setPreferredSize(new Dimension(200, 30));
+        sliderVolumen.setOpaque(false);
+        sliderVolumen.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        sliderVolumen.addChangeListener(e -> {
+            float v = sliderVolumen.getValue() / 100.0f;
+            Sonido.setVolumenBGM(v);
+        });
+
+        panelVolumen.add(etiquetaVolumen);
+        panelVolumen.add(Box.createVerticalStrut(5));
+        panelVolumen.add(sliderVolumen);
+
+        panelFondo.add(botonJugar);
+        panelFondo.add(panelVolumen);
+
+        // Posicionamiento estático
+        panelFondo.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                int w = panelFondo.getWidth();
+                int h = panelFondo.getHeight();
+                // para poner el boton centrado en la bola
+                botonJugar.setBounds(w / 2 - 100, h / 2 + 25, 200, 100);
+                // para poner la barra del slider de la música justo por debajo del botón
+                panelVolumen.setBounds(w / 2 - 100, h / 2 + 135, 200, 60);
+            }
+        });
+
         add(panelFondo);
     }
 

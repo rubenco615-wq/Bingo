@@ -2,12 +2,14 @@ package clases.model;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import java.io.File;
 
 public class Sonido {
     // Ruta base donde están los archivos de audio
     private static final String DIR = "Juego/src/resources/";
     private static Clip musicaFondo;
+    private static float volumenActual = 0.75f; // Volumen por defecto (0.0 a 1.0)
 
     // Reproduce un archivo de música en bucle (BGM = Background Music).
     public static void reproducirBGM(String file) {
@@ -20,9 +22,28 @@ public class Sonido {
             }
             musicaFondo = AudioSystem.getClip();
             musicaFondo.open(AudioSystem.getAudioInputStream(f));
+
+            // Aplicar volumen actual
+            actualizarVolumenInterno();
+
             musicaFondo.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (Exception e) {
             System.err.println("Error al reproducir BGM: " + e.getMessage());
+        }
+    }
+
+    // Ajusta el volumen de la música de fondo (0.0f a 1.0f)
+    public static void setVolumenBGM(float valor) {
+        volumenActual = Math.max(0.0f, Math.min(1.0f, valor));
+        actualizarVolumenInterno();
+    }
+
+    private static void actualizarVolumenInterno() {
+        if (musicaFondo != null && musicaFondo.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+            FloatControl gainControl = (FloatControl) musicaFondo.getControl(FloatControl.Type.MASTER_GAIN);
+            // Convertir lineal (0.0-1.0) a decibelios (logarítmico)
+            float dB = (float) (Math.log(volumenActual != 0 ? volumenActual : 0.0001f) / Math.log(10.0) * 20.0);
+            gainControl.setValue(dB);
         }
     }
 
@@ -69,5 +90,10 @@ public class Sonido {
     public static void reproducirBingo() {
         detenerBGM();
         reproducirSFX("Audio_Victoria_1.wav");
+    }
+
+    // Reproduce el audio correspondiente al número extraído
+    public static void reproducirNumero(int numero) {
+        reproducirSFX("audios/Numeros/Numeros/" + numero + ".wav");
     }
 }

@@ -158,6 +158,7 @@ public class VentanaJuego extends JPanel {
 
         cabecera.setNumero(String.valueOf(num));
         historial.escribirLog("Nº " + num);
+        Sonido.reproducirNumero(num); // Reproducir audio del número
         actualizarCartones();
 
         // Tras 2 a 5 segundos falsos de "pensar", la máquina revisa su propio cartón
