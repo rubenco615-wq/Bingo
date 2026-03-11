@@ -29,8 +29,10 @@ public class VentanaJuego extends JPanel {
         cabecera = new Cabecera();
         historial = new Historial();
         botones = new Botones();
-        panelCartonJugador = new PanelCarton("Tu Cartón  [haz clic para marcar]", new Color(25, 25, 55), false, "pingu.png");
-        panelCartonMaquina = new PanelCarton("Cartón Máquina  [automático]", new Color(140, 30, 30), true, "PinguBetis.png");
+        panelCartonJugador = new PanelCarton("Tu Cartón  [haz clic para marcar]", new Color(25, 25, 55), false,
+                "pingu.png");
+        panelCartonMaquina = new PanelCarton("Cartón Máquina  [automático]", new Color(140, 30, 30), true,
+                "PinguBetis.png");
 
         // Juntamos los dos cartones en un panel central
         JPanel panelCartones = new JPanel(new GridLayout(2, 1, 0, 12));
