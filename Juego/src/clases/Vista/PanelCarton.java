@@ -11,42 +11,13 @@ public class PanelCarton extends JPanel {
     private JLabel labelTitulo;
     private JButton[] celdas;
     private JPanel grid;
+    private Icon iconoVacio;
 
-    private static final Icon PINGU_ICON = cargarIcono();
-
-    // Método para cargar la foto del pingüino
-    private static Icon cargarIcono() {
-        try {
-            final Image img = new ImageIcon("Juego/src/resources/imagen/pingu.png").getImage();
-            return new Icon() {
-                @Override
-                public void paintIcon(Component c, Graphics g, int x, int y) {
-                    Graphics2D g2 = (Graphics2D) g.create();
-                    // Usamos un truco de dibujo para que el pingüino se vea muy nítido (Bicubic)
-                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-                    g2.drawImage(img, x, y, getIconWidth(), getIconHeight(), null);
-                    g2.dispose();
-                }
-
-                @Override
-                public int getIconWidth() {
-                    return 42;
-                } // Ancho de la imagen
-
-                @Override
-                public int getIconHeight() {
-                    return 42;
-                } // Alto de la imagen
-            };
-        } catch (Exception e) {
-            // Si hay un error, no mostramos imagen
-            return null;
-        }
-    }
-
-    public PanelCarton(String titulo, Color colorBase, boolean esMaquina) {
+    public PanelCarton(String titulo, Color colorBase, boolean esMaquina, String nombreImagen) {
         setLayout(new BorderLayout(5, 5));
         setBackground(new Color(235, 235, 250));
+
+        this.iconoVacio = crearIcono(nombreImagen);
 
         labelTitulo = new JLabel(titulo, SwingConstants.LEFT);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 14));
@@ -81,6 +52,34 @@ public class PanelCarton extends JPanel {
         add(grid, BorderLayout.CENTER);
     }
 
+    // metodo para crear la foto del pinguino de cada carton
+    private Icon crearIcono(String nombreImagen) {
+        try {
+            final Image img = new ImageIcon("Juego/src/resources/imagen/" + nombreImagen).getImage();
+            return new Icon() {
+                @Override
+                public void paintIcon(Component c, Graphics g, int x, int y) {
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                    g2.drawImage(img, x, y, getIconWidth(), getIconHeight(), null);
+                    g2.dispose();
+                }
+
+                @Override
+                public int getIconWidth() {
+                    return 42;
+                }
+
+                @Override
+                public int getIconHeight() {
+                    return 42;
+                }
+            };
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public void setTitulo(String txt) {
         labelTitulo.setText(txt);
     }
@@ -107,7 +106,7 @@ public class PanelCarton extends JPanel {
 
             if (num == 0) {
                 celdas[i].setText("");
-                celdas[i].setIcon(PINGU_ICON); // Ponemos el pingüino en el hueco
+                celdas[i].setIcon(iconoVacio); // Ponemos el pingüino de cada uno en el hueco
                 celdas[i].setBackground(new Color(210, 210, 225)); // Gris para huecos
                 celdas[i].setEnabled(false);
             } else {
