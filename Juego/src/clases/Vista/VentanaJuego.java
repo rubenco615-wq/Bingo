@@ -84,6 +84,12 @@ public class VentanaJuego extends JPanel {
                 finalizarJuego("Partida finalizada manualmente.");
         });
 
+        // Botón Ajustes: abre el diálogo modal de ajustes
+        botones.getBotonAjustes().addActionListener(e -> {
+            DialogoAjustes dlg = new DialogoAjustes(SwingUtilities.getWindowAncestor(this));
+            dlg.setVisible(true);
+        });
+
         // Configurar qué pasa al hacer clic en el cuadradito "Auto"
         cabecera.getBtnAuto().addActionListener(e -> {
             if (cabecera.getBtnAuto().isSelected()) {
@@ -182,7 +188,8 @@ public class VentanaJuego extends JPanel {
             historial.escribirLog("¡LÍNEA! " + nombre);
             Sonido.reproducirLinea();
 
-            // Pausamos el modo automático para que no salgan números mientras el aviso esté abierto
+            // Pausamos el modo automático para que no salgan números mientras el aviso esté
+            // abierto
             boolean autoEstaba = cabecera.getBtnAuto().isSelected();
             if (autoEstaba && timerAuto != null)
                 timerAuto.detener();
