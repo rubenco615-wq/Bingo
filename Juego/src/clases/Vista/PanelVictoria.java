@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-// Panel de victoria: la imagen cubre todo el fondo del panel escalada al 100%.
-// El título y el botón flotan encima con fondo semitransparente.
+// Panel que se muestra cuando alguien gana el bingo
+// La imagen de fondo ocupa todo el panel y el titulo y el boton van encima
 public class PanelVictoria extends JPanel {
 
     private Image imagenVictoria;
@@ -13,13 +13,13 @@ public class PanelVictoria extends JPanel {
     public PanelVictoria(String nombreGanador) {
         setLayout(new BorderLayout());
 
-        // Cargamos la imagen de fondo
+        // la imagen de fondo
         File archivo = new File("Juego/src/resources/imagen/Monedas_Bingo.jpg");
         if (archivo.exists()) {
             imagenVictoria = new ImageIcon(archivo.getAbsolutePath()).getImage();
         }
 
-        // ---- Título (NORTH) — texto dorado sobre fondo semitransparente ----
+        // Etiqueta con el nombre del ganador
         JLabel lblTitulo = new JLabel("¡FELICIDADES " + nombreGanador.toUpperCase() + "!", SwingConstants.CENTER) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -36,7 +36,7 @@ public class PanelVictoria extends JPanel {
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(18, 10, 18, 10));
         add(lblTitulo, BorderLayout.NORTH);
 
-        // ---- Botón (SOUTH) — centrado sobre fondo semitransparente ----
+        // Boton para volver al menu principal
         JButton btnMenu = new JButton("VOLVER AL MENÚ PRINCIPAL");
         btnMenu.setFont(new Font("Arial", Font.BOLD, 20));
         btnMenu.setPreferredSize(new Dimension(380, 55));
@@ -74,7 +74,7 @@ public class PanelVictoria extends JPanel {
         add(pSur, BorderLayout.SOUTH);
     }
 
-    // La imagen se escala para cubrir siempre TODO el panel
+    // poner la foto que ocuepe todo el panel
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

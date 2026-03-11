@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 // Pantalla de inicio del juego
-// Muestra una imagen de fondo y un botón para empezar
-// Pon tu imagen en: resources/splash.png
+// Muestra la imagen de fondo, el boton de jugar y el boton de ajustes
+// El boton de ajustes despliega un panel flotante con el volumen y el boton de salir
 public class PantallaInicio extends JFrame {
 
     public PantallaInicio() {
@@ -78,47 +78,125 @@ public class PantallaInicio extends JFrame {
             }
         });
 
-        // --- Panel de Volumen ---
-        JPanel panelVolumen = new JPanel();
-        panelVolumen.setOpaque(false);
-        panelVolumen.setLayout(new BoxLayout(panelVolumen, BoxLayout.Y_AXIS));
+        // Boton de ajustes, va en la esquina superior derecha con un icono de engranaje
+        JButton botonAjustes = new JButton();
+        File fGear = new File("Juego/src/resources/imagen/gear_icon.png");
+        if (fGear.exists()) {
+            ImageIcon icon = new ImageIcon(fGear.getAbsolutePath());
+            Image scaled = icon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+            botonAjustes.setIcon(new ImageIcon(scaled));
+        } else {
+            botonAjustes.setText("⚙");
+            botonAjustes.setFont(new Font("Arial", Font.PLAIN, 26));
+        }
+        botonAjustes.setForeground(Color.WHITE);
+        botonAjustes.setOpaque(false);
+        botonAjustes.setContentAreaFilled(false);
+        botonAjustes.setBorderPainted(false);
+        botonAjustes.setFocusPainted(false);
+        botonAjustes.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        JLabel etiquetaVolumen = new JLabel("Volumen Música");
-        etiquetaVolumen.setForeground(Color.WHITE);
-        etiquetaVolumen.setFont(new Font("Arial", Font.BOLD, 14));
+        // Panel flotante de ajustes, empieza oculto
+        JPanel panelAjustes = new JPanel();
+        panelAjustes.setLayout(new BoxLayout(panelAjustes, BoxLayout.Y_AXIS));
+        panelAjustes.setBackground(new Color(20, 20, 50, 220));
+        panelAjustes.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(100, 100, 180), 1),
+                BorderFactory.createEmptyBorder(16, 20, 16, 20)));
+        panelAjustes.setVisible(false);
+
+        // Titulo del panel de ajustes
+        JLabel lblAjustesTitulo = new JLabel("Ajustes");
+        lblAjustesTitulo.setForeground(new Color(255, 215, 0));
+        lblAjustesTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        lblAjustesTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Etiqueta y slider del volumen
+        JLabel etiquetaVolumen = new JLabel("Volumen Musica");
+        etiquetaVolumen.setForeground(Color.LIGHT_GRAY);
+        etiquetaVolumen.setFont(new Font("Arial", Font.BOLD, 13));
         etiquetaVolumen.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JSlider sliderVolumen = new JSlider(0, 100, 25); // 0 a 100, empieza en 75
-        sliderVolumen.setPreferredSize(new Dimension(200, 30));
+        JSlider sliderVolumen = new JSlider(0, 100, 25);
         sliderVolumen.setOpaque(false);
+        sliderVolumen.setMaximumSize(new Dimension(200, 36));
+        sliderVolumen.setAlignmentX(Component.CENTER_ALIGNMENT);
         sliderVolumen.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
+        sliderVolumen.setPaintTicks(true);
+        sliderVolumen.setMajorTickSpacing(25);
+        sliderVolumen.setPaintLabels(true);
+        sliderVolumen.setForeground(Color.LIGHT_GRAY);
         sliderVolumen.addChangeListener(e -> {
             float v = sliderVolumen.getValue() / 100.0f;
             Sonido.setVolumenBGM(v);
         });
 
-        panelVolumen.add(etiquetaVolumen);
-        panelVolumen.add(Box.createVerticalStrut(5));
-        panelVolumen.add(sliderVolumen);
+        // Boton para cerrar el panel de ajustes sin salir
+        JButton btnCerrarPanel = crearBotonAjuste("Cerrar", new Color(70, 70, 130));
+        btnCerrarPanel.addActionListener(e -> panelAjustes.setVisible(false));
+
+        // Boton para salir del juego con confirmacion
+        JButton btnSalir = crearBotonAjuste("Salir del Juego", new Color(180, 40, 40));
+        btnSalir.addActionListener(e -> {
+            int resp = JOptionPane.showConfirmDialog(
+                    null,
+                    "\u00bfSeguro que quieres salir?",
+                    "Salir",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            if (resp == JOptionPane.YES_OPTION) {
+                Sonido.detenerBGM();
+                System.exit(0);
+            }
+        });
+
+        // Monto el panel de ajustes
+        panelAjustes.add(lblAjustesTitulo);
+        panelAjustes.add(Box.createVerticalStrut(10));
+        panelAjustes.add(etiquetaVolumen);
+        panelAjustes.add(Box.createVerticalStrut(4));
+        panelAjustes.add(sliderVolumen);
+        panelAjustes.add(Box.createVerticalStrut(14));
+        panelAjustes.add(btnCerrarPanel);
+        panelAjustes.add(Box.createVerticalStrut(6));
+        panelAjustes.add(btnSalir);
+
+        // Al pulsar el boton de ajustes, mostramos u ocultamos el panel
+        botonAjustes.addActionListener(e -> panelAjustes.setVisible(!panelAjustes.isVisible()));
 
         panelFondo.add(botonJugar);
-        panelFondo.add(panelVolumen);
+        panelFondo.add(botonAjustes);
+        panelFondo.add(panelAjustes);
 
-        // Posicionamiento estático
+        // Posicionamiento estatico de todos los elementos
         panelFondo.addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
                 int w = panelFondo.getWidth();
                 int h = panelFondo.getHeight();
-                // para poner el boton centrado en la bola
+                // el boton de jugar centrado en la imagen
                 botonJugar.setBounds(w / 2 - 100, h / 2 + 25, 200, 100);
-                // para poner la barra del slider de la música justo por debajo del botón
-                panelVolumen.setBounds(w / 2 - 100, h / 2 + 135, 200, 60);
+                // el boton de ajustes en la esquina superior derecha
+                botonAjustes.setBounds(w - 65, 10, 50, 50);
+                // el panel de ajustes justo debajo del boton de ajustes
+                panelAjustes.setBounds(w - 260, 65, 235, 220);
             }
         });
 
         add(panelFondo);
+    }
+
+    // metodo para crear los botones de ajustes con el mismo estilo
+    private JButton crearBotonAjuste(String texto, Color color) {
+        JButton b = new JButton(texto);
+        b.setFont(new Font("Arial", Font.BOLD, 14));
+        b.setBackground(color);
+        b.setForeground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        b.setAlignmentX(Component.CENTER_ALIGNMENT);
+        b.setMaximumSize(new Dimension(200, 40));
+        return b;
     }
 
     class PanelFondo extends JPanel {
