@@ -45,13 +45,14 @@ public class PanelVictoria extends JPanel {
         btnMenu.setFocusPainted(false);
         btnMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        // Al pulsar este boton, limpiamos todo y volvemos al menu de inicio
         btnMenu.addActionListener(e -> {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             if (frame != null) {
                 frame.getContentPane().removeAll();
-                frame.add(new PantallaInicio().getContentPane());
-                frame.setTitle("BingoSwingJunior - Inicio");
-                frame.setSize(800, 500);
+                frame.add(new PanelInicio()); // Cargamos el menu otra vez
+                frame.setTitle("LUDOVINGO");
+                frame.setSize(800, 500); // Tamaño pequeño para el menu
                 frame.setLocationRelativeTo(null);
                 frame.revalidate();
                 frame.repaint();
