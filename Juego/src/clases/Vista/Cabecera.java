@@ -10,6 +10,7 @@ public class Cabecera extends JPanel {
 
     private final JLabel labelNumero;
     private final JToggleButton btnAuto;
+    private final JButton botonExtraer;
     private final JSpinner spinnerVelocidad;
 
     // Crea la cabecera con el visor de números y los ajustes de velocidad.
@@ -29,6 +30,9 @@ public class Cabecera extends JPanel {
         btnAuto = new JToggleButton("AUTO");
         configurarBotonAuto();
 
+        botonExtraer = new JButton("Extraer");
+        configurarBotonExtraer();
+
         spinnerVelocidad = new JSpinner(new SpinnerNumberModel(3, 1, 15, 1));
         spinnerVelocidad.setFont(new Font("Arial", Font.BOLD, 13));
         spinnerVelocidad.setPreferredSize(new Dimension(55, 26));
@@ -40,6 +44,7 @@ public class Cabecera extends JPanel {
         lblSeg.setForeground(Color.LIGHT_GRAY);
 
         pAuto.add(btnAuto);
+        pAuto.add(botonExtraer);
         pAuto.add(lblInfo);
         pAuto.add(spinnerVelocidad);
         pAuto.add(lblSeg);
@@ -62,32 +67,92 @@ public class Cabecera extends JPanel {
         return btnAuto;
     }
 
+    public JButton getBotonExtraer() {
+        return botonExtraer;
+    }
+
     public JSpinner getSpinnerVelocidad() {
         return spinnerVelocidad;
     }
 
     private void configurarBotonAuto() {
-        btnAuto.setFont(new Font("Arial", Font.BOLD, 12));
-        btnAuto.setPreferredSize(new Dimension(80, 28));
+        btnAuto.setFont(new Font("Arial", Font.BOLD, 14));
+        btnAuto.setPreferredSize(new Dimension(140, 34)); // Mismo tamaño que extraer
         btnAuto.setFocusPainted(false);
         btnAuto.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnAuto.setEnabled(false);
 
-        // Estilo visual moderno
-        btnAuto.setBackground(new Color(60, 60, 90));
-        btnAuto.setForeground(Color.LIGHT_GRAY);
-        btnAuto.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 120)));
+        // Estilo visual fondo carne pastel y texto negro
+        btnAuto.setBackground(new Color(255, 230, 210));
+        btnAuto.setForeground(Color.BLACK);
+        btnAuto.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 160, 140), 2),
+                BorderFactory.createEmptyBorder(4, 10, 4, 10)));
 
         // Efecto visual al activarse
         btnAuto.addActionListener(e -> {
             if (btnAuto.isSelected()) {
-                btnAuto.setBackground(new Color(45, 120, 200));
-                btnAuto.setForeground(Color.WHITE);
+                btnAuto.setBackground(new Color(180, 230, 180)); // Verde pálido (pastel)
+                btnAuto.setForeground(Color.BLACK);
+                btnAuto.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(130, 180, 130), 2),
+                        BorderFactory.createEmptyBorder(4, 10, 4, 10)));
                 btnAuto.setText("AUTO ON");
             } else {
-                btnAuto.setBackground(new Color(60, 60, 90));
-                btnAuto.setForeground(Color.LIGHT_GRAY);
+                btnAuto.setBackground(new Color(255, 230, 210));
+                btnAuto.setForeground(Color.BLACK);
+                btnAuto.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(200, 160, 140), 2),
+                        BorderFactory.createEmptyBorder(4, 10, 4, 10)));
                 btnAuto.setText("AUTO");
+            }
+        });
+    }
+
+    private void configurarBotonExtraer() {
+        botonExtraer.setFont(new Font("Arial", Font.BOLD, 14));
+        botonExtraer.setPreferredSize(new Dimension(140, 34)); // Mismo tamaño
+        botonExtraer.setFocusPainted(false);
+        botonExtraer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        botonExtraer.setEnabled(false);
+
+        botonExtraer.setBackground(new Color(255, 230, 210));
+        botonExtraer.setForeground(Color.BLACK);
+        botonExtraer.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 160, 140), 2),
+                BorderFactory.createEmptyBorder(4, 10, 4, 10)));
+
+        botonExtraer.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                if (botonExtraer.isEnabled()) {
+                    botonExtraer.setBackground(new Color(255, 245, 235)); // Fondo más claro al pasar el ratón (más
+                                                                          // pastel)
+                }
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                if (botonExtraer.isEnabled()) {
+                    botonExtraer.setBackground(new Color(255, 230, 210)); // Vuelve a su carne pastel normal
+                }
+            }
+        });
+
+        // Listener para que cuando se deshabilite/habilite su color se actualice bien
+        botonExtraer.addPropertyChangeListener("enabled", evt -> {
+            if (botonExtraer.isEnabled()) {
+                botonExtraer.setBackground(new Color(255, 230, 210));
+                botonExtraer.setForeground(Color.BLACK);
+                botonExtraer.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(200, 160, 140), 2),
+                        BorderFactory.createEmptyBorder(4, 10, 4, 10)));
+            } else {
+                botonExtraer.setBackground(new Color(255, 230, 210));
+                botonExtraer.setForeground(Color.GRAY);
+                botonExtraer.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.GRAY, 2),
+                        BorderFactory.createEmptyBorder(4, 10, 4, 10)));
             }
         });
     }

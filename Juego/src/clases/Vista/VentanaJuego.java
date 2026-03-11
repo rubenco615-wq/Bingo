@@ -67,7 +67,7 @@ public class VentanaJuego extends JPanel {
             actualizarCartones();
 
             botones.getBotonIniciar().setEnabled(false);
-            botones.getBotonExtraer().setEnabled(true);
+            cabecera.getBotonExtraer().setEnabled(true);
             botones.getBotonFinalizar().setEnabled(true);
             cabecera.getBtnAuto().setEnabled(true);
             cabecera.getSpinnerVelocidad().setEnabled(true);
@@ -77,7 +77,7 @@ public class VentanaJuego extends JPanel {
             historial.escribirLog("Partida iniciada!\nJugador: " + nombre + "\n¡Buena suerte!\n---------------");
         });
 
-        botones.getBotonExtraer().addActionListener(e -> procesarExtraccion());
+        cabecera.getBotonExtraer().addActionListener(e -> procesarExtraccion());
 
         botones.getBotonFinalizar().addActionListener(e -> {
             if (DialogosJuego.confirmarFinalizar(this))
@@ -90,12 +90,12 @@ public class VentanaJuego extends JPanel {
                 int s = (Integer) cabecera.getSpinnerVelocidad().getValue();
                 timerAuto = new Temporizador(s, ev -> procesarExtraccion());
                 timerAuto.iniciar();
-                botones.getBotonExtraer().setEnabled(false);
+                cabecera.getBotonExtraer().setEnabled(false);
                 historial.escribirLog("Auto ON [" + s + "s]");
             } else {
                 if (timerAuto != null)
                     timerAuto.detener();
-                botones.getBotonExtraer().setEnabled(true);
+                cabecera.getBotonExtraer().setEnabled(true);
                 historial.escribirLog("Auto OFF");
             }
         });
@@ -212,7 +212,7 @@ public class VentanaJuego extends JPanel {
         cabecera.getSpinnerVelocidad().setEnabled(false);
         cabecera.resetNumero();
 
-        botones.getBotonExtraer().setEnabled(false);
+        cabecera.getBotonExtraer().setEnabled(false);
         botones.getBotonFinalizar().setEnabled(false);
         botones.getBotonIniciar().setEnabled(true);
         historial.escribirLog(msg);
