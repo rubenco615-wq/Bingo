@@ -181,7 +181,18 @@ public class VentanaJuego extends JPanel {
             yaHayLineaEnPartida = true;
             historial.escribirLog("¡LÍNEA! " + nombre);
             Sonido.reproducirLinea();
+
+            // Pausamos el modo automático para que no salgan números mientras el aviso esté abierto
+            boolean autoEstaba = cabecera.getBtnAuto().isSelected();
+            if (autoEstaba && timerAuto != null)
+                timerAuto.detener();
+
             DialogosJuego.mostrarLinea(this, nombre);
+
+            // Al cerrar el aviso, reanudamos si el modo auto seguía activo
+            if (autoEstaba && timerAuto != null && juego.isPartidaActiva())
+                timerAuto.iniciar();
+
             Sonido.reproducirCartones(); // Reanudamos la música del juego tras cerrar el aviso
         }
         if (c.comprobarBingo()) {
