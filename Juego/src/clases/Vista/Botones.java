@@ -7,6 +7,7 @@ import java.awt.*;
 public class Botones extends JPanel {
     private final JButton botonIniciar;
     private final JButton botonFinalizar;
+    private final JButton botonAjustes;
 
     public Botones() {
         setLayout(new FlowLayout(FlowLayout.CENTER, 15, 8));
@@ -14,11 +15,13 @@ public class Botones extends JPanel {
 
         botonIniciar = crearBoton(" Iniciar Partida", new Color(45, 170, 45));
         botonFinalizar = crearBoton("Finalizar Partida", new Color(190, 45, 45));
+        botonAjustes = crearBoton("Ajustes", new Color(60, 60, 140));
 
         botonFinalizar.setEnabled(false);
 
         add(botonIniciar);
         add(botonFinalizar);
+        add(botonAjustes);
     }
 
     public JButton getBotonIniciar() {
@@ -27,6 +30,10 @@ public class Botones extends JPanel {
 
     public JButton getBotonFinalizar() {
         return botonFinalizar;
+    }
+
+    public JButton getBotonAjustes() {
+        return botonAjustes;
     }
 
     private JButton crearBoton(String texto, Color color) {

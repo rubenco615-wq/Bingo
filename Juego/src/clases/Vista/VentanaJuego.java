@@ -29,8 +29,10 @@ public class VentanaJuego extends JPanel {
         cabecera = new Cabecera();
         historial = new Historial();
         botones = new Botones();
-        panelCartonJugador = new PanelCarton("Tu Cartón  [haz clic para marcar]", new Color(25, 25, 55), false);
-        panelCartonMaquina = new PanelCarton("Cartón Máquina  [automático]", new Color(140, 30, 30), true);
+        panelCartonJugador = new PanelCarton("Tu Cartón  [haz clic para marcar]", new Color(25, 25, 55), false,
+                "pingu.png");
+        panelCartonMaquina = new PanelCarton("Cartón Máquina  [automático]", new Color(140, 30, 30), true,
+                "PinguBetis.png");
 
         // Juntamos los dos cartones en un panel central
         JPanel panelCartones = new JPanel(new GridLayout(2, 1, 0, 12));
@@ -82,6 +84,12 @@ public class VentanaJuego extends JPanel {
         botones.getBotonFinalizar().addActionListener(e -> {
             if (DialogosJuego.confirmarFinalizar(this))
                 finalizarJuego("Partida finalizada manualmente.");
+        });
+
+        // Botón Ajustes: abre el diálogo modal de ajustes
+        botones.getBotonAjustes().addActionListener(e -> {
+            DialogoAjustes dlg = new DialogoAjustes(SwingUtilities.getWindowAncestor(this));
+            dlg.setVisible(true);
         });
 
         // Configurar qué pasa al hacer clic en el cuadradito "Auto"
@@ -182,7 +190,8 @@ public class VentanaJuego extends JPanel {
             historial.escribirLog("¡LÍNEA! " + nombre);
             Sonido.reproducirLinea();
 
-            // Pausamos el modo automático para que no salgan números mientras el aviso esté abierto
+            // Pausamos el modo automático para que no salgan números mientras el aviso esté
+            // abierto
             boolean autoEstaba = cabecera.getBtnAuto().isSelected();
             if (autoEstaba && timerAuto != null)
                 timerAuto.detener();
