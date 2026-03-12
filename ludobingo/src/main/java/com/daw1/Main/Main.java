@@ -1,6 +1,6 @@
-package clases.Main;
+package com.daw1.Main;
 
-import clases.Vista.PantallaInicio;
+import com.daw1.Vista.PantallaInicio;
 
 public class Main {
     public static void main(String[] args) {
