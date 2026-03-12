@@ -1,7 +1,7 @@
-package clases.Vista;
+package com.daw1.Vista;
 
-import clases.model.Carton;
-import clases.model.Participante;
+import com.daw1.model.Carton;
+import com.daw1.model.Participante;
 import javax.swing.*;
 import java.awt.*;
 

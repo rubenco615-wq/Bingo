@@ -1,6 +1,6 @@
-package clases.Vista;
+package com.daw1.Vista;
 
-import clases.model.Sonido;
+import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 

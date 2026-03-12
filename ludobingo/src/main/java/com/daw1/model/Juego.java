@@ -1,4 +1,4 @@
-package clases.model;
+package com.daw1.model;
 
 import java.util.ArrayList;
 import java.util.List;

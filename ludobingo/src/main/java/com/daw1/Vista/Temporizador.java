@@ -1,4 +1,4 @@
-package clases.Vista;
+package com.daw1.Vista;
 
 import javax.swing.Timer;
 import java.awt.event.ActionListener;
