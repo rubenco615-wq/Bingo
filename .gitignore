@@ -336,3 +336,4 @@ Do not share my personal information
 
 # Built Visual Studio Code Extensions
 *.vsix
+Juego/.vscode/settings.json
