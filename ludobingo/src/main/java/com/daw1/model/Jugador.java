@@ -1,4 +1,4 @@
-package clases.model;
+package com.daw1.model;
 
 // Representa a un jugador en el bingo (ya sea humano o máquina).
 public class Jugador implements Participante {

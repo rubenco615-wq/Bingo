@@ -1,4 +1,4 @@
-package clases.model;
+package com.daw1.model;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -98,7 +98,8 @@ public class Sonido {
                 System.err.println("Archivo de audio no encontrado: " + f.getAbsolutePath());
                 return;
             }
-            if (musicaLinea != null) musicaLinea.close();
+            if (musicaLinea != null)
+                musicaLinea.close();
             musicaLinea = AudioSystem.getClip();
             musicaLinea.open(AudioSystem.getAudioInputStream(f));
             musicaLinea.start();

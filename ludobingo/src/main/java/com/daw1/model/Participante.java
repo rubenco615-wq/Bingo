@@ -1,4 +1,4 @@
-package clases.model;
+package com.daw1.model;
 
 // Puede ser implementada tanto por jugadores humanos como por la máquina.
 public interface Participante {

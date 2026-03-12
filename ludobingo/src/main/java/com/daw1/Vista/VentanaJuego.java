@@ -1,8 +1,8 @@
-package clases.Vista;
+package com.daw1.Vista;
 
-import clases.model.Carton;
-import clases.model.Juego;
-import clases.model.Sonido;
+import com.daw1.model.Carton;
+import com.daw1.model.Juego;
+import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 
@@ -198,7 +198,8 @@ public class VentanaJuego extends JPanel {
 
             DialogosJuego.mostrarLinea(this, nombre);
 
-            // Al cerrar el aviso, detenemos el sonido de línea y reanudamos la música de cartones
+            // Al cerrar el aviso, detenemos el sonido de línea y reanudamos la música de
+            // cartones
             Sonido.detenerLinea();
             Sonido.reproducirCartones();
 

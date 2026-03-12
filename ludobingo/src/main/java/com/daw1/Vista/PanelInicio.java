@@ -1,6 +1,6 @@
-package clases.Vista;
+package com.daw1.Vista;
 
-import clases.model.Sonido;
+import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -38,7 +38,8 @@ public class PanelInicio extends JPanel {
             }
         });
 
-        // Cuando pulsas jugar, paramos la musica de inicio y cambiamos al panel del juego
+        // Cuando pulsas jugar, paramos la musica de inicio y cambiamos al panel del
+        // juego
         botonJugar.addActionListener(e -> {
             Sonido.detenerBGM();
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
