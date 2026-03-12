@@ -9,6 +9,7 @@ public class Sonido {
     // Ruta base donde están los archivos de audio
     private static final String DIR = "Juego/src/resources/";
     private static Clip musicaFondo;
+    private static Clip musicaLinea; // Clip separado para el sonido de línea
     private static float volumenActual = 0.75f; // Volumen por defecto (0.0 a 1.0)
 
     // Reproduce un archivo de música en bucle (BGM = Background Music).
@@ -80,10 +81,30 @@ public class Sonido {
         reproducirBGM("Audio_Cartones_1.wav");
     }
 
+    // Detiene el sonido de línea si sigue reproduciéndose.
+    public static void detenerLinea() {
+        if (musicaLinea != null && musicaLinea.isRunning()) {
+            musicaLinea.stop();
+            musicaLinea.close();
+        }
+    }
+
     // Efecto de sonido cuando el jugador o la máquina hace línea.
     public static void reproducirLinea() {
         detenerBGM(); // Paramos la música de fondo para que se oiga la línea
-        reproducirSFX("Audio_Bingo_1.wav");
+        try {
+            File f = new File(DIR + "Audio_Bingo_1.wav");
+            if (!f.exists()) {
+                System.err.println("Archivo de audio no encontrado: " + f.getAbsolutePath());
+                return;
+            }
+            if (musicaLinea != null) musicaLinea.close();
+            musicaLinea = AudioSystem.getClip();
+            musicaLinea.open(AudioSystem.getAudioInputStream(f));
+            musicaLinea.start();
+        } catch (Exception e) {
+            System.err.println("Error al reproducir sonido de línea: " + e.getMessage());
+        }
     }
 
     // Detiene la BGM y reproduce el sonido de victoria al hacer bingo.

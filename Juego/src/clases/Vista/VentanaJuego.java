@@ -198,11 +198,13 @@ public class VentanaJuego extends JPanel {
 
             DialogosJuego.mostrarLinea(this, nombre);
 
-            // Al cerrar el aviso, reanudamos si el modo auto seguía activo
+            // Al cerrar el aviso, detenemos el sonido de línea y reanudamos la música de cartones
+            Sonido.detenerLinea();
+            Sonido.reproducirCartones();
+
+            // Reanudamos el modo auto si estaba activo
             if (autoEstaba && timerAuto != null && juego.isPartidaActiva())
                 timerAuto.iniciar();
-
-            Sonido.reproducirCartones(); // Reanudamos la música del juego tras cerrar el aviso
         }
         if (c.comprobarBingo()) {
             finalizarJuego("BINGO de " + nombre + "!");
