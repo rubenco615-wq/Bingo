@@ -3,7 +3,7 @@ package com.daw1.Vista;
 import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+
 
 // Este panel es el menu principal que ves al abrir el juego
 // Aqui puedes darle a jugar o abrir los ajustes del volumen
@@ -57,9 +57,9 @@ public class PanelInicio extends JPanel {
 
         // Botón de ajustes
         JButton botonAjustes = new JButton();
-        File fGear = new File("Juego/src/resources/imagen/gear_icon.png");
-        if (fGear.exists()) {
-            ImageIcon icon = new ImageIcon(fGear.getAbsolutePath());
+        java.net.URL urlGear = getClass().getResource("/imagen/gear_icon.png");
+        if (urlGear != null) {
+            ImageIcon icon = new ImageIcon(urlGear);
             Image scaled = icon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
             botonAjustes.setIcon(new ImageIcon(scaled));
         } else {
@@ -167,9 +167,9 @@ public class PanelInicio extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        File archivoImagen = new File("Juego/src/resources/imagen/foto_inicio.png");
-        if (archivoImagen.exists()) {
-            Image imagen = new ImageIcon(archivoImagen.getAbsolutePath()).getImage();
+        java.net.URL urlImagen = getClass().getResource("/imagen/foto_inicio.png");
+        if (urlImagen != null) {
+            Image imagen = new ImageIcon(urlImagen).getImage();
             g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
             Graphics2D g2d = (Graphics2D) g;
             g2d.setColor(new Color(0, 0, 0, 80));

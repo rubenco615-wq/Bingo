@@ -17,7 +17,7 @@ public class PantallaInicio extends JFrame {
 
         // asignar el icono de la aplicación
         Image icono = new ImageIcon(
-                getClass().getResource("/resources/imagen/LogoBingo.png")).getImage();
+                getClass().getResource("/imagen/LogoBingo.png")).getImage();
         setIconImage(icono);
 
         // Música de la pantalla inicial

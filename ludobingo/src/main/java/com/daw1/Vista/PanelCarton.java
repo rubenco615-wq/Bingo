@@ -55,7 +55,7 @@ public class PanelCarton extends JPanel {
     // metodo para crear la foto del pinguino de cada carton
     private Icon crearIcono(String nombreImagen) {
         try {
-            final Image img = new ImageIcon("Juego/src/resources/imagen/" + nombreImagen).getImage();
+            final Image img = new ImageIcon(getClass().getResource("/imagen/" + nombreImagen)).getImage();
             return new Icon() {
                 @Override
                 public void paintIcon(Component c, Graphics g, int x, int y) {

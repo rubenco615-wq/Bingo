@@ -3,30 +3,32 @@ package com.daw1.model;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import java.io.File;
+import java.io.InputStream;
 
 public class Sonido {
-    // Ruta base donde están los archivos de audio
-    private static final String DIR = "Juego/src/resources/";
     private static Clip musicaFondo;
     private static Clip musicaLinea; // Clip separado para el sonido de línea
     private static float volumenActual = 0.75f; // Volumen por defecto (0.0 a 1.0)
+
+    // Carga un audio desde el classpath
+    private static Clip cargarClip(String rutaClasspath) throws Exception {
+        InputStream is = Sonido.class.getResourceAsStream(rutaClasspath);
+        if (is == null) {
+            System.err.println("Archivo de audio no encontrado en classpath: " + rutaClasspath);
+            return null;
+        }
+        Clip clip = AudioSystem.getClip();
+        clip.open(AudioSystem.getAudioInputStream(is));
+        return clip;
+    }
 
     // Reproduce un archivo de música en bucle (BGM = Background Music).
     public static void reproducirBGM(String file) {
         detenerBGM();
         try {
-            File f = new File(DIR + file);
-            if (!f.exists()) {
-                System.err.println("Archivo de audio no encontrado: " + f.getAbsolutePath());
-                return;
-            }
-            musicaFondo = AudioSystem.getClip();
-            musicaFondo.open(AudioSystem.getAudioInputStream(f));
-
-            // Aplicar volumen actual
+            musicaFondo = cargarClip("/" + file);
+            if (musicaFondo == null) return;
             actualizarVolumenInterno();
-
             musicaFondo.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (Exception e) {
             System.err.println("Error al reproducir BGM: " + e.getMessage());
@@ -56,15 +58,10 @@ public class Sonido {
     }
 
     // Reproduce un efecto de sonido corto una sola vez
-    private static void reproducirSFX(String file) {
+    private static void reproducirSFX(String rutaClasspath) {
         try {
-            File f = new File(DIR + file);
-            if (!f.exists()) {
-                System.err.println("Archivo de audio no encontrado: " + f.getAbsolutePath());
-                return;
-            }
-            Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(f));
+            Clip clip = cargarClip(rutaClasspath);
+            if (clip == null) return;
             clip.start();
         } catch (Exception e) {
             System.err.println("Error al reproducir SFX: " + e.getMessage());
@@ -93,15 +90,9 @@ public class Sonido {
     public static void reproducirLinea() {
         detenerBGM(); // Paramos la música de fondo para que se oiga la línea
         try {
-            File f = new File(DIR + "Audio_Bingo_1.wav");
-            if (!f.exists()) {
-                System.err.println("Archivo de audio no encontrado: " + f.getAbsolutePath());
-                return;
-            }
-            if (musicaLinea != null)
-                musicaLinea.close();
-            musicaLinea = AudioSystem.getClip();
-            musicaLinea.open(AudioSystem.getAudioInputStream(f));
+            if (musicaLinea != null) musicaLinea.close();
+            musicaLinea = cargarClip("/Audio_Bingo_1.wav");
+            if (musicaLinea == null) return;
             musicaLinea.start();
         } catch (Exception e) {
             System.err.println("Error al reproducir sonido de línea: " + e.getMessage());
@@ -111,11 +102,11 @@ public class Sonido {
     // Detiene la BGM y reproduce el sonido de victoria al hacer bingo.
     public static void reproducirBingo() {
         detenerBGM();
-        reproducirSFX("Audio_Victoria_1.wav");
+        reproducirSFX("/Audio_Victoria_1.wav");
     }
 
     // Reproduce el audio correspondiente al número extraído
     public static void reproducirNumero(int numero) {
-        reproducirSFX("audios/Numeros/Numeros/" + numero + ".wav");
+        reproducirSFX("/audios/Numeros/Numeros/" + numero + ".wav");
     }
 }
