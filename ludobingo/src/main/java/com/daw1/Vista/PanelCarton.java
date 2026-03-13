@@ -89,40 +89,56 @@ public class PanelCarton extends JPanel {
     }
 
     // Sincroniza el dibujo del cartón con los datos reales del Participante.
-    public void actualizarCarton(Participante p, boolean activa) {
+    public void actualizarCarton(Participante p, boolean partidaActiva) {
         if (p == null) {
-            for (JButton b : celdas) {
-                b.setText("");
-                b.setBackground(Color.WHITE);
-            }
+            limpiarCarton();
             return;
         }
 
-        Carton c = p.getCarton();
-        for (int i = 0; i < 27; i++) {
-            int f = i / 9;
-            int col = i % 9;
-            int num = c.getNumero(f, col);
+        Carton carton = p.getCarton();
+        for (int i = 0; i < celdas.length; i++) {
+            actualizarCelda(i, carton, partidaActiva);
+        }
+    }
 
-            if (num == 0) {
-                celdas[i].setText("");
-                celdas[i].setIcon(iconoVacio); // Ponemos el pingüino de cada uno en el hueco
-                celdas[i].setBackground(new Color(210, 210, 225)); // Gris para huecos
-                celdas[i].setEnabled(false);
-            } else {
-                celdas[i].setText(String.valueOf(num));
-                celdas[i].setIcon(null); // Quitamos el pingüino si hay un número
-                celdas[i].setEnabled(activa);
+    private void limpiarCarton() {
+        for (JButton b : celdas) {
+            b.setText("");
+            b.setBackground(Color.WHITE);
+            b.setIcon(null);
+        }
+    }
 
-                if (c.isMarcado(f, col)) {
-                    celdas[i].setBackground(new Color(255, 230, 100)); // Amarillo (Marcado)
-                } else {
-                    celdas[i].setBackground(Color.WHITE);
-                    // Pista visual de columnas
-                    if (col % 2 == 0)
-                        celdas[i].setBackground(new Color(245, 250, 255));
-                }
-            }
+    private void actualizarCelda(int indice, Carton carton, boolean partidaActiva) {
+        int fila = indice / Carton.COLUMNAS;
+        int col = indice % Carton.COLUMNAS;
+        int num = carton.getNumero(fila, col);
+        JButton celda = celdas[indice];
+
+        if (num == 0) {
+            configurarCeldaVacia(celda);
+        } else {
+            configurarCeldaConNumero(celda, num, carton.isMarcado(fila, col), col, partidaActiva);
+        }
+    }
+
+    private void configurarCeldaVacia(JButton celda) {
+        celda.setText("");
+        celda.setIcon(iconoVacio);
+        celda.setBackground(new Color(210, 210, 225));
+        celda.setEnabled(false);
+    }
+
+    private void configurarCeldaConNumero(JButton celda, int num, boolean marcado, int col, boolean partidaActiva) {
+        celda.setText(String.valueOf(num));
+        celda.setIcon(null);
+        celda.setEnabled(partidaActiva);
+
+        if (marcado) {
+            celda.setBackground(new Color(255, 230, 100)); // Amarillo (Marcado)
+        } else {
+            // Fondo blanco con celdas alternas para mejor legibilidad
+            celda.setBackground((col % 2 == 0) ? new Color(245, 250, 255) : Color.WHITE);
         }
     }
 }

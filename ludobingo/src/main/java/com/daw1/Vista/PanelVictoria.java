@@ -2,7 +2,6 @@ package com.daw1.Vista;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 // Panel que se muestra cuando alguien gana el bingo
 // La imagen de fondo ocupa todo el panel y el titulo y el boton van encima
@@ -14,9 +13,10 @@ public class PanelVictoria extends JPanel {
         setLayout(new BorderLayout());
 
         // la imagen de fondo
-        File archivo = new File("Juego/src/resources/imagen/Monedas_Bingo.jpg");
-        if (archivo.exists()) {
-            imagenVictoria = new ImageIcon(archivo.getAbsolutePath()).getImage();
+        try {
+            imagenVictoria = new ImageIcon(getClass().getResource("/imagen/Monedas_Bingo.jpg")).getImage();
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar la imagen de victoria: " + e.getMessage());
         }
 
         // Etiqueta con el nombre del ganador

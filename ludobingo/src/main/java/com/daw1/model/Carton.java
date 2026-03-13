@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Random;
 
 public class Carton {
-    private static final int FILAS = 3;
-    private static final int COLUMNAS = 9;
+    // Constantes para las dimensiones del cartón
+    public static final int FILAS = 3;
+    public static final int COLUMNAS = 9;
     private static final int NUMEROS_POR_FILA = 5;
 
-    private final int[][] numeros; // El número en la casilla
-    private final boolean[][] marcados; // Si el número ha sido tachado
+    private final int[][] numeros; // 0 indica casilla vacía
+    private final boolean[][] marcados; // true si el número ha sido extraído
 
     public Carton() {
         this.numeros = new int[FILAS][COLUMNAS];
@@ -27,154 +28,143 @@ public class Carton {
         return marcados[fila][col];
     }
 
-    // genera el carton
+    // Genera un cartón de bingo válido siguiendo las reglas estándar.
     private void generarCarton() {
         boolean[][] estructura = determinarEstructura();
         rellenarNumeros(estructura);
         ordenarColumnas();
     }
 
-    // Determina qué casillas tendrán número y cuáles no.
+    // Selecciona qué casillas tendrán número, asegurando 5 por fila y al menos 1 por columna.
     private boolean[][] determinarEstructura() {
         boolean[][] tieneNumero;
         boolean generacionOk;
 
         do {
             tieneNumero = new boolean[FILAS][COLUMNAS];
-            int[] usosColumna = new int[COLUMNAS];
+            int[] conteoPorColumna = new int[COLUMNAS];
             generacionOk = true;
 
             for (int f = 0; f < FILAS; f++) {
-                List<Integer> disponibles = new ArrayList<>();
+                List<Integer> columnasDisponibles = new ArrayList<>();
                 for (int c = 0; c < COLUMNAS; c++) {
-                    // No más de 2 números por columna (estándar para asegurar distribución)
-                    if (usosColumna[c] < 2) {
-                        disponibles.add(c);
+                    // Máximo 2 números por columna para una mejor distribución
+                    if (conteoPorColumna[c] < 2) {
+                        columnasDisponibles.add(c);
                     }
                 }
 
-                if (disponibles.size() < NUMEROS_POR_FILA) {
+                if (columnasDisponibles.size() < NUMEROS_POR_FILA) {
                     generacionOk = false;
                     break;
                 }
 
-                Collections.shuffle(disponibles);
+                Collections.shuffle(columnasDisponibles);
                 for (int i = 0; i < NUMEROS_POR_FILA; i++) {
-                    int col = disponibles.get(i);
+                    int col = columnasDisponibles.get(i);
                     tieneNumero[f][col] = true;
-                    usosColumna[col]++;
+                    conteoPorColumna[col]++;
                 }
             }
 
-            // Validar que cada columna tenga al menos un número
+            // Validar que no haya columnas vacías
             if (generacionOk) {
-                for (int c = 0; c < COLUMNAS; c++) {
-                    if (usosColumna[c] == 0) {
+                for (int conteo : conteoPorColumna) {
+                    if (conteo == 0) {
                         generacionOk = false;
                         break;
                     }
                 }
             }
-
         } while (!generacionOk);
 
         return tieneNumero;
     }
 
-    // Rellena las casillas seleccionadas con números aleatorios válidos.
+    // Asigna números aleatorios a las casillas seleccionadas según el rango de cada columna.
     private void rellenarNumeros(boolean[][] estructura) {
         Random random = new Random();
-        int[] minCol = { 1, 10, 20, 30, 40, 50, 60, 70, 80 };
-        int[] maxCol = { 9, 19, 29, 39, 49, 59, 69, 79, 90 };
 
-        List<List<Integer>> usadosCol = new ArrayList<>();
-        for (int i = 0; i < COLUMNAS; i++) {
-            usadosCol.add(new ArrayList<>());
-        }
+        for (int c = 0; c < COLUMNAS; c++) {
+            int min = (c == 0) ? 1 : c * 10;
+            int max = (c == 8) ? 90 : (c * 10) + 9;
 
-        for (int f = 0; f < FILAS; f++) {
-            for (int c = 0; c < COLUMNAS; c++) {
+            List<Integer> usadosEnColumna = new ArrayList<>();
+            for (int f = 0; f < FILAS; f++) {
                 if (estructura[f][c]) {
                     int num;
                     do {
-                        num = random.nextInt(maxCol[c] - minCol[c] + 1) + minCol[c];
-                    } while (usadosCol.get(c).contains(num));
+                        num = random.nextInt(max - min + 1) + min;
+                    } while (usadosEnColumna.contains(num));
 
                     numeros[f][c] = num;
-                    usadosCol.get(c).add(num);
+                    usadosEnColumna.add(num);
                 }
             }
         }
     }
 
-    // Ordena los números de cada columna de menor a mayor.
+    // Ordena de menor a mayor los números presentes en cada columna.
     private void ordenarColumnas() {
         for (int c = 0; c < COLUMNAS; c++) {
             List<Integer> valores = new ArrayList<>();
-            List<Integer> filasConNumero = new ArrayList<>();
+            List<Integer> indicesFilas = new ArrayList<>();
 
             for (int f = 0; f < FILAS; f++) {
                 if (numeros[f][c] != 0) {
                     valores.add(numeros[f][c]);
-                    filasConNumero.add(f);
+                    indicesFilas.add(f);
                 }
             }
 
-            // Ordena los números de menor a mayor
             Collections.sort(valores);
             for (int i = 0; i < valores.size(); i++) {
-                numeros[filasConNumero.get(i)][c] = valores.get(i);
+                numeros[indicesFilas.get(i)][c] = valores.get(i);
             }
         }
     }
 
-    // Comprueba si el cartón contiene un número específico.
     public boolean contieneNumero(int numero) {
-        for (int f = 0; f < FILAS; f++) {
-            for (int c = 0; c < COLUMNAS; c++) {
-                if (numeros[f][c] == numero) {
+        for (int[] fila : numeros) {
+            for (int n : fila) {
+                if (n == numero)
                     return true;
-                }
             }
         }
         return false;
     }
 
-    // Marca el número indicado si existe en el cartón.
     public void marcarNumero(int numero) {
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLUMNAS; c++) {
                 if (numeros[f][c] == numero) {
                     marcados[f][c] = true;
+                    return; // Un número solo aparece una vez en el cartón
                 }
             }
         }
     }
 
-    // Comprueba si hay alguna línea completa en el cartón.
+    // Comprueba si el jugador ha completado alguna línea.
     public boolean comprobarLinea() {
         for (int f = 0; f < FILAS; f++) {
-            if (isFilaCompleta(f)) {
+            if (isFilaCompleta(f))
                 return true;
-            }
         }
         return false;
     }
 
     private boolean isFilaCompleta(int fila) {
-        boolean tieneNumeros = false;
         for (int c = 0; c < COLUMNAS; c++) {
-            if (numeros[fila][c] != 0) {
-                tieneNumeros = true;
-                if (!marcados[fila][c]) {
-                    return false;
-                }
+            // Si hay un número y no está marcado, la fila no está completa
+            if (numeros[fila][c] != 0 && !marcados[fila][c]) {
+                return false;
             }
         }
-        return tieneNumeros;
+        return true;
     }
 
-    // comprobar si tiene bingo
+    // Comprueba si el jugador ha tachado todos los números del cartón.
     public boolean comprobarBingo() {
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLUMNAS; c++) {

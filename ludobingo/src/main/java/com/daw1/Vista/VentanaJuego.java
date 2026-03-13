@@ -2,6 +2,7 @@ package com.daw1.Vista;
 
 import com.daw1.model.Carton;
 import com.daw1.model.Juego;
+import com.daw1.model.Participante;
 import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
@@ -54,108 +55,131 @@ public class VentanaJuego extends JPanel {
         Sonido.reproducirCartones();
     }
 
-    // Registra los eventos de los botones
+    // Este método registra qué tiene que pasar cuando se pulsan los botones.
     private void registrarEventos() {
-        botones.getBotonIniciar().addActionListener(e -> {
-            String nombre = DialogosJuego.pedirNombre(this).trim();
-            if (timerAuto != null)
-                timerAuto.detener();
-            cabecera.getBtnAuto().setSelected(false);
-
-            juego.iniciarPartida(nombre);
-            yaHayLineaEnPartida = false;
-
-            panelCartonJugador.setTitulo("Tu Cartón  [" + nombre + "] — haz clic para marcar");
-            actualizarCartones();
-
-            botones.getBotonIniciar().setEnabled(false);
-            cabecera.getBotonExtraer().setEnabled(true);
-            botones.getBotonFinalizar().setEnabled(true);
-            cabecera.getBtnAuto().setEnabled(true);
-            cabecera.getSpinnerVelocidad().setEnabled(true);
-
-            historial.limpiarLog();
-            cabecera.resetNumero();
-            historial.escribirLog("Partida iniciada!\nJugador: " + nombre + "\n¡Buena suerte!\n---------------");
-        });
-
+        botones.getBotonIniciar().addActionListener(e -> iniciarNuevaPartida());
         cabecera.getBotonExtraer().addActionListener(e -> procesarExtraccion());
+        botones.getBotonFinalizar().addActionListener(e -> confirmarYFinalizar());
+        botones.getBotonAjustes().addActionListener(e -> abrirAjustes());
+        
+        configurarModoAutomatico();
+        configurarClicsEnCarton();
+    }
 
-        botones.getBotonFinalizar().addActionListener(e -> {
-            if (DialogosJuego.confirmarFinalizar(this))
-                finalizarJuego("Partida finalizada manualmente.");
-        });
+    private void iniciarNuevaPartida() {
+        String nombre = DialogosJuego.pedirNombre(this).trim();
+        if (nombre.isEmpty()) return;
 
-        // Botón Ajustes: abre el diálogo modal de ajustes
-        botones.getBotonAjustes().addActionListener(e -> {
-            DialogoAjustes dlg = new DialogoAjustes(SwingUtilities.getWindowAncestor(this));
-            dlg.setVisible(true);
-        });
+        detenerModoAuto();
+        juego.iniciarPartida(nombre);
+        yaHayLineaEnPartida = false;
 
-        // Configurar qué pasa al hacer clic en el cuadradito "Auto"
+        panelCartonJugador.setTitulo("Tu Cartón [" + nombre + "] — haz clic para marcar");
+        actualizarCartones();
+
+        botones.getBotonIniciar().setEnabled(false);
+        habilitarControlesPartida(true);
+
+        historial.limpiarLog();
+        cabecera.resetNumero();
+        historial.escribirLog("¡Partida iniciada!\nJugador: " + nombre + "\n¡Buena suerte!\n---------------");
+    }
+
+    private void habilitarControlesPartida(boolean habilitar) {
+        cabecera.getBotonExtraer().setEnabled(habilitar && !cabecera.getBtnAuto().isSelected());
+        botones.getBotonFinalizar().setEnabled(habilitar);
+        cabecera.getBtnAuto().setEnabled(habilitar);
+        cabecera.getSpinnerVelocidad().setEnabled(habilitar);
+    }
+
+    private void confirmarYFinalizar() {
+        if (DialogosJuego.confirmarFinalizar(this)) {
+            finalizarJuego("Partida finalizada manualmente.");
+        }
+    }
+
+    private void abrirAjustes() {
+        DialogoAjustes dlg = new DialogoAjustes(SwingUtilities.getWindowAncestor(this));
+        dlg.setVisible(true);
+    }
+
+    private void configurarModoAutomatico() {
         cabecera.getBtnAuto().addActionListener(e -> {
             if (cabecera.getBtnAuto().isSelected()) {
-                int s = (Integer) cabecera.getSpinnerVelocidad().getValue();
-                timerAuto = new Temporizador(s, ev -> procesarExtraccion());
-                timerAuto.iniciar();
-                cabecera.getBotonExtraer().setEnabled(false);
-                historial.escribirLog("Auto ON [" + s + "s]");
+                activarModoAuto();
             } else {
-                if (timerAuto != null)
-                    timerAuto.detener();
-                cabecera.getBotonExtraer().setEnabled(true);
-                historial.escribirLog("Auto OFF");
+                detenerModoAuto();
             }
         });
 
         cabecera.getSpinnerVelocidad().addChangeListener(e -> {
             if (cabecera.getBtnAuto().isSelected() && timerAuto != null) {
-                int s = (Integer) cabecera.getSpinnerVelocidad().getValue();
-                timerAuto.cambiarIntervalo(s);
-                historial.escribirLog("Velocidad -> " + s + "s");
+                int segundos = (Integer) cabecera.getSpinnerVelocidad().getValue();
+                timerAuto.cambiarIntervalo(segundos);
+                historial.escribirLog("Velocidad -> " + segundos + "s");
             }
         });
+    }
 
-        // Enganchar listeners de Clic a todos los huecos numéricos de TU cartón
+    private void activarModoAuto() {
+        int segundos = (Integer) cabecera.getSpinnerVelocidad().getValue();
+        timerAuto = new Temporizador(segundos, ev -> procesarExtraccion());
+        timerAuto.iniciar();
+        cabecera.getBotonExtraer().setEnabled(false);
+        historial.escribirLog("Auto ON [" + segundos + "s]");
+    }
+
+    private void detenerModoAuto() {
+        if (timerAuto != null) {
+            timerAuto.detener();
+        }
+        cabecera.getBtnAuto().setSelected(false);
+        cabecera.getBotonExtraer().setEnabled(juego.isPartidaActiva());
+        historial.escribirLog("Auto OFF");
+    }
+
+    // Estos métodos configuran qué pasa cuando el jugador hace clic en su cartón.
+    private void configurarClicsEnCarton() {
         JButton[] celdas = panelCartonJugador.getCeldas();
         for (int i = 0; i < celdas.length; i++) {
-            int indice = i;
+            final int indice = i;
             celdas[i].addActionListener(e -> marcarCeldaJugador(indice));
         }
     }
 
     private void marcarCeldaJugador(int indice) {
-        if (!juego.isPartidaActiva())
-            return;
+        if (!juego.isPartidaActiva()) return;
 
-        Carton c = juego.getJugador().getCarton();
-        int fila = indice / 9, col = indice % 9;
-        int num = c.getNumero(fila, col);
+        Participante jugador = juego.getJugador();
+        Carton carton = jugador.getCarton();
+        int fila = indice / Carton.COLUMNAS;
+        int col = indice % Carton.COLUMNAS;
+        int num = carton.getNumero(fila, col);
 
-        if (num == 0 || c.isMarcado(fila, col))
-            return; // Era un hueco vacío o ya lo habías marcado
+        if (num == 0 || carton.isMarcado(fila, col)) return;
 
-        // Has pulsado un número que aún no ha salido del bombo
         if (!juego.esNumeroExtraido(num)) {
-            panelCartonJugador.getCeldas()[indice].setBackground(new Color(255, 70, 70));
-            new Timer(350, ev -> {
-                panelCartonJugador.actualizarCarton(juego.getJugador(), juego.isPartidaActiva());
-                ((Timer) ev.getSource()).stop();
-            }).start();
+            reproducirEfectoError(indice);
             return;
         }
 
-        // Si es correcto se marca
-        c.marcarNumero(num);
-        historial.escribirLog("Haz marcado el " + num);
-        panelCartonJugador.actualizarCarton(juego.getJugador(), true);
+        carton.marcarNumero(num);
+        historial.escribirLog("Has marcado el " + num);
+        panelCartonJugador.actualizarCarton(jugador, true);
 
-        verificarPremios(c, juego.getJugador().getNombre());
+        verificarPremios(carton, jugador.getNombre());
+    }
+
+    private void reproducirEfectoError(int indice) {
+        panelCartonJugador.getCeldas()[indice].setBackground(new Color(255, 70, 70));
+        new Timer(350, ev -> {
+            panelCartonJugador.actualizarCarton(juego.getJugador(), juego.isPartidaActiva());
+            ((Timer) ev.getSource()).stop();
+        }).start();
     }
 
     private void procesarExtraccion() {
-        if (!juego.isPartidaActiva())
-            return;
+        if (!juego.isPartidaActiva()) return;
 
         int num = juego.extraerNumero();
         if (num == -1) {
@@ -166,82 +190,88 @@ public class VentanaJuego extends JPanel {
 
         cabecera.setNumero(String.valueOf(num));
         historial.escribirLog("Nº " + num);
-        Sonido.reproducirNumero(num); // Reproducir audio del número
+        Sonido.reproducirNumero(num);
         actualizarCartones();
 
-        // Tras 2 a 5 segundos falsos de "pensar", la máquina revisa su propio cartón
-        new Timer(2000 + (int) (Math.random() * 3000), e -> {
+        planificarMarcadoMaquina(num);
+    }
+
+    private void planificarMarcadoMaquina(int num) {
+        // La máquina "piensa" entre 2 y 5 segundos antes de marcar
+        int retardo = 2000 + (int) (Math.random() * 3000);
+        new Timer(retardo, e -> {
             ((Timer) e.getSource()).stop();
-            if (juego.isPartidaActiva() && juego.getMaquina() != null) {
-                Carton cm = juego.getMaquina().getCarton();
-                if (cm.contieneNumero(num)) { // Si la maquina lo tiene lo marca y mira si ha ganado
-                    juego.getMaquina().marcarNumero(num);
-                    panelCartonMaquina.actualizarCarton(juego.getMaquina(), true);
-                    verificarPremios(cm, "Máquina");
-                }
+            if (juego.isPartidaActiva()) {
+                procesarMarcadoMaquina(num);
             }
         }).start();
     }
 
-    // comprueba si ha conseguido las lineas o el bingo
-    private void verificarPremios(Carton c, String nombre) {
-        if (!yaHayLineaEnPartida && c.comprobarLinea()) {
-            yaHayLineaEnPartida = true;
-            historial.escribirLog("¡LÍNEA! " + nombre);
-            Sonido.reproducirLinea();
-
-            // Pausamos el modo automático para que no salgan números mientras el aviso esté
-            // abierto
-            boolean autoEstaba = cabecera.getBtnAuto().isSelected();
-            if (autoEstaba && timerAuto != null)
-                timerAuto.detener();
-
-            DialogosJuego.mostrarLinea(this, nombre);
-
-            // Al cerrar el aviso, detenemos el sonido de línea y reanudamos la música de
-            // cartones
-            Sonido.detenerLinea();
-            Sonido.reproducirCartones();
-
-            // Reanudamos el modo auto si estaba activo
-            if (autoEstaba && timerAuto != null && juego.isPartidaActiva())
-                timerAuto.iniciar();
-        }
-        if (c.comprobarBingo()) {
-            finalizarJuego("BINGO de " + nombre + "!");
-            historial.escribirLog("¡BINGO! " + nombre);
-            Sonido.reproducirBingo();
-
-            // Reemplazamos el diálogo por la pantalla de victoria completa
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            if (frame != null) {
-                frame.getContentPane().removeAll();
-                frame.add(new PanelVictoria(nombre));
-                frame.revalidate();
-                frame.repaint();
-            }
+    private void procesarMarcadoMaquina(int num) {
+        Participante maquina = juego.getMaquina();
+        if (maquina != null && maquina.getCarton().contieneNumero(num)) {
+            maquina.getCarton().marcarNumero(num);
+            panelCartonMaquina.actualizarCarton(maquina, true);
+            verificarPremios(maquina.getCarton(), "Máquina");
         }
     }
 
-    // finaliza la partida
-    private void finalizarJuego(String msg) {
+    private void verificarPremios(Carton carton, String nombre) {
+        if (!yaHayLineaEnPartida && carton.comprobarLinea()) {
+            gestionarLinea(nombre);
+        }
+        if (carton.comprobarBingo()) {
+            gestionarBingo(nombre);
+        }
+    }
+
+    private void gestionarLinea(String nombre) {
+        yaHayLineaEnPartida = true;
+        historial.escribirLog("¡LÍNEA! " + nombre);
+        Sonido.reproducirLinea();
+
+        boolean autoEstaba = cabecera.getBtnAuto().isSelected();
+        if (autoEstaba && timerAuto != null) timerAuto.detener();
+
+        DialogosJuego.mostrarLinea(this, nombre);
+
+        Sonido.detenerLinea();
+        Sonido.reproducirCartones();
+
+        if (autoEstaba && timerAuto != null && juego.isPartidaActiva()) {
+            timerAuto.iniciar();
+        }
+    }
+
+    private void gestionarBingo(String nombre) {
+        finalizarJuego("¡BINGO de " + nombre + "!");
+        historial.escribirLog("¡BINGO! " + nombre);
+        Sonido.reproducirBingo();
+
+        mostrarPantallaVictoria(nombre);
+    }
+
+    private void mostrarPantallaVictoria(String nombre) {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        if (frame != null) {
+            frame.getContentPane().removeAll();
+            frame.add(new PanelVictoria(nombre));
+            frame.revalidate();
+            frame.repaint();
+        }
+    }
+
+    private void finalizarJuego(String mensaje) {
         juego.finalizarPartida();
-        if (timerAuto != null)
-            timerAuto.detener();
+        detenerModoAuto();
         actualizarCartones();
 
-        cabecera.getBtnAuto().setSelected(false);
-        cabecera.getBtnAuto().setEnabled(false);
-        cabecera.getSpinnerVelocidad().setEnabled(false);
-        cabecera.resetNumero();
-
-        cabecera.getBotonExtraer().setEnabled(false);
-        botones.getBotonFinalizar().setEnabled(false);
+        habilitarControlesPartida(false);
         botones.getBotonIniciar().setEnabled(true);
-        historial.escribirLog(msg);
+        cabecera.resetNumero();
+        historial.escribirLog(mensaje);
     }
 
-    // actualiza los cartones con cada partida
     private void actualizarCartones() {
         panelCartonJugador.actualizarCarton(juego.getJugador(), juego.isPartidaActiva());
         panelCartonMaquina.actualizarCarton(juego.getMaquina(), juego.isPartidaActiva());

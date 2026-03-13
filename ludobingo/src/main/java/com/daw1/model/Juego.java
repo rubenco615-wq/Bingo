@@ -9,6 +9,9 @@ public class Juego {
     private Bombo bombo;
     private boolean partidaActiva;
 
+    private static final int INDICE_JUGADOR = 0;
+    private static final int INDICE_MAQUINA = 1;
+
     public Juego() {
         this.participantes = new ArrayList<>();
         this.partidaActiva = false;
@@ -17,20 +20,18 @@ public class Juego {
     // Prepara y arranca una partida nueva con un jugador humano y la máquina.
     public void iniciarPartida(String nombreJugador) {
         participantes.clear();
-        participantes.add(new Jugador(nombreJugador));
-        participantes.add(new Jugador("Máquina"));
+        participantes.add(new Jugador(nombreJugador)); // Jugador humano
+        participantes.add(new Jugador("Máquina")); // Jugador automático
 
-        // Creamos un bombo nuevo y mezclado
         bombo = new Bombo();
         partidaActiva = true;
     }
 
-    // Marca la partida como terminada.
     public void finalizarPartida() {
         partidaActiva = false;
     }
 
-    // Saca el siguiente número del bombo.
+    // Extrae el siguiente número del bombo si la partida está activa.
     public int extraerNumero() {
         if (!partidaActiva || bombo == null) {
             return -1;
@@ -38,19 +39,24 @@ public class Juego {
         return bombo.sacarNumero();
     }
 
-    // Comprueba si un número específico ya ha salido del bombo.
+    // Comprueba si un número ya ha salido del bombo.
     public boolean esNumeroExtraido(int numero) {
         return bombo != null && bombo.contieneExtraido(numero);
     }
 
-    // Obtiene el participante que representa al jugador humano.
     public Participante getJugador() {
-        return participantes.isEmpty() ? null : participantes.get(0);
+        return getParticipante(INDICE_JUGADOR);
     }
 
-    // Obtiene el participante que representa a la máquina.
     public Participante getMaquina() {
-        return participantes.size() > 1 ? participantes.get(1) : null;
+        return getParticipante(INDICE_MAQUINA);
+    }
+
+    private Participante getParticipante(int indice) {
+        if (indice >= 0 && indice < participantes.size()) {
+            return participantes.get(indice);
+        }
+        return null;
     }
 
     public boolean isPartidaActiva() {
