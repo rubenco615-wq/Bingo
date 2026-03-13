@@ -9,7 +9,7 @@ public class PanelVictoria extends JPanel {
 
     private Image imagenVictoria;
 
-    public PanelVictoria(String nombreGanador) {
+    public PanelVictoria(String nombreGanador, boolean esMaquina) {
         setLayout(new BorderLayout());
 
         // la imagen de fondo
@@ -19,8 +19,15 @@ public class PanelVictoria extends JPanel {
             System.err.println("No se pudo cargar la imagen de victoria: " + e.getMessage());
         }
 
-        // Etiqueta con el nombre del ganador
-        JLabel lblTitulo = new JLabel("¡FELICIDADES " + nombreGanador.toUpperCase() + "!", SwingConstants.CENTER) {
+        // Etiqueta con el mensaje de victoria diferenciado
+        String mensajeVictoria;
+        if (esMaquina) {
+            mensajeVictoria = "¡LA MÁQUINA HA GANADO!";
+        } else {
+            mensajeVictoria = "¡FELICIDADES " + nombreGanador.toUpperCase() + ", HAS GANADO!";
+        }
+
+        JLabel lblTitulo = new JLabel(mensajeVictoria, SwingConstants.CENTER) {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();

@@ -61,14 +61,15 @@ public class VentanaJuego extends JPanel {
         cabecera.getBotonExtraer().addActionListener(e -> procesarExtraccion());
         botones.getBotonFinalizar().addActionListener(e -> confirmarYFinalizar());
         botones.getBotonAjustes().addActionListener(e -> abrirAjustes());
-        
+
         configurarModoAutomatico();
         configurarClicsEnCarton();
     }
 
     private void iniciarNuevaPartida() {
         String nombre = DialogosJuego.pedirNombre(this).trim();
-        if (nombre.isEmpty()) return;
+        if (nombre.isEmpty())
+            return;
 
         detenerModoAuto();
         juego.iniciarPartida(nombre);
@@ -148,7 +149,8 @@ public class VentanaJuego extends JPanel {
     }
 
     private void marcarCeldaJugador(int indice) {
-        if (!juego.isPartidaActiva()) return;
+        if (!juego.isPartidaActiva())
+            return;
 
         Participante jugador = juego.getJugador();
         Carton carton = jugador.getCarton();
@@ -156,7 +158,8 @@ public class VentanaJuego extends JPanel {
         int col = indice % Carton.COLUMNAS;
         int num = carton.getNumero(fila, col);
 
-        if (num == 0 || carton.isMarcado(fila, col)) return;
+        if (num == 0 || carton.isMarcado(fila, col))
+            return;
 
         if (!juego.esNumeroExtraido(num)) {
             reproducirEfectoError(indice);
@@ -179,7 +182,8 @@ public class VentanaJuego extends JPanel {
     }
 
     private void procesarExtraccion() {
-        if (!juego.isPartidaActiva()) return;
+        if (!juego.isPartidaActiva())
+            return;
 
         int num = juego.extraerNumero();
         if (num == -1) {
@@ -231,7 +235,8 @@ public class VentanaJuego extends JPanel {
         Sonido.reproducirLinea();
 
         boolean autoEstaba = cabecera.getBtnAuto().isSelected();
-        if (autoEstaba && timerAuto != null) timerAuto.detener();
+        if (autoEstaba && timerAuto != null)
+            timerAuto.detener();
 
         DialogosJuego.mostrarLinea(this, nombre);
 
@@ -255,7 +260,8 @@ public class VentanaJuego extends JPanel {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         if (frame != null) {
             frame.getContentPane().removeAll();
-            frame.add(new PanelVictoria(nombre));
+            boolean esMaquina = nombre.equals("Máquina");
+            frame.add(new PanelVictoria(nombre, esMaquina));
             frame.revalidate();
             frame.repaint();
         }
