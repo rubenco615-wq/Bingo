@@ -1,161 +1,79 @@
 # Diagrama de Casos de Uso – Juego Bingo
 
+Este diagrama representa las interacciones entre los usuarios (Jugador y Máquina) y el sistema, reflejando las funcionalidades actuales como el ajuste de velocidad, el modo automático y los efectos de sonido.
+
 ```mermaid
-graph TD
+graph LR
+    subgraph Actores
+        J((Jugador))
+        M((Máquina))
+    end
 
-Jugador((Jugador))
-Maquina((Máquina))
-Sistema((Sistema))
+    subgraph "Sistema Bingo"
+        UC1[Iniciar Partida]
+        UC2[Introducir Nombre]
+        UC3[Generar Cartones y Bombo]
+        UC4[Ajustar Velocidad / Modo AUTO]
+        UC5[Extraer Número]
+        UC6[Reproducir Sonido/Efectos]
+        UC7[Marcar Número Manualmente]
+        UC8[Marcar Número Automáticamente]
+        UC9[Comprobar Línea/Bingo]
+        UC10[Mostrar Pantalla Victoria]
+        UC11[Abrir Ajustes]
+    end
 
-IniciarPartida[Iniciar partida]
-GenerarCartones[Generar cartones]
-CrearParticipantes[Crear participantes]
-
-ExtraerNumero[Extraer número]
-NotificarParticipantes[Notificar participantes]
-ActualizarHistorial[Actualizar historial]
-
-MarcarNumeroJugador[Marcar número - Jugador]
-MarcarNumeroMaquina[Marcar número - Máquina]
-ValidarMarcado[Validar marcado]
-
-ComprobarLinea[Comprobar línea]
-MostrarLinea[Mostrar mensaje de línea]
-
-ComprobarBingo[Comprobar bingo]
-FinalizarPartida[Finalizar partida]
-MostrarGanador[Mostrar ganador]
-
-Jugador --> IniciarPartida
-Jugador --> MarcarNumeroJugador
-
-Maquina --> MarcarNumeroMaquina
-
-Sistema --> ExtraerNumero
-Sistema --> NotificarParticipantes
-Sistema --> MarcarNumeroMaquina
-
-IniciarPartida -->|<< include >>| CrearParticipantes
-CrearParticipantes -->|<< include >>| GenerarCartones
-
-ExtraerNumero -->|<< include >>| NotificarParticipantes
-NotificarParticipantes -->|<< include >>| ActualizarHistorial
-
-MarcarNumeroJugador -->|<< include >>| ValidarMarcado
-
-ComprobarLinea -->|<< extend >>| MostrarLinea
-ComprobarBingo -->|<< extend >>| FinalizarPartida
-FinalizarPartida -->|<< include >>| MostrarGanador
+    J --> UC1
+    UC1 ..> UC2 : << include >>
+    UC2 ..> UC3 : << include >>
+    
+    J --> UC4
+    J --> UC7
+    J --> UC11
+    
+    M --> UC8
+    
+    UC5 ..> UC6 : << include >>
+    UC5 ..> UC9 : << include >>
+    
+    UC9 ..> UC10 : << extend >>
 ```
 
-# Explicación del Diagrama de Casos de Uso
+# Explicación del Diagrama
 
-## Actores del Sistema
+## Actores
 
-### **Jugador**
-Es el usuario que interactúa con el juego. Puede **iniciar la partida** y **marcar manualmente los números** que aparecen en su cartón cuando estos han sido extraídos por el sistema. El marcado se realiza haciendo clic en el número correspondiente de su cartón.
+### **Jugador (Humano)**
+Es el usuario principal. Sus responsabilidades incluyen:
+- **Iniciar la partida** (introduciendo su nombre).
+- **Controlar la partida**: Activar/desactivar el modo **AUTO** y ajustar la **velocidad** de extracción.
+- **Participar**: Marcar manualmente los números en su cartón.
+- **Configurar**: Acceder al menú de **Ajustes**.
 
-### **Máquina**
-Representa al oponente controlado por el sistema. Participa en la partida y **marca automáticamente los números** que aparecen en su cartón cuando son extraídos y notificados por el sistema.
-
-### **Sistema**
-Representa la lógica interna del juego que ejecuta acciones automáticas: extrae números del bombo, notifica a los participantes, actualiza el historial y controla el temporizador.
-
----
-
-## Casos de Uso Principales
-
-### **Iniciar partida**
-Permite al jugador comenzar una **nueva partida de Bingo**. Cuando se inicia la partida, el sistema prepara todos los elementos necesarios para el juego.
-
-### **Crear participantes**
-El sistema crea las instancias de **Jugador** y **Máquina**, asignando a cada uno un nombre y preparando su estructura interna.
-
-**Relación utilizada:** `&lt;&lt;include&gt;&gt;`  
-Esto significa que **siempre que se inicia una partida se crean los participantes**.
-
-### **Generar cartones**
-Este caso de uso se ejecuta automáticamente al crear los participantes. Cada participante genera de forma **aleatoria su propio cartón** con 15 números distribuidos en formato 3x9.
-
-**Relación utilizada:** `&lt;&lt;include&gt;&gt;`  
-Esto significa que **siempre que se crean los participantes se generan sus cartones**.
+### **Máquina (IA)**
+Representa al oponente. Su única acción es **marcar automáticamente** sus números tras un breve retardo, simulando el comportamiento de un jugador.
 
 ---
 
-### **Extraer número**
-El **Sistema** extrae automáticamente un número del bombo **cada cierto intervalo de tiempo** (4 segundos). Los números extraídos **no pueden repetirse**.
+## Casos de Uso del Sistema
 
-### **Notificar participantes**
-Cada número extraído es **notificado a ambos participantes** (Jugador y Máquina) para que puedan marcarlo en sus cartones si lo tienen.
+### **1. Gestión de la Partida**
+- **Iniciar Partida**: Incluye pedir el nombre del jugador y generar tanto los cartones (únicos y aleatorios) como el bombo.
+- **Finalizar Partida**: Se dispara automáticamente cuando alguien consigue Bingo, mostrando la pantalla de victoria.
 
-**Relación utilizada:** `&lt;&lt;include&gt;&gt;`  
-Esto significa que **cada vez que se extrae un número, se notifica a los participantes**.
+### **2. Control y Ajustes**
+- **Ajustar Velocidad / Modo AUTO**: El jugador puede decidir si la extracción es manual o automática, y a qué ritmo salen las bolas.
+- **Abrir Ajustes**: Permite acceder a opciones adicionales de configuración de la aplicación.
 
-### **Actualizar historial**
-Cada número extraído se guarda en un **historial visible** que permite al jugador ver los números que ya han salido durante la partida.
+### **3. Lógica del Juego (Automática)**
+- **Extraer Número**: El sistema saca una bola del bombo (sin repetición).
+- **Reproducir Sonido**: Cada extracción y cada premio activa efectos de sonido para mejorar la inmersión.
+- **Comprobar Línea/Bingo**: Tras cada marcado, el sistema valida si se ha cumplido alguna condición de premio.
 
-**Relación utilizada:** `&lt;&lt;include&gt;&gt;`  
-Esto significa que **cada vez que se notifica a los participantes, también se actualiza el historial**.
-
----
-
-### **Marcar número - Jugador**
-Cuando el **Jugador** recibe la notificación de un nuevo número, puede **marcarlo manualmente** haciendo clic en el número de su cartón. La interfaz solicita al objeto Jugador que ejecute el marcado.
-
-### **Marcar número - Máquina**
-Cuando la **Máquina** recibe la notificación de un nuevo número, **marca automáticamente** si el número está en su cartón, sin intervención del usuario.
-
-### **Validar marcado**
-Antes de permitir el marcado, el sistema valida:
-- Que el número haya sido extraído previamente
-- Que el número pertenezca al cartón del jugador
-- Que el número no esté ya marcado
-
-Si no cumple las condiciones, se muestra un mensaje de error.
-
-**Relación utilizada:** `&lt;&lt;include&gt;&gt;`  
-Esto significa que **cada vez que el jugador intenta marcar, se validan las condiciones**.
+### **4. Marcado de Números**
+- **Marcado Manual (Jugador)**: Requiere que el usuario haga clic. El sistema valida que el número sea correcto (haya salido en el bombo).
+- **Marcado Automático (Máquina)**: El sistema detecta el número y lo marca en el cartón de la IA tras unos segundos.
 
 ---
 
-### **Comprobar línea**
-El sistema verifica si alguno de los participantes ha **completado una fila en su cartón** después de cada marcado.
-
-### **Mostrar mensaje de línea**
-Si se detecta una línea, el sistema muestra un **mensaje informativo al jugador** indicando quién la consiguió.
-
-**Relación utilizada:** `&lt;&lt;extend&gt;&gt;`  
-Esto significa que **solo ocurre cuando se cumple la condición de tener una línea**.
-
----
-
-### **Comprobar bingo**
-Después de cada marcado, el sistema verifica si alguno de los participantes ha **completado todos los números de su cartón**.
-
-### **Finalizar partida**
-Si se detecta un **bingo**, el juego termina inmediatamente.
-
-**Relación utilizada:** `&lt;&lt;extend&gt;&gt;`  
-Esto significa que **solo se ejecuta cuando alguien consigue bingo**.
-
-### **Mostrar ganador**
-Al finalizar la partida, se muestra un **mensaje con el nombre del ganador** y la opción de volver al menú principal.
-
-**Relación utilizada:** `&lt;&lt;include&gt;&gt;`  
-Esto significa que **siempre que finaliza la partida se muestra el ganador**.
-
----
-
-## Resumen del Funcionamiento
-
-El **jugador inicia la partida** y el sistema **crea los participantes y genera sus cartones automáticamente**.
-
-A partir de ese momento, el **sistema extrae números del bombo de forma automática** y **notifica a ambos participantes**.
-
-La **máquina marca automáticamente** los números en su cartón, mientras que el **jugador debe hacer clic para marcar manualmente**.
-
-Antes de cada marcado del jugador, el sistema **valida que se cumplan las reglas**.
-
-Después de cada marcado, el sistema **comprueba si se ha completado una línea o un bingo**.
-
-Cuando un participante consigue **bingo**, la partida **finaliza, se muestra el ganador** y se ofrece la opción de reiniciar.
+> **Nota**: Los casos de uso ayudan a definir **qué** hace el sistema sin entrar en detalles de **cómo** lo hace. Es la base para entender los requerimientos antes de empezar a programar.
