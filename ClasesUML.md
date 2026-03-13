@@ -113,3 +113,4 @@ Juego --> Temporizador
 Participante --> Carton
 VentanaPrincipal --> Juego
 VentanaPrincipal --> PanelCarton
+```
