@@ -7,7 +7,10 @@ import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 
-// El panel principal donde ocurre toda la acción.
+/**
+ * El panel principal del juego donde se integran todos los componentes del Bingo.
+ * Gestiona el flujo de la partida, los eventos de usuario y la actualización de la interfaz.
+ */
 public class VentanaJuego extends JPanel {
 
     private Juego juego;
@@ -21,6 +24,9 @@ public class VentanaJuego extends JPanel {
     private boolean yaHayLineaEnPartida;
     private Temporizador timerAuto;
 
+    /**
+     * Inicializa el tablero de juego y todos sus paneles secundarios.
+     */
     public VentanaJuego() {
         setLayout(new BorderLayout(8, 8));
 
@@ -55,7 +61,9 @@ public class VentanaJuego extends JPanel {
         Sonido.reproducirCartones();
     }
 
-    // Este método registra qué tiene que pasar cuando se pulsan los botones.
+    /**
+     * Registra los listeners de eventos para interactuar con los componentes de la interfaz.
+     */
     private void registrarEventos() {
         botones.getBotonIniciar().addActionListener(e -> iniciarNuevaPartida());
         cabecera.getBotonExtraer().addActionListener(e -> procesarExtraccion());
@@ -66,6 +74,9 @@ public class VentanaJuego extends JPanel {
         configurarClicsEnCarton();
     }
 
+    /**
+     * Solicita el nombre al usuario e inicia una nueva instancia de partida.
+     */
     private void iniciarNuevaPartida() {
         String nombre = DialogosJuego.pedirNombre(this).trim();
         if (nombre.isEmpty())
@@ -86,6 +97,11 @@ public class VentanaJuego extends JPanel {
         historial.escribirLog("¡Partida iniciada!\nJugador: " + nombre + "\n¡Buena suerte!\n---------------");
     }
 
+    /**
+     * Habilita o deshabilita los controles del juego según el estado de la partida.
+     * 
+     * @param habilitar true para habilitar, false para deshabilitar.
+     */
     private void habilitarControlesPartida(boolean habilitar) {
         cabecera.getBotonExtraer().setEnabled(habilitar && !cabecera.getBtnAuto().isSelected());
         botones.getBotonFinalizar().setEnabled(habilitar);
@@ -93,17 +109,26 @@ public class VentanaJuego extends JPanel {
         cabecera.getSpinnerVelocidad().setEnabled(habilitar);
     }
 
+    /**
+     * Muestra una confirmación y finaliza la partida si el usuario acepta.
+     */
     private void confirmarYFinalizar() {
         if (DialogosJuego.confirmarFinalizar(this)) {
             finalizarJuego("Partida finalizada manualmente.");
         }
     }
 
+    /**
+     * Abre la ventana modal de ajustes.
+     */
     private void abrirAjustes() {
         DialogoAjustes dlg = new DialogoAjustes(SwingUtilities.getWindowAncestor(this));
         dlg.setVisible(true);
     }
 
+    /**
+     * Configura el comportamiento de la extracción automática de números.
+     */
     private void configurarModoAutomatico() {
         cabecera.getBtnAuto().addActionListener(e -> {
             if (cabecera.getBtnAuto().isSelected()) {
@@ -122,6 +147,9 @@ public class VentanaJuego extends JPanel {
         });
     }
 
+    /**
+     * Activa el temporizador de extracción automática.
+     */
     private void activarModoAuto() {
         int segundos = (Integer) cabecera.getSpinnerVelocidad().getValue();
         timerAuto = new Temporizador(segundos, ev -> procesarExtraccion());
@@ -130,6 +158,9 @@ public class VentanaJuego extends JPanel {
         historial.escribirLog("Auto ON [" + segundos + "s]");
     }
 
+    /**
+     * Detiene el temporizador de extracción automática.
+     */
     private void detenerModoAuto() {
         if (timerAuto != null) {
             timerAuto.detener();
@@ -139,7 +170,9 @@ public class VentanaJuego extends JPanel {
         historial.escribirLog("Auto OFF");
     }
 
-    // Estos métodos configuran qué pasa cuando el jugador hace clic en su cartón.
+    /**
+     * Registra los eventos de clic en cada celda del cartón del jugador humano.
+     */
     private void configurarClicsEnCarton() {
         JButton[] celdas = panelCartonJugador.getCeldas();
         for (int i = 0; i < celdas.length; i++) {
@@ -148,6 +181,11 @@ public class VentanaJuego extends JPanel {
         }
     }
 
+    /**
+     * Procesa el intento de marcado de una celda por parte del jugador.
+     * 
+     * @param indice El índice de la celda pulsada.
+     */
     private void marcarCeldaJugador(int indice) {
         if (!juego.isPartidaActiva())
             return;
@@ -173,6 +211,11 @@ public class VentanaJuego extends JPanel {
         verificarPremios(carton, jugador.getNombre());
     }
 
+    /**
+     * Muestra un efecto visual de error cuando se pulsa una celda incorrecta.
+     * 
+     * @param indice El índice de la celda que causó el error.
+     */
     private void reproducirEfectoError(int indice) {
         panelCartonJugador.getCeldas()[indice].setBackground(new Color(255, 70, 70));
         new Timer(350, ev -> {
@@ -181,6 +224,9 @@ public class VentanaJuego extends JPanel {
         }).start();
     }
 
+    /**
+     * Realiza la extracción de un número, actualiza el visor e inicia el turno de la máquina.
+     */
     private void procesarExtraccion() {
         if (!juego.isPartidaActiva())
             return;
@@ -200,6 +246,11 @@ public class VentanaJuego extends JPanel {
         planificarMarcadoMaquina(num);
     }
 
+    /**
+     * Planifica el marcado de un número extraído por parte de la máquina tras un retardo.
+     * 
+     * @param num El número extraído.
+     */
     private void planificarMarcadoMaquina(int num) {
         // La máquina "piensa" entre 2 y 5 segundos antes de marcar
         int retardo = 2000 + (int) (Math.random() * 3000);
@@ -211,6 +262,11 @@ public class VentanaJuego extends JPanel {
         }).start();
     }
 
+    /**
+     * Realiza el marcado efectivo de un número en el cartón de la máquina.
+     * 
+     * @param num El número a marcar.
+     */
     private void procesarMarcadoMaquina(int num) {
         Participante maquina = juego.getMaquina();
         if (maquina != null && maquina.getCarton().contieneNumero(num)) {
@@ -220,6 +276,12 @@ public class VentanaJuego extends JPanel {
         }
     }
 
+    /**
+     * Verifica si se han conseguido premios de línea o bingo tras un marcado.
+     * 
+     * @param carton El cartón a comprobar.
+     * @param nombre El nombre del participante.
+     */
     private void verificarPremios(Carton carton, String nombre) {
         if (!yaHayLineaEnPartida && carton.comprobarLinea()) {
             gestionarLinea(nombre);
@@ -229,6 +291,11 @@ public class VentanaJuego extends JPanel {
         }
     }
 
+    /**
+     * Gestiona los eventos y notificaciones tras conseguirse una línea.
+     * 
+     * @param nombre Nombre de quien hizo línea.
+     */
     private void gestionarLinea(String nombre) {
         yaHayLineaEnPartida = true;
         historial.escribirLog("¡LÍNEA! " + nombre);
@@ -248,6 +315,11 @@ public class VentanaJuego extends JPanel {
         }
     }
 
+    /**
+     * Gestiona el fin de la partida tras cantarse Bingo.
+     * 
+     * @param nombre El nombre del ganador.
+     */
     private void gestionarBingo(String nombre) {
         finalizarJuego("¡BINGO de " + nombre + "!");
         historial.escribirLog("¡BINGO! " + nombre);
@@ -256,6 +328,11 @@ public class VentanaJuego extends JPanel {
         mostrarPantallaVictoria(nombre);
     }
 
+    /**
+     * Muestra la pantalla de victoria final ocupando toda la ventana.
+     * 
+     * @param nombre El nombre del ganador.
+     */
     private void mostrarPantallaVictoria(String nombre) {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         if (frame != null) {
@@ -267,6 +344,11 @@ public class VentanaJuego extends JPanel {
         }
     }
 
+    /**
+     * Finaliza la estructura lógica y visual de la partida actual.
+     * 
+     * @param mensaje El mensaje de finalización a mostrar en el log.
+     */
     private void finalizarJuego(String mensaje) {
         juego.finalizarPartida();
         detenerModoAuto();
@@ -278,6 +360,9 @@ public class VentanaJuego extends JPanel {
         historial.escribirLog(mensaje);
     }
 
+    /**
+     * Actualiza los paneles visuales de ambos cartones.
+     */
     private void actualizarCartones() {
         panelCartonJugador.actualizarCarton(juego.getJugador(), juego.isPartidaActiva());
         panelCartonMaquina.actualizarCarton(juego.getMaquina(), juego.isPartidaActiva());

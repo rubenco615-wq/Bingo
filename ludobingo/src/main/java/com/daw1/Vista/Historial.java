@@ -3,11 +3,16 @@ package com.daw1.Vista;
 import javax.swing.*;
 import java.awt.*;
 
-// Recuadro negro donde se encuentran todos los números extraídos anteriormente. 
-
+/**
+ * Panel que muestra un registro (log) de todos los números extraídos y sucesos de la partida.
+ * Utiliza un JTextArea desplazable para facilitar la lectura.
+ */
 public class Historial extends JPanel {
     private JTextArea areaLog;
 
+    /**
+     * Inicializa el panel del historial con su diseño y componentes.
+     */
     public Historial() {
         setLayout(new BorderLayout(0, 5));
         setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 12));
@@ -27,11 +32,19 @@ public class Historial extends JPanel {
         add(new JScrollPane(areaLog), BorderLayout.CENTER);
     }
 
+    /**
+     * Añade un mensaje al registro visual.
+     * 
+     * @param msj El texto a añadir.
+     */
     public void escribirLog(String msj) {
         areaLog.append(msj + "\n");
         areaLog.setCaretPosition(areaLog.getDocument().getLength());
     }
 
+    /**
+     * Borra todo el contenido del historial.
+     */
     public void limpiarLog() {
         areaLog.setText("");
     }

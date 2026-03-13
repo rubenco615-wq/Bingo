@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- * Unit test for simple App.
+ * Pruebas unitarias básicas para la aplicación.
  */
 public class AppTest {
     /**
-     * Rigorous Test :-)
+     * Prueba de integridad básica (rigorous test).
      */
     @Test
     public void shouldAnswerWithTrue() {

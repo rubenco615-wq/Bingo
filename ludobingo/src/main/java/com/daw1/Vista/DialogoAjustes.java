@@ -4,10 +4,16 @@ import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 
-// Ventana de ajustes del juego
-// Aqui se puede cambiar el volumen de la musica y salir del juego
+/**
+ * Diálogo modal que permite ajustar el volumen de la música y salir del juego.
+ */
 public class DialogoAjustes extends JDialog {
 
+    /**
+     * Crea un nuevo diálogo de ajustes.
+     * 
+     * @param propietario La ventana o componente padre.
+     */
     public DialogoAjustes(Window propietario) {
         super(propietario, "⚙  Ajustes", ModalityType.APPLICATION_MODAL);
         setResizable(false);
@@ -96,7 +102,13 @@ public class DialogoAjustes extends JDialog {
         setLocationRelativeTo(propietario);
     }
 
-    // Metodo para crear botones con el mismo estilo, asi no repito codigo
+    /**
+     * Crea un botón con el estilo visual coherente con el diálogo.
+     * 
+     * @param texto El texto del botón.
+     * @param color El color de fondo del botón.
+     * @return Un objeto JButton configurado.
+     */
     private JButton crearBoton(String texto, Color color) {
         JButton b = new JButton(texto);
         b.setFont(new Font("Arial", Font.BOLD, 14));

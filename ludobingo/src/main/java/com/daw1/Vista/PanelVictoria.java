@@ -3,12 +3,20 @@ package com.daw1.Vista;
 import javax.swing.*;
 import java.awt.*;
 
-// Panel que se muestra cuando alguien gana el bingo
-// La imagen de fondo ocupa todo el panel y el titulo y el boton van encima
+/**
+ * Panel de transición que se muestra cuando un jugador canta Bingo.
+ * Muestra el nombre del ganador sobre un fondo festivo y permite volver al menú.
+ */
 public class PanelVictoria extends JPanel {
 
     private Image imagenVictoria;
 
+    /**
+     * Crea el panel de victoria configurando el mensaje según quién haya ganado.
+     * 
+     * @param nombreGanador El nombre del ganador.
+     * @param esMaquina true si el ganador ha sido la máquina.
+     */
     public PanelVictoria(String nombreGanador, boolean esMaquina) {
         setLayout(new BorderLayout());
 
@@ -82,7 +90,11 @@ public class PanelVictoria extends JPanel {
         add(pSur, BorderLayout.SOUTH);
     }
 
-    // poner la foto que ocuepe todo el panel
+    /**
+     * Dibuja la imagen de victoria ocupando todo el fondo del panel.
+     * 
+     * @param g El contexto gráfico.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

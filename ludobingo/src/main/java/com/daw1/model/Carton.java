@@ -5,37 +5,68 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Representa un cartón de bingo de 3x9.
+ * Se encarga de su generación siguiendo las reglas estándar y de validar premios.
+ */
 public class Carton {
-    // Constantes para las dimensiones del cartón
+    /** Número de filas del cartón (estándar: 3) */
     public static final int FILAS = 3;
+    /** Número de columnas del cartón (estándar: 9) */
     public static final int COLUMNAS = 9;
+    /** Cantidad de números por cada fila (estándar: 5) */
     private static final int NUMEROS_POR_FILA = 5;
 
-    private final int[][] numeros; // 0 indica casilla vacía
-    private final boolean[][] marcados; // true si el número ha sido extraído
+    /** Matriz con los números del cartón (0 indica casilla vacía) */
+    private final int[][] numeros;
+    /** Matriz con el estado de marcado de cada casilla */
+    private final boolean[][] marcados;
 
+    /**
+     * Crea un nuevo cartón de bingo y lo genera automáticamente.
+     */
     public Carton() {
         this.numeros = new int[FILAS][COLUMNAS];
         this.marcados = new boolean[FILAS][COLUMNAS];
         generarCarton();
     }
 
+    /**
+     * Obtiene el número en una posición específica.
+     * 
+     * @param fila Fila (0-2)
+     * @param col Columna (0-8)
+     * @return El número en la casilla, o 0 si está vacía.
+     */
     public int getNumero(int fila, int col) {
         return numeros[fila][col];
     }
 
+    /**
+     * Indica si una casilla ya ha sido marcada.
+     * 
+     * @param fila Fila (0-2)
+     * @param col Columna (0-8)
+     * @return true si está marcada, false en caso contrario.
+     */
     public boolean isMarcado(int fila, int col) {
         return marcados[fila][col];
     }
 
-    // Genera un cartón de bingo válido siguiendo las reglas estándar.
+    /**
+     * Genera un cartón de bingo válido siguiendo las reglas estándar.
+     */
     private void generarCarton() {
         boolean[][] estructura = determinarEstructura();
         rellenarNumeros(estructura);
         ordenarColumnas();
     }
 
-    // Selecciona qué casillas tendrán número, asegurando 5 por fila y al menos 1 por columna.
+    /**
+     * Selecciona qué casillas tendrán número, asegurando 5 por fila y al menos 1 por columna.
+     * 
+     * @return Matriz booleana con la estructura de huecos y números.
+     */
     private boolean[][] determinarEstructura() {
         boolean[][] tieneNumero;
         boolean generacionOk;
@@ -81,7 +112,11 @@ public class Carton {
         return tieneNumero;
     }
 
-    // Asigna números aleatorios a las casillas seleccionadas según el rango de cada columna.
+    /**
+     * Asigna números aleatorios a las casillas seleccionadas según el rango de cada columna.
+     * 
+     * @param estructura La estructura de huecos generada previamente.
+     */
     private void rellenarNumeros(boolean[][] estructura) {
         Random random = new Random();
 
@@ -104,7 +139,9 @@ public class Carton {
         }
     }
 
-    // Ordena de menor a mayor los números presentes en cada columna.
+    /**
+     * Ordena de menor a mayor los números presentes en cada columna del cartón.
+     */
     private void ordenarColumnas() {
         for (int c = 0; c < COLUMNAS; c++) {
             List<Integer> valores = new ArrayList<>();
@@ -124,6 +161,12 @@ public class Carton {
         }
     }
 
+    /**
+     * Comprueba si el cartón contiene un número específico.
+     * 
+     * @param numero El número a buscar.
+     * @return true si el número está en el cartón, false en caso contrario.
+     */
     public boolean contieneNumero(int numero) {
         for (int[] fila : numeros) {
             for (int n : fila) {
@@ -134,6 +177,11 @@ public class Carton {
         return false;
     }
 
+    /**
+     * Marca un número en el cartón si este está presente.
+     * 
+     * @param numero El número a marcar.
+     */
     public void marcarNumero(int numero) {
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLUMNAS; c++) {
@@ -145,7 +193,11 @@ public class Carton {
         }
     }
 
-    // Comprueba si el jugador ha completado alguna línea.
+    /**
+     * Comprueba si el jugador ha completado alguna línea horizontal.
+     * 
+     * @return true si hay al menos una línea completa, false en caso contrario.
+     */
     public boolean comprobarLinea() {
         for (int f = 0; f < FILAS; f++) {
             if (isFilaCompleta(f))
@@ -154,6 +206,12 @@ public class Carton {
         return false;
     }
 
+    /**
+     * Comprueba si una fila específica está completamente marcada.
+     * 
+     * @param fila El índice de la fila a comprobar.
+     * @return true si la fila está completa, false en caso contrario.
+     */
     private boolean isFilaCompleta(int fila) {
         for (int c = 0; c < COLUMNAS; c++) {
             // Si hay un número y no está marcado, la fila no está completa
@@ -164,7 +222,11 @@ public class Carton {
         return true;
     }
 
-    // Comprueba si el jugador ha tachado todos los números del cartón.
+    /**
+     * Comprueba si el jugador ha completado todo el cartón (Bingo).
+     * 
+     * @return true si todas las casillas numeradas están marcadas, false en caso contrario.
+     */
     public boolean comprobarBingo() {
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLUMNAS; c++) {

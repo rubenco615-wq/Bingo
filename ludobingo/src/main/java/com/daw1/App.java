@@ -1,8 +1,8 @@
 package com.daw1;
 
 /**
- * Hello world!
- *
+ * Clase autogenerada por Maven.
+ * Actualmente no se utiliza como punto de entrada principal del juego.
  */
 public class App 
 {

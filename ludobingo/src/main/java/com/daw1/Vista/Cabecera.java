@@ -3,7 +3,10 @@ package com.daw1.Vista;
 import javax.swing.*;
 import java.awt.*;
 
-// Panel superior que muestra el número extraído
+/**
+ * Panel superior de la interfaz que muestra el número extraído del bombo.
+ * También contiene los controles del modo automático y extracción manual.
+ */
 public class Cabecera extends JPanel {
     private static final Color BG_COLOR = new Color(25, 25, 55);
     private static final Color GOLD = new Color(255, 215, 0);
@@ -13,7 +16,9 @@ public class Cabecera extends JPanel {
     private final JButton botonExtraer;
     private final JSpinner spinnerVelocidad;
 
-    // Crea la cabecera con el visor de números y los ajustes de velocidad.
+    /**
+     * Crea la cabecera con el visor de números y los controles de juego.
+     */
     public Cabecera() {
         setLayout(new BorderLayout());
         setBackground(BG_COLOR);
@@ -51,30 +56,61 @@ public class Cabecera extends JPanel {
         add(pAuto, BorderLayout.SOUTH);
     }
 
+    /**
+     * Establece el número a mostrar en el visor central.
+     * 
+     * @param num El número entero a mostrar.
+     */
     public void setNumero(int num) {
         labelNumero.setText(String.format("%02d", num));
     }
 
+    /**
+     * Establece el texto a mostrar en el visor central.
+     * 
+     * @param txt El texto a mostrar.
+     */
     public void setNumero(String txt) {
         labelNumero.setText(txt);
     }
 
+    /**
+     * Reinicia el visor a su estado inicial (--).
+     */
     public void resetNumero() {
         labelNumero.setText("--");
     }
 
+    /**
+     * Obtiene el botón de alternancia del modo automático.
+     * 
+     * @return El botón toggle "AUTO".
+     */
     public JToggleButton getBtnAuto() {
         return btnAuto;
     }
 
+    /**
+     * Obtiene el botón para extraer un número manualmente.
+     * 
+     * @return El botón "Extraer".
+     */
     public JButton getBotonExtraer() {
         return botonExtraer;
     }
 
+    /**
+     * Obtiene el selector de velocidad para el modo automático.
+     * 
+     * @return El componente JSpinner.
+     */
     public JSpinner getSpinnerVelocidad() {
         return spinnerVelocidad;
     }
 
+    /**
+     * Configura el estilo visual y el comportamiento básico del botón AUTO.
+     */
     private void configurarBotonAuto() {
         btnAuto.setFont(new Font("Arial", Font.BOLD, 14));
         btnAuto.setPreferredSize(new Dimension(140, 34)); // Mismo tamaño que extraer
@@ -109,6 +145,9 @@ public class Cabecera extends JPanel {
         });
     }
 
+    /**
+     * Configura el estilo visual y los efectos del botón Extraer.
+     */
     private void configurarBotonExtraer() {
         botonExtraer.setFont(new Font("Arial", Font.BOLD, 14));
         botonExtraer.setPreferredSize(new Dimension(140, 34)); // Mismo tamaño

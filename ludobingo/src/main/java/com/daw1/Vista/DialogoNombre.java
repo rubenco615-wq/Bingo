@@ -5,11 +5,18 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-// Diálogo interactivo para solicitar el nombre del jugador al iniciar una nueva partida.
+/**
+ * Diálogo modal para solicitar el nombre al jugador antes de empezar una partida.
+ */
 public class DialogoNombre extends JDialog {
     private String nombre = "Jugador";
     private final JTextField txtNombre;
 
+    /**
+     * Crea un nuevo diálogo para solicitar el nombre.
+     * 
+     * @param p El frame padre.
+     */
     public DialogoNombre(Frame p) {
         super(p, "Nuevo Jugador", true);
         setResizable(false);
@@ -65,6 +72,9 @@ public class DialogoNombre extends JDialog {
         setLocationRelativeTo(p);
     }
 
+    /**
+     * Valida la entrada y cierra el diálogo.
+     */
     private void aceptar() {
         String input = txtNombre.getText().trim();
         if (!input.isEmpty()) {
@@ -73,6 +83,11 @@ public class DialogoNombre extends JDialog {
         dispose();
     }
 
+    /**
+     * Obtiene el nombre introducido por el usuario.
+     * 
+     * @return El nombre del jugador.
+     */
     public String getNombre() {
         return nombre;
     }

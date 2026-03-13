@@ -4,10 +4,15 @@ import com.daw1.model.Sonido;
 import java.awt.Image;
 import javax.swing.*;
 
-// Esta es la ventana principal que aguanta todo el juego
-// Primero muestra el menu, luego el juego y al final la victoria
+/**
+ * Ventana principal (JFrame) de la aplicación Bingo.
+ * Se encarga de alternar entre los diferentes estados visuales del juego.
+ */
 public class PantallaInicio extends JFrame {
 
+    /**
+     * Inicializa la ventana con los ajustes básicos y carga el menú inicial.
+     */
     public PantallaInicio() {
         setTitle("LUDOBINGO");
         setSize(800, 500);

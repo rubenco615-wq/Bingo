@@ -5,12 +5,22 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.io.InputStream;
 
+/**
+ * Utility class para la gestión de efectos de sonido y música en el juego.
+ * Utiliza la API javax.sound.sampled para la reproducción de archivos WAV.
+ */
 public class Sonido {
     private static Clip musicaFondo;
     private static Clip musicaLinea; // Clip separado para el sonido de línea
     private static float volumenActual = 0.75f; // Volumen por defecto (0.0 a 1.0)
 
-    // Carga un audio desde el classpath
+    /**
+     * Carga un audio desde el classpath.
+     * 
+     * @param rutaClasspath La ruta del recurso de audio.
+     * @return Un objeto Clip listo para reproducir, o null si no se encuentra.
+     * @throws Exception Si ocurre un error al procesar el audio.
+     */
     private static Clip cargarClip(String rutaClasspath) throws Exception {
         InputStream is = Sonido.class.getResourceAsStream(rutaClasspath);
         if (is == null) {
@@ -22,7 +32,11 @@ public class Sonido {
         return clip;
     }
 
-    // Reproduce un archivo de música en bucle (BGM = Background Music).
+    /**
+     * Reproduce un archivo de música en bucle (BGM = Background Music).
+     * 
+     * @param file El nombre del archivo en la raiz del classpath.
+     */
     public static void reproducirBGM(String file) {
         detenerBGM();
         try {
@@ -35,12 +49,19 @@ public class Sonido {
         }
     }
 
-    // Ajusta el volumen de la música de fondo (0.0f a 1.0f)
+    /**
+     * Ajusta el volumen de la música de fondo.
+     * 
+     * @param valor El volumen entre 0.0f (silencio) y 1.0f (máximo).
+     */
     public static void setVolumenBGM(float valor) {
         volumenActual = Math.max(0.0f, Math.min(1.0f, valor));
         actualizarVolumenInterno();
     }
 
+    /**
+     * Actualiza el volumen interno del clip BGM activo convirtiendo el valor lineal a decibelios.
+     */
     private static void actualizarVolumenInterno() {
         if (musicaFondo != null && musicaFondo.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             FloatControl gainControl = (FloatControl) musicaFondo.getControl(FloatControl.Type.MASTER_GAIN);
@@ -50,6 +71,9 @@ public class Sonido {
         }
     }
 
+    /**
+     * Detiene la música de fondo si está en reproducción.
+     */
     public static void detenerBGM() {
         if (musicaFondo != null && musicaFondo.isRunning()) {
             musicaFondo.stop();
@@ -57,7 +81,11 @@ public class Sonido {
         }
     }
 
-    // Reproduce un efecto de sonido corto una sola vez
+    /**
+     * Reproduce un efecto de sonido corto una sola vez.
+     * 
+     * @param rutaClasspath Ruta del recurso SFX.
+     */
     private static void reproducirSFX(String rutaClasspath) {
         try {
             Clip clip = cargarClip(rutaClasspath);
@@ -68,17 +96,23 @@ public class Sonido {
         }
     }
 
-    // Música en bucle para la pantalla inicial.
+    /**
+     * Reproduce la música ambiente de la pantalla inicial.
+     */
     public static void reproducirPantallaInicial() {
         reproducirBGM("Audio_PantallaInicial_1.wav");
     }
 
-    // Música en bucle para la pantalla de cartones / juego.
+    /**
+     * Reproduce la música ambiente durante el juego (pantalla de cartones).
+     */
     public static void reproducirCartones() {
         reproducirBGM("Audio_Cartones_1.wav");
     }
 
-    // Detiene el sonido de línea si sigue reproduciéndose.
+    /**
+     * Detiene específicamente el sonido de línea si sigue reproduciéndose.
+     */
     public static void detenerLinea() {
         if (musicaLinea != null && musicaLinea.isRunning()) {
             musicaLinea.stop();
@@ -86,7 +120,9 @@ public class Sonido {
         }
     }
 
-    // Efecto de sonido cuando el jugador o la máquina hace línea.
+    /**
+     * Detiene la música de fondo y reproduce el sonido de premio de línea.
+     */
     public static void reproducirLinea() {
         detenerBGM(); // Paramos la música de fondo para que se oiga la línea
         try {
@@ -99,13 +135,19 @@ public class Sonido {
         }
     }
 
-    // Detiene la BGM y reproduce el sonido de victoria al hacer bingo.
+    /**
+     * Detiene la música de fondo y reproduce el sonido de victoria (Bingo).
+     */
     public static void reproducirBingo() {
         detenerBGM();
         reproducirSFX("/Audio_Victoria_1.wav");
     }
 
-    // Reproduce el audio correspondiente al número extraído
+    /**
+     * Reproduce el archivo de audio correspondiente al número extraído del bombo.
+     * 
+     * @param numero El número cantado.
+     */
     public static void reproducirNumero(int numero) {
         reproducirSFX("/audios/Numeros/Numeros/" + numero + ".wav");
     }

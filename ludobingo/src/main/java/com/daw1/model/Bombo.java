@@ -6,18 +6,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-//Representa el bombo físico del bingo.
-//Contiene bolas del 1 al 90 y se encarga de mezclarlas y entregarlas.
-
+/**
+ * Representa el bombo físico del bingo.
+ * Contiene bolas del 1 al 90 y se encarga de mezclarlas y entregarlas.
+ */
 public class Bombo {
-    // Lista de números que todavía están dentro del bombo
+    /** Lista de números que todavía están dentro del bombo */
     private final List<Integer> numerosDisponibles;
 
-    // Conjunto rápido para saber al instante si un número ya ha salido
+    /** Conjunto rápido para saber al instante si un número ya ha salido */
     private final Set<Integer> numerosExtraidos;
 
-    // Inicializa el bombo con 90 números y los mezcla.
-
+    /**
+     * Inicializa el bombo con 90 números y los mezcla para que salgan al azar.
+     */
     public Bombo() {
         this.numerosDisponibles = new ArrayList<>();
         this.numerosExtraidos = new HashSet<>();
@@ -30,7 +32,11 @@ public class Bombo {
         Collections.shuffle(numerosDisponibles);
     }
 
-    // sacar los numeros del bombo
+    /**
+     * Extrae el siguiente número del bombo.
+     * 
+     * @return El número extraído, o -1 si el bombo está vacío.
+     */
     public int sacarNumero() {
         if (numerosDisponibles.isEmpty()) {
             return -1;
@@ -41,10 +47,21 @@ public class Bombo {
         return num;
     }
 
+    /**
+     * Comprueba si un número específico ya ha salido del bombo.
+     * 
+     * @param numero El número a comprobar.
+     * @return true si el número ya ha sido extraído, false en caso contrario.
+     */
     public boolean contieneExtraido(int numero) {
         return numerosExtraidos.contains(numero);
     }
 
+    /**
+     * Indica si el bombo ya no tiene más números disponibles.
+     * 
+     * @return true si el bombo está vacío, false si quedan números.
+     */
     public boolean isEmpty() {
         return numerosDisponibles.isEmpty();
     }

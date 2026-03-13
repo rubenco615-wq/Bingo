@@ -5,10 +5,15 @@ import javax.swing.*;
 import java.awt.*;
 
 
-// Este panel es el menu principal que ves al abrir el juego
-// Aqui puedes darle a jugar o abrir los ajustes del volumen
+/**
+ * Panel que representa el menú principal del juego.
+ * Permite iniciar una partida, acceder a los ajustes y salir de la aplicación.
+ */
 public class PanelInicio extends JPanel {
 
+    /**
+     * Crea e inicializa los componentes del menú principal.
+     */
     public PanelInicio() {
         setLayout(null); // Layout nulo para control absoluto de posiciones (según diseño original)
 
@@ -152,6 +157,13 @@ public class PanelInicio extends JPanel {
         });
     }
 
+    /**
+     * Crea un botón de estilo común para el panel de ajustes lateral.
+     * 
+     * @param texto El texto del botón.
+     * @param color El color de fondo del botón.
+     * @return Un JButton configurado.
+     */
     private JButton crearBotonAjuste(String texto, Color color) {
         JButton b = new JButton(texto);
         b.setFont(new Font("Arial", Font.BOLD, 14));
@@ -164,6 +176,11 @@ public class PanelInicio extends JPanel {
         return b;
     }
 
+    /**
+     * Dibuja la imagen de fondo del menú o un degradado en su defecto.
+     * 
+     * @param g El contexto gráfico.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
