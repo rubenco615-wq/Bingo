@@ -1,187 +1,112 @@
 ```mermaid
 sequenceDiagram
-autonumber
-
-actor Jugador
-participant VentanaPrincipal
-participant Juego
-participant Bombo
-participant Maquina
-participant JugadorClass as Jugador
-participant CartonJugador
-participant CartonMaquina
-
-Jugador->>VentanaPrincipal: iniciarPartida()
-activate VentanaPrincipal
-
-VentanaPrincipal->>Juego: iniciarPartida()
-activate Juego
-
-Juego->>JugadorClass: crearJugador()
-Juego->>Maquina: crearMaquina()
-Juego->>CartonJugador: generarCarton()
-Juego->>CartonMaquina: generarCarton()
-
-Juego-->>VentanaPrincipal: partidaIniciada(cartones)
-deactivate Juego
-deactivate VentanaPrincipal
-
-loop Mientras no haya bingo
-    VentanaPrincipal->>Juego: extraerNumero()
-    activate Juego
+    autonumber
     
-    Juego->>Bombo: extraerNumero()
-    activate Bombo
-    Bombo-->>Juego: numero
-    deactivate Bombo
+    actor Jugador
+    participant V as VentanaJuego
+    participant J as Juego
+    participant B as Bombo
+    participant M as Máquina (Jugador)
+    participant H as Humano (Jugador)
+    participant PV as PanelVictoria
     
-    Juego->>Maquina: marcarNumero(numero)
-    activate Maquina
-    Maquina->>CartonMaquina: marcarNumero(numero)
-    CartonMaquina-->>Maquina: confirmado
-    Maquina-->>Juego: marcado
-    deactivate Maquina
-    
-    Juego->>JugadorClass: marcarNumero(numero)
-    activate JugadorClass
-    Note right of JugadorClass: El jugador marca manualmente<br/>a través de la interfaz
-    JugadorClass-->>Juego: pendiente
-    deactivate JugadorClass
-    
-    Juego-->>VentanaPrincipal: mostrarNumero(numero)
-    deactivate Juego
-    
-    alt Jugador hace clic en número
-        Jugador->>VentanaPrincipal: clicEnNumero(numero)
-        VentanaPrincipal->>JugadorClass: marcarNumero(numero)
-        activate JugadorClass
-        JugadorClass->>CartonJugador: marcarNumero(numero)
-        CartonJugador-->>JugadorClass: resultado
-        JugadorClass-->>VentanaPrincipal: resultado
-        deactivate JugadorClass
+    Jugador->>V: iniciarPartida()
+    activate V
+    V->>J: iniciarPartida(nombre)
+    activate J
+    J->>B: new Bombo()
+    J->>H: new Jugador(nombre)
+    J->>M: new Jugador("Máquina")
+    J-->>V: partidaActiva = true
+    deactivate J
+    V-->>Jugador: Pedir nombre y mostrar cartones
+    V->>V: actualizarCartones()
+    deactivate V
+
+    loop Mientras partidaActiva
+        alt Extracción (Manual o Auto)
+            Jugador->>V: clic Extraer / Timer
+            activate V
+            V->>J: extraerNumero()
+            activate J
+            J->>B: sacarNumero()
+            B-->>J: numero
+            J-->>V: numero
+            deactivate J
+            V->>V: Sonido.reproducirNumero(n)
+            V->>V: actualizarCartones()
+            
+            V->>V: planificarMarcadoMaquina(n)
+            Note over V,M: Timer (2-5s)
+            V->>M: marcarNumero(n)
+            V->>V: verificarPremios(cartonM)
+        end
+
+        alt Marcado Manual Jugador
+            Jugador->>V: clic en celda cartón
+            V->>J: esNumeroExtraido(n)
+            J-->>V: true/false
+            V->>H: marcarNumero(n)
+            V->>V: actualizarCartones()
+            V->>V: verificarPremios(cartonH)
+        end
         
-        VentanaPrincipal->>PanelCarton: marcarBotonVisualmente(numero)
+        opt Detección de Linea / Bingo
+            V->>V: gestionarLinea()
+            Note over V: Solo una vez por partida
+            
+            V->>V: gestionarBingo(ganador)
+            activate V
+            V->>J: finalizarPartida()
+            V->>V: finalizarJuego(mensaje)
+            V->>V: mostrarPantallaVictoria(ganador)
+            V->>PV: new PanelVictoria(ganador)
+            deactivate V
+        end
     end
-    
-    VentanaPrincipal->>Juego: comprobarLinea()
-    activate Juego
-    Juego->>CartonJugador: comprobarLinea()
-    Juego->>CartonMaquina: comprobarLinea()
-    Juego-->>VentanaPrincipal: resultadoLinea
-    deactivate Juego
-    
-    VentanaPrincipal->>Juego: comprobarBingo()
-    activate Juego
-    Juego->>CartonJugador: comprobarBingo()
-    Juego->>CartonMaquina: comprobarBingo()
-    Juego-->>VentanaPrincipal: resultadoBingo
-    deactivate Juego
-end
-
-Juego-->>VentanaPrincipal: finalizarPartida(ganador)
-VentanaPrincipal-->>Jugador: mostrarGanador(ganador)
 ```
-#  Diagrama de Secuencia del Juego de Bingo
 
-Este diagrama muestra cómo se desarrolla una partida de bingo, detallando la interacción entre el **Jugador**, la **VentanaPrincipal**, el **Juego**, la **Máquina**, el **Bombo** y los **Cartones**.
+# Diagrama de Secuencia - Bingo POO
 
----
-
-## Actores y Participantes
-
-1. **Jugador**: Usuario que inicia y participa en la partida. Interactúa con la interfaz para comenzar el juego, marcar números manualmente y ver los resultados.
-
-2. **VentanaPrincipal**: Interfaz gráfica del juego.
-    - Muestra la partida y recibe las acciones del jugador.
-    - Envía solicitudes al **Juego** para iniciar la partida y extraer números.
-    - Solicita a los **Participantes** (Jugador/Máquina) que marquen sus números.
-    - Actualiza la vista de los cartones a través de **PanelCarton**.
-    - Muestra mensajes de línea, bingo y ganador.
-
-3. **Juego**: Controla la lógica interna del bingo.
-    - Inicia la partida creando los participantes y sus cartones.
-    - Extrae números del **Bombo** y notifica a todos los participantes.
-    - Coordina las comprobaciones de línea y bingo.
-    - Finaliza la partida cuando hay un ganador.
-
-4. **Máquina**: Participante controlado por el sistema.
-    - Recibe notificación de números extraídos.
-    - Marca automáticamente en su cartón si tiene el número.
-
-5. **Jugador (clase)**: Participante humano.
-    - Recibe notificación de números extraídos.
-    - Espera a que el usuario haga clic para marcar el número.
-    - Valida y ejecuta el marcado en su cartón.
-
-6. **Bombo**: Contenedor de números.
-    - Proporciona números aleatorios sin repetición cuando el **Juego** solicita `extraerNumero()`.
-
-7. **Cartón**: Representa el cartón de un participante.
-    - Genera números aleatorios al inicio (`generarCarton()`).
-    - Contiene la lógica de marcado (`marcarNumero()`).
-    - Comprueba línea (`comprobarLinea()`) y bingo (`comprobarBingo()`).
+Este diagrama detalla cómo interactúan los objetos del sistema durante una partida, reflejando la arquitectura refactorada donde la **VentanaJuego** actúa como mediador principal y el objeto **Juego** gestiona el estado.
 
 ---
 
-##  Flujo de la Partida
+## Participantes y Roles
 
-### 1 Inicio de la partida
-
-1. El **Jugador** solicita iniciar la partida (`iniciarPartida()`).
-2. La **VentanaPrincipal** envía la solicitud al **Juego**.
-3. El **Juego** crea las instancias de **Jugador** y **Máquina**.
-4. El **Juego** solicita a cada participante generar su **Cartón** (`generarCarton()`).
-5. El **Juego** notifica a la **VentanaPrincipal** que la partida ha iniciado (`partidaIniciada`).
-6. La **VentanaPrincipal** muestra los cartones en pantalla a través de **PanelCarton**.
-
-### 2️ Desarrollo del juego (loop Mientras no haya bingo)
-
-1. La **VentanaPrincipal** solicita al **Juego** extraer un número (`extraerNumero()`).
-2. El **Juego** obtiene un número del **Bombo** (`extraerNumero()`).
-3. El **Bombo** devuelve el número extraído al **Juego**.
-4. El **Juego** notifica a la **Máquina** del nuevo número (`marcarNumero(numero)`).
-5. La **Máquina** verifica si tiene el número en su **Cartón** (`contieneNumero()`).
-6. Si lo tiene, la **Máquina** marca el número en su **Cartón** (`marcarNumero()`).
-7. El **Juego** notifica al **Jugador** del nuevo número (`marcarNumero(numero)`).
-8. El **Jugador** queda en espera de que el usuario haga clic (validación pendiente).
-9. El **Juego** devuelve el número a la **VentanaPrincipal** (`mostrarNumero(numero)`).
-10. La **VentanaPrincipal** actualiza el número actual y el historial.
-
-**Marcado manual por el usuario:**
-
-11. El **Jugador** (usuario) hace clic en un número de su cartón.
-12. La **VentanaPrincipal** solicita al objeto **Jugador** (clase) que marque el número (`marcarNumero(numero)`).
-13. El **Jugador** (clase) valida que el número haya sido extraído y pertenezca a su **Cartón**.
-14. Si es válido, el **Jugador** marca el número en su **Cartón** (`marcarNumero()`).
-15. El **Cartón** confirma el marcado al **Jugador**.
-16. El **Jugador** confirma el resultado a la **VentanaPrincipal**.
-17. La **VentanaPrincipal** solicita a **PanelCarton** actualizar la vista (`marcarBotonVisualmente()`).
-
-**Comprobaciones de victoria:**
-
-18. La **VentanaPrincipal** solicita al **Juego** comprobar línea (`comprobarLinea()`).
-19. El **Juego** consulta al **Cartón** del **Jugador** y de la **Máquina**.
-20. Si hay línea, el **Juego** devuelve el resultado a la **VentanaPrincipal**.
-21. La **VentanaPrincipal** muestra mensaje informativo de línea (`mostrarMensajeLinea()`).
-
-22. La **VentanaPrincipal** solicita al **Juego** comprobar bingo (`comprobarBingo()`).
-23. El **Juego** consulta al **Cartón** del **Jugador** y de la **Máquina**.
-24. El **Juego** devuelve el resultado a la **VentanaPrincipal**.
-25. El ciclo se repite hasta que alguien consiga bingo.
-
-### 3️ Finalización de la partida
-
-1. Una vez detectado el bingo, el **Juego** notifica a la **VentanaPrincipal** (`finalizarPartida(ganador)`).
-2. La **VentanaPrincipal** detiene el temporizador y muestra al **Jugador** el ganador (`mostrarGanador()`).
-3. Se ofrece la opción de volver al menú principal o iniciar nueva partida.
+1.  **Jugador (Actor)**: El usuario que interactúa con la interfaz (clics, ajustes).
+2.  **VentanaJuego**: El "cerebro" visual. Controla el flujo de la UI, gestiona los temporizadores (AUTO y Máquina) y sincroniza los paneles con los datos del modelo.
+3.  **Juego**: El motor de la lógica (Model). Controla si la partida está activa, gestiona el bombo único y mantiene la lista de participantes.
+4.  **Jugador (Clase Model)**: Representa a los competidores. Cada uno posee su propio `Carton`. Se usa tanto para el humano como para la "Máquina".
+5.  **Bombo**: Implementa la lógica de extracción aleatoria sin repetición (1-90).
+6.  **PanelVictoria**: Componente especial que aparece al finalizar con la animación del ganador.
 
 ---
 
-##  Notas Importantes
+## Flujo de Operaciones Principal
 
-- La **VentanaPrincipal** nunca accede directamente al **Cartón**. Siempre interactúa a través de los **Participantes** (Jugador/Máquina).
-- La **Máquina** marca automáticamente sin intervención del usuario.
-- El **Jugador** (clase) valida las reglas del negocio antes de permitir el marcado.
-- **PanelCarton** es puramente visual y no contiene lógica de negocio.
-- Las comprobaciones de línea y bingo se realizan después de cada marcado.
-- El sistema mantiene separación de responsabilidades: la interfaz maneja eventos, el modelo maneja datos y reglas, y el controlador (Juego) coordina el flujo.
+### 1. Inicialización de la Partida
+Cuando el usuario pulsa "Iniciar", se dispara una cadena de creación: el `Juego` instancia el `Bombo` y los `Jugadores`. Cada jugador genera su `Carton` automáticamente. La `VentanaJuego` recibe la señal y actualiza todos los componentes visuales (`PanelCarton`, `Cabecera`, `Historial`).
+
+### 2. El Ciclo de Extracción
+El juego avanza mediante extracciones:
+1.  Se pide un número al `Juego`, que lo saca del `Bombo`.
+2.  La bola se muestra en grande y se añade al historial.
+3.  **Simulación de IA**: La máquina no marca instantáneamente; la ventana usa un `Timer` para esperar unos segundos, haciendo que el juego se sienta más natural.
+
+### 3. Interacción del Jugador
+El marcado manual es una validación de reglas:
+1.  Al clicar en un número, la ventana comprueba con el `Juego` si el número realmente ha salido.
+2.  Si es así, se actualiza el `Carton` interno y el botón cambia de color.
+3.  Si el jugador se equivoca, el sistema reacciona con un efecto visual de error (flash rojo).
+
+### 4. Victoria y Cierre
+Cuando alguien (Humano o Máquina) completa su cartón:
+1.  `gestionarBingo` detiene todos los procesos automáticos.
+2.  El `Juego` se marca como inactivo.
+3.  Se detiene la música ambiental y suena el efecto de victoria.
+4.  La ventana reemplaza todo el contenido por el `PanelVictoria`.
+
+---
+
+> **Nota**: Fíjate en el paso **38** (marcado de máquina). Este flujo demuestra cómo el **Encapsulamiento** protege los datos: el usuario nunca toca el cartón de la máquina, y la máquina solo marca lo que la lógica permite.
