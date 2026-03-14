@@ -5,13 +5,12 @@ import java.awt.Image;
 import javax.swing.*;
 
 /**
- * Ventana principal (JFrame) de la aplicación Bingo.
- * Se encarga de alternar entre los diferentes estados visuales del juego.
+ * Ventana principal (JFrame) de la aplicación Bingo
  */
 public class PantallaInicio extends JFrame {
 
     /**
-     * Inicializa la ventana con los ajustes básicos y carga el menú inicial.
+     * Inicializa la ventana con los ajustes básicos y carga el menú inicial
      */
     public PantallaInicio() {
         setTitle("LUDOBINGO");

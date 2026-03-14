@@ -6,7 +6,7 @@ import javax.sound.sampled.FloatControl;
 import java.io.InputStream;
 
 /**
- * Utility class para la gestión de efectos de sonido y música en el juego.
+ * Clase para utilizar los sonidos
  * Utiliza la API javax.sound.sampled para la reproducción de archivos WAV.
  */
 public class Sonido {
@@ -16,11 +16,11 @@ public class Sonido {
     private static float volumenActual = 0.75f; // Volumen por defecto (0.0 a 1.0)
 
     /**
-     * Carga un audio desde el classpath.
+     * Carga un audio
      * 
-     * @param rutaClasspath La ruta del recurso de audio.
-     * @return Un objeto Clip listo para reproducir, o null si no se encuentra.
-     * @throws Exception Si ocurre un error al procesar el audio.
+     * @param rutaClasspath La ruta del audio
+     * @return Clip, o null si no se encuentra.
+     * @throws Exception si hay un error al procesar el audio
      */
     private static Clip cargarClip(String rutaClasspath) throws Exception {
         InputStream is = Sonido.class.getResourceAsStream(rutaClasspath);
@@ -34,15 +34,16 @@ public class Sonido {
     }
 
     /**
-     * Reproduce un archivo de música en bucle (BGM = Background Music).
+     * Reproduce un archivo de música en bucle
      * 
-     * @param file El nombre del archivo en la raiz del classpath.
+     * @param file El nombre del archivo
      */
     public static void reproducirBGM(String file) {
         detenerBGM();
         try {
             musicaFondo = cargarClip("/" + file);
-            if (musicaFondo == null) return;
+            if (musicaFondo == null)
+                return;
             actualizarVolumenInterno();
             musicaFondo.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (Exception e) {
@@ -51,9 +52,9 @@ public class Sonido {
     }
 
     /**
-     * Ajusta el volumen de la música de fondo.
+     * Ajusta el volumen de la música de fondo
      * 
-     * @param valor El volumen entre 0.0f (silencio) y 1.0f (máximo).
+     * @param valor El volumen
      */
     public static void setVolumenBGM(float valor) {
         volumenActual = Math.max(0.0f, Math.min(1.0f, valor));
@@ -61,19 +62,18 @@ public class Sonido {
     }
 
     /**
-     * Actualiza el volumen interno del clip BGM activo convirtiendo el valor lineal a decibelios.
+     * Actualiza el volumen del audio
      */
     private static void actualizarVolumenInterno() {
         if (musicaFondo != null && musicaFondo.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             FloatControl gainControl = (FloatControl) musicaFondo.getControl(FloatControl.Type.MASTER_GAIN);
-            // Convertir lineal (0.0-1.0) a decibelios (logarítmico)
             float dB = (float) (Math.log(volumenActual != 0 ? volumenActual : 0.0001f) / Math.log(10.0) * 20.0);
             gainControl.setValue(dB);
         }
     }
 
     /**
-     * Detiene la música de fondo si está en reproducción.
+     * Detiene la música de fondo
      */
     public static void detenerBGM() {
         if (musicaFondo != null && musicaFondo.isRunning()) {
@@ -85,12 +85,13 @@ public class Sonido {
     /**
      * Reproduce un efecto de sonido corto una sola vez.
      * 
-     * @param rutaClasspath Ruta del recurso SFX.
+     * @param rutaClasspath la ruta del audio
      */
     private static void reproducirSFX(String rutaClasspath) {
         try {
             Clip clip = cargarClip(rutaClasspath);
-            if (clip == null) return;
+            if (clip == null)
+                return;
             clip.start();
         } catch (Exception e) {
             System.err.println("Error al reproducir SFX: " + e.getMessage());
@@ -98,21 +99,21 @@ public class Sonido {
     }
 
     /**
-     * Reproduce la música ambiente de la pantalla inicial.
+     * Reproduce la música de la pantalla inicial
      */
     public static void reproducirPantallaInicial() {
         reproducirBGM("Audio_PantallaInicial_1.wav");
     }
 
     /**
-     * Reproduce la música ambiente durante el juego (pantalla de cartones).
+     * Reproduce la música durante el juego
      */
     public static void reproducirCartones() {
         reproducirBGM("Audio_Cartones_1.wav");
     }
 
     /**
-     * Detiene específicamente el sonido de línea si sigue reproduciéndose.
+     * Detiene el sonido de línea si sigue reproduciéndose
      */
     public static void detenerLinea() {
         if (musicaLinea != null && musicaLinea.isRunning()) {
@@ -122,14 +123,16 @@ public class Sonido {
     }
 
     /**
-     * Detiene la música de fondo y reproduce el sonido de premio de línea.
+     * Detiene la música de fondo y reproduce el sonido de premio de línea
      */
     public static void reproducirLinea() {
         detenerBGM(); // Paramos la música de fondo para que se oiga la línea
         try {
-            if (musicaLinea != null) musicaLinea.close();
+            if (musicaLinea != null)
+                musicaLinea.close();
             musicaLinea = cargarClip("/Audio_Bingo_1.wav");
-            if (musicaLinea == null) return;
+            if (musicaLinea == null)
+                return;
             musicaLinea.start();
         } catch (Exception e) {
             System.err.println("Error al reproducir sonido de línea: " + e.getMessage());
@@ -137,7 +140,7 @@ public class Sonido {
     }
 
     /**
-     * Detiene específicamente el sonido de victoria (Bingo) si sigue reproduciéndose.
+     * Detiene el sonido de victoria (Bingo) si sigue reproduciéndose
      */
     public static void detenerBingo() {
         if (musicaVictoria != null && musicaVictoria.isRunning()) {
@@ -147,14 +150,15 @@ public class Sonido {
     }
 
     /**
-     * Detiene la música de fondo y reproduce el sonido de victoria (Bingo).
+     * Detiene la música de fondo y reproduce el sonido de victoria (Bingo)
      */
     public static void reproducirBingo() {
         detenerBGM();
         detenerBingo(); // Por si acaso hubiera uno sonando
         try {
             musicaVictoria = cargarClip("/Audio_Victoria_1.wav");
-            if (musicaVictoria == null) return;
+            if (musicaVictoria == null)
+                return;
             musicaVictoria.start();
         } catch (Exception e) {
             System.err.println("Error al reproducir sonido de victoria: " + e.getMessage());
@@ -162,9 +166,9 @@ public class Sonido {
     }
 
     /**
-     * Reproduce el archivo de audio correspondiente al número extraído del bombo.
+     * Reproduce el audio del numero que sale
      * 
-     * @param numero El número cantado.
+     * @param numero El número
      */
     public static void reproducirNumero(int numero) {
         reproducirSFX("/audios/Numeros/Numeros/" + numero + ".wav");

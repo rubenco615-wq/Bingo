@@ -6,16 +6,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * Diálogo modal para solicitar el nombre al jugador antes de empezar una partida.
+ * Dialogo para pedir el nombre del jugador
  */
 public class DialogoNombre extends JDialog {
     private String nombre = "Jugador";
     private final JTextField txtNombre;
 
     /**
-     * Crea un nuevo diálogo para solicitar el nombre.
+     * Crea un nuevo diálogo para pedir el nombre
      * 
-     * @param p El frame padre.
+     * @param p
      */
     public DialogoNombre(Frame p) {
         super(p, "Nuevo Jugador", true);
@@ -73,7 +73,7 @@ public class DialogoNombre extends JDialog {
     }
 
     /**
-     * Valida la entrada y cierra el diálogo.
+     * Acepta el nombre introducido y cierra el diálogo
      */
     private void aceptar() {
         String input = txtNombre.getText().trim();
@@ -84,9 +84,9 @@ public class DialogoNombre extends JDialog {
     }
 
     /**
-     * Obtiene el nombre introducido por el usuario.
+     * Obtiene el nombre introducido por el usuario
      * 
-     * @return El nombre del jugador.
+     * @return El nombre del jugador
      */
     public String getNombre() {
         return nombre;

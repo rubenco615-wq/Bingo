@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel superior de la interfaz que muestra el número extraído del bombo.
- * También contiene los controles del modo automático y extracción manual.
+ * Cabecera que muestra el número y los botones para extraer de forma manual o
+ * automatica
  */
 public class Cabecera extends JPanel {
     private static final Color BG_COLOR = new Color(25, 25, 55);
@@ -17,7 +17,7 @@ public class Cabecera extends JPanel {
     private final JSpinner spinnerVelocidad;
 
     /**
-     * Crea la cabecera con el visor de números y los controles de juego.
+     * Crea la cabecera con el número y los botones de juego.
      */
     public Cabecera() {
         setLayout(new BorderLayout());
@@ -57,59 +57,59 @@ public class Cabecera extends JPanel {
     }
 
     /**
-     * Establece el número a mostrar en el visor central.
+     * El numero que sale del bombo
      * 
-     * @param num El número entero a mostrar.
+     * @param num El número
      */
     public void setNumero(int num) {
         labelNumero.setText(String.format("%02d", num));
     }
 
     /**
-     * Establece el texto a mostrar en el visor central.
+     * Establece el texto
      * 
-     * @param txt El texto a mostrar.
+     * @param txt El texto
      */
     public void setNumero(String txt) {
         labelNumero.setText(txt);
     }
 
     /**
-     * Reinicia el visor a su estado inicial (--).
+     * Reinicia el bombo( lo deja sin numeros, se queda en --)
      */
     public void resetNumero() {
         labelNumero.setText("--");
     }
 
     /**
-     * Obtiene el botón de alternancia del modo automático.
+     * El boton de auto
      * 
-     * @return El botón toggle "AUTO".
+     * @return El botón de auto
      */
     public JToggleButton getBtnAuto() {
         return btnAuto;
     }
 
     /**
-     * Obtiene el botón para extraer un número manualmente.
+     * El boton de extraer
      * 
-     * @return El botón "Extraer".
+     * @return El botón de extraer
      */
     public JButton getBotonExtraer() {
         return botonExtraer;
     }
 
     /**
-     * Obtiene el selector de velocidad para el modo automático.
+     * El jSlider de velocidad
      * 
-     * @return El componente JSpinner.
+     * @return El jSlider de velocidad
      */
     public JSpinner getSpinnerVelocidad() {
         return spinnerVelocidad;
     }
 
     /**
-     * Configura el estilo visual y el comportamiento básico del botón AUTO.
+     * Configura el boton de auto
      */
     private void configurarBotonAuto() {
         btnAuto.setFont(new Font("Arial", Font.BOLD, 16));
@@ -118,17 +118,16 @@ public class Cabecera extends JPanel {
         btnAuto.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnAuto.setEnabled(false);
 
-        // Estilo visual fondo carne pastel y texto negro
+        // fondo carne pastel y texto negro
         btnAuto.setBackground(new Color(255, 230, 210));
         btnAuto.setForeground(Color.BLACK);
         btnAuto.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 160, 140), 2),
                 BorderFactory.createEmptyBorder(4, 10, 4, 10)));
 
-        // Efecto visual al activarse
         btnAuto.addActionListener(e -> {
             if (btnAuto.isSelected()) {
-                btnAuto.setBackground(new Color(180, 230, 180)); // Verde pálido (pastel)
+                btnAuto.setBackground(new Color(180, 230, 180)); //
                 btnAuto.setForeground(Color.BLACK);
                 btnAuto.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(new Color(130, 180, 130), 2),
@@ -146,7 +145,7 @@ public class Cabecera extends JPanel {
     }
 
     /**
-     * Configura el estilo visual y los efectos del botón Extraer.
+     * Configura el boton de extraer
      */
     private void configurarBotonExtraer() {
         botonExtraer.setFont(new Font("Arial", Font.BOLD, 16));
@@ -165,15 +164,14 @@ public class Cabecera extends JPanel {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 if (botonExtraer.isEnabled()) {
-                    botonExtraer.setBackground(new Color(255, 245, 235)); // Fondo más claro al pasar el ratón (más
-                                                                          // pastel)
+                    botonExtraer.setBackground(new Color(255, 245, 235)); // Fondo más claro al pasar el ratón
                 }
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
                 if (botonExtraer.isEnabled()) {
-                    botonExtraer.setBackground(new Color(255, 230, 210)); // Vuelve a su carne pastel normal
+                    botonExtraer.setBackground(new Color(255, 230, 210)); // Vuelve a su color original
                 }
             }
         });

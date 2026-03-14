@@ -4,18 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Diálogo personalizado para anunciar premios (Línea o Bingo).
- * Utiliza un diseño sin bordes y un mensaje en formato HTML para resaltar el ganador.
+ * Dialogo para anunciar premios (Línea o Bingo)
  */
 public class DialogoPremio extends JDialog {
 
     /**
-     * Crea un nuevo diálogo de premio.
+     * Crea un nuevo diálogo de premio
      * 
-     * @param p El frame padre.
-     * @param title El título de la ventana.
-     * @param msg El mensaje de felicitación.
-     * @param bg El color de fondo del diálogo.
+     * @param p     El frame padre
+     * @param title El título de la ventana
+     * @param msg   El mensaje de felicitación
+     * @param bg    El color de fondo del diálogo
      */
     public DialogoPremio(Frame p, String title, String msg, Color bg) {
         super(p, title, true);

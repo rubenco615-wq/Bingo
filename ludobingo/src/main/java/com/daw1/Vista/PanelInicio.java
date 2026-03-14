@@ -4,18 +4,17 @@ import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
- * Panel que representa el menú principal del juego.
- * Permite iniciar una partida, acceder a los ajustes y salir de la aplicación.
+ * Panel que representa el menú principal del juego
+ * Permite iniciar una partida, acceder a los ajustes y salir de la aplicación
  */
 public class PanelInicio extends JPanel {
 
     /**
-     * Crea e inicializa los componentes del menú principal.
+     * Crea e inicializa los componentes del menú principal
      */
     public PanelInicio() {
-        setLayout(null); // Layout nulo para control absoluto de posiciones (según diseño original)
+        setLayout(null); // Layout nulo para control absoluto de posiciones
 
         // Botón de jugar
         JButton botonJugar = new JButton("");
@@ -158,11 +157,11 @@ public class PanelInicio extends JPanel {
     }
 
     /**
-     * Crea un botón de estilo común para el panel de ajustes lateral.
+     * Crea un botón de ajustes
      * 
-     * @param texto El texto del botón.
-     * @param color El color de fondo del botón.
-     * @return Un JButton configurado.
+     * @param texto El texto del botón
+     * @param color El color de fondo del botón
+     * @return Un JButton configurado
      */
     private JButton crearBotonAjuste(String texto, Color color) {
         JButton b = new JButton(texto);
@@ -177,9 +176,9 @@ public class PanelInicio extends JPanel {
     }
 
     /**
-     * Dibuja la imagen de fondo del menú o un degradado en su defecto.
+     * Dibuja la imagen de fondo del menú
      * 
-     * @param g El contexto gráfico.
+     * @param g El contexto gráfico
      */
     @Override
     protected void paintComponent(Graphics g) {

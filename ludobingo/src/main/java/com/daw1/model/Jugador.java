@@ -1,17 +1,16 @@
 package com.daw1.model;
 
 /**
- * Representa a un jugador en el bingo (ya sea humano o máquina).
- * Implementa la interfaz Participante.
+ * Representa a un jugador
  */
 public class Jugador implements Participante {
     private final String nombre;
     private final Carton carton;
 
     /**
-     * Crea un nuevo jugador y le asigna un cartón generado automáticamente.
+     * Crea un nuevo jugador y le asigna un cartón
      * 
-     * @param nombre El nombre del jugador.
+     * @param nombre El nombre del jugador
      */
     public Jugador(String nombre) {
         this.nombre = nombre;
@@ -19,9 +18,9 @@ public class Jugador implements Participante {
     }
 
     /**
-     * Busca el número en su cartón y lo marca si lo tiene.
+     * Busca el número en su cartón y lo marca si lo tiene
      * 
-     * @param numero El número a marcar.
+     * @param numero el numero marcado
      */
     @Override
     public void marcarNumero(int numero) {

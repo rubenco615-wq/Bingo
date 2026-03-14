@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel que muestra un registro (log) de todos los números extraídos y sucesos de la partida.
- * Utiliza un JTextArea desplazable para facilitar la lectura.
+ * muestra los numeros que han salido y una barra para desplazar y ver los
+ * numeros que son
  */
 public class Historial extends JPanel {
     private JTextArea areaLog;
 
     /**
-     * Inicializa el panel del historial con su diseño y componentes.
+     * Inicializa el panel del historial
      */
     public Historial() {
         setLayout(new BorderLayout(0, 5));
@@ -33,9 +33,9 @@ public class Historial extends JPanel {
     }
 
     /**
-     * Añade un mensaje al registro visual.
+     * Añade un mensaje al registro
      * 
-     * @param msj El texto a añadir.
+     * @param msj El texto
      */
     public void escribirLog(String msj) {
         areaLog.append(msj + "\n");
@@ -43,7 +43,7 @@ public class Historial extends JPanel {
     }
 
     /**
-     * Borra todo el contenido del historial.
+     * Borra todo el contenido del historial
      */
     public void limpiarLog() {
         areaLog.setText("");

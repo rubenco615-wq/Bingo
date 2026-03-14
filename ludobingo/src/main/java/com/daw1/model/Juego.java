@@ -4,23 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Gestiona la lógica principal y el estado de una partida de Bingo.
- * Se encarga de coordinar a los participantes y el bombo.
+ * la logica y la partida
  */
 public class Juego {
-    /** Lista de participantes en la partida (humano y máquina) */
     private final List<Participante> participantes;
-    
-    /** El bombo utilizado en la partida actual */
+
     private Bombo bombo;
-    
-    /** Indica si una partida está actualmente en curso */
+
     private boolean partidaActiva;
 
-    /** Índice del jugador humano en la lista de participantes */
     private static final int INDICE_JUGADOR = 0;
-    
-    /** Índice de la máquina en la lista de participantes */
+
     private static final int INDICE_MAQUINA = 1;
 
     /**
@@ -32,30 +26,30 @@ public class Juego {
     }
 
     /**
-     * Prepara y arranca una partida nueva con un jugador humano y la máquina.
+     * crea una nueva partida con el jugador y la maquina
      * 
-     * @param nombreJugador El nombre que usará el jugador humano.
+     * @param nombreJugador El nombre del jugador
      */
     public void iniciarPartida(String nombreJugador) {
         participantes.clear();
-        participantes.add(new Jugador(nombreJugador)); // Jugador humano
-        participantes.add(new Jugador("Máquina")); // Jugador automático
+        participantes.add(new Jugador(nombreJugador)); // Jugador
+        participantes.add(new Jugador("Máquina")); // Maquina
 
         bombo = new Bombo();
         partidaActiva = true;
     }
 
     /**
-     * Finaliza la partida actual.
+     * Finaliza la partida
      */
     public void finalizarPartida() {
         partidaActiva = false;
     }
 
     /**
-     * Extrae el siguiente número del bombo si la partida está activa.
+     * Extrae el siguiente número del bombo
      * 
-     * @return El número extraído, o -1 si no se puede extraer (partida inactiva o bombo vacío).
+     * @return El número extraído, o -1 si no se puede extraer
      */
     public int extraerNumero() {
         if (!partidaActiva || bombo == null) {
@@ -68,25 +62,25 @@ public class Juego {
      * Comprueba si un número ya ha salido del bombo.
      * 
      * @param numero El número a comprobar.
-     * @return true si el número ya fue extraído, false en caso contrario.
+     * @return true si el número ya ha salido, false si no ha salido
      */
     public boolean esNumeroExtraido(int numero) {
         return bombo != null && bombo.contieneExtraido(numero);
     }
 
     /**
-     * Obtiene el participante que representa al jugador humano.
+     * Coje al jugador.
      * 
-     * @return El participante humano.
+     * @return devuelve al jugador
      */
     public Participante getJugador() {
         return getParticipante(INDICE_JUGADOR);
     }
 
     /**
-     * Obtiene el participante que representa a la máquina.
+     * Coje a la maquina
      * 
-     * @return El participante máquina.
+     * @return devuelve a la maquina
      */
     public Participante getMaquina() {
         return getParticipante(INDICE_MAQUINA);
@@ -106,9 +100,9 @@ public class Juego {
     }
 
     /**
-     * Indica si hay una partida activa.
+     * Dice si se esta jugando la partida
      * 
-     * @return true si la partida está activa, false en caso contrario.
+     * @return true si la partida esta activa, false si no lo esta
      */
     public boolean isPartidaActiva() {
         return partidaActiva;

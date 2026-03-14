@@ -6,8 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Componente gráfico que representa un cartón de bingo en pantalla.
- * Se encarga de renderizar la cuadrícula de celdas (3x9) y sincronizar sus estados.
+ * Representa el carton del jugador/ maquina
  */
 public class PanelCarton extends JPanel {
 
@@ -19,9 +18,10 @@ public class PanelCarton extends JPanel {
     /**
      * Crea un nuevo panel para un cartón de bingo.
      * 
-     * @param titulo El título a mostrar sobre el cartón.
-     * @param colorBase El color temático de este cartón.
-     * @param esMaquina Indica si el cartón pertenece a la máquina (deshabilita clics).
+     * @param titulo       El título a mostrar sobre el cartón.
+     * @param colorBase    El color temático de este cartón.
+     * @param esMaquina    Indica si el cartón pertenece a la máquina (deshabilita
+     *                     clics).
      * @param nombreImagen El nombre del archivo de imagen para las casillas vacías.
      */
     public PanelCarton(String titulo, Color colorBase, boolean esMaquina, String nombreImagen) {
@@ -64,10 +64,11 @@ public class PanelCarton extends JPanel {
     }
 
     /**
-     * Crea un icono personalizado a partir de una imagen para las celdas sin número.
+     * Crea un icono personalizado a partir de una imagen para las celdas sin
+     * número.
      * 
-     * @param nombreImagen Nombre del recurso de imagen.
-     * @return Un objeto Icon con la imagen escalada.
+     * @param nombreImagen Nombre de la imagen
+     * @return Un objeto Icon con la imagen escalada
      */
     private Icon crearIcono(String nombreImagen) {
         try {
@@ -97,28 +98,28 @@ public class PanelCarton extends JPanel {
     }
 
     /**
-     * Cambia el título que se muestra sobre el cartón.
+     * Cambia el título que se muestra sobre el cartón
      * 
-     * @param txt El nuevo título.
+     * @param txt El nuevo título
      */
     public void setTitulo(String txt) {
         labelTitulo.setText(txt);
     }
 
     /**
-     * Obtiene el array de botones que forman las celdas del cartón.
+     * Obtiene el array de botones que forman las celdas del cartón
      * 
-     * @return Array de JButtons (27 elementos).
+     * @return Array de JButtons (27 elementos)
      */
     public JButton[] getCeldas() {
         return celdas;
     }
 
     /**
-     * Sincroniza el dibujo del cartón con los datos reales de un Participante.
+     * Sincroniza el dibujo del cartón con los datos del jugador
      * 
-     * @param p El participante asociado a este panel.
-     * @param partidaActiva Estado actual de la partida.
+     * @param p             El jugador asociado al panel
+     * @param partidaActiva Estado actual de la partida
      */
     public void actualizarCarton(Participante p, boolean partidaActiva) {
         if (p == null) {
@@ -133,7 +134,7 @@ public class PanelCarton extends JPanel {
     }
 
     /**
-     * Restablece todas las celdas del cartón a su estado inicial vacío.
+     * Restablece todas las celdas del cartón a su estado inicial vacío
      */
     private void limpiarCarton() {
         for (JButton b : celdas) {
@@ -144,11 +145,12 @@ public class PanelCarton extends JPanel {
     }
 
     /**
-     * Actualiza el estado visual de una celda específica basándose en el modelo de datos.
+     * Actualiza el estado de una celda
      * 
-     * @param indice El índice lineal de la celda (0-26).
-     * @param carton El modelo del cartón del que obtener los datos.
-     * @param partidaActiva Si la partida está activa en este momento.
+     * 
+     * @param indice        El índice lineal de la celda
+     * @param carton        El modelo del cartón del que obtener los datos
+     * @param partidaActiva Si la partida está activa
      */
     private void actualizarCelda(int indice, Carton carton, boolean partidaActiva) {
         int fila = indice / Carton.COLUMNAS;
@@ -164,9 +166,9 @@ public class PanelCarton extends JPanel {
     }
 
     /**
-     * Configura la celda como una casilla vacía (sin número) mostrando el icono.
+     * Configura la celda como una casilla vacía (sin número) mostrando el icono
      * 
-     * @param celda El botón de la celda.
+     * @param celda El botón de la celda
      */
     private void configurarCeldaVacia(JButton celda) {
         celda.setText("");
@@ -176,13 +178,14 @@ public class PanelCarton extends JPanel {
     }
 
     /**
-     * Configura la celda para mostrar un número y su estado de marcado.
+     * Configura la celda para mostrar un número y su estado de marcado
      * 
-     * @param celda El botón de la celda.
-     * @param num El número a mostrar.
-     * @param marcado true si el número está marcado.
-     * @param col Índice de la columna para aplicar estilo alterno.
-     * @param partidaActiva Indica si la celda debe estar habilitada para interacción.
+     * @param celda         El botón de la celda
+     * @param num           El número a mostrar
+     * @param marcado       true si el número está marcado
+     * @param col           Índice de la columna para aplicar estilo alterno
+     * @param partidaActiva Indica si la celda debe estar habilitada para
+     *                      interacción.
      */
     private void configurarCeldaConNumero(JButton celda, int num, boolean marcado, int col, boolean partidaActiva) {
         celda.setText(String.valueOf(num));

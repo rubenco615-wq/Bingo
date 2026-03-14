@@ -1,28 +1,27 @@
 package com.daw1.model;
 
 /**
- * Define el comportamiento básico de cualquier participante en el juego de Bingo.
- * Puede ser implementada tanto por jugadores humanos como por la máquina.
+ * Define como es el jugador y la maquina
  */
 public interface Participante {
     /**
-     * Marca un número en el cartón del participante si este lo contiene.
+     * Busca el número en su cartón y lo marca si lo tiene
      * 
-     * @param numero El número a marcar.
+     * @param numero el numero marcado
      */
     void marcarNumero(int numero);
 
     /**
-     * Obtiene el cartón asociado al participante.
+     * el carton del jugador
      * 
-     * @return El cartón del participante.
+     * @return el cartón del participante
      */
     Carton getCarton();
 
     /**
-     * Obtiene el nombre del participante.
+     * Obtiene el nombre del participante
      * 
-     * @return El nombre del participante.
+     * @return el nombre del participante
      */
     String getNombre();
 }

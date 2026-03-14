@@ -5,14 +5,14 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Diálogo modal que permite ajustar el volumen de la música y salir del juego.
+ * Dialogo para ajustar el volumen de la musica y salir del juego
  */
 public class DialogoAjustes extends JDialog {
 
     /**
      * Crea un nuevo diálogo de ajustes.
      * 
-     * @param propietario La ventana o componente padre.
+     * @param propietario La ventana padre.
      */
     public DialogoAjustes(Window propietario) {
         super(propietario, "⚙  Ajustes", ModalityType.APPLICATION_MODAL);
@@ -103,7 +103,7 @@ public class DialogoAjustes extends JDialog {
     }
 
     /**
-     * Crea un botón con el estilo visual coherente con el diálogo.
+     * 
      * 
      * @param texto El texto del botón.
      * @param color El color de fondo del botón.

@@ -4,8 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel que contiene los botones de control principales del juego.
- * Se ubica usualmente en la parte inferior de la ventana principal.
+ * Panel con los botones del juego.
  */
 public class Botones extends JPanel {
     private final JButton botonIniciar;
@@ -13,7 +12,7 @@ public class Botones extends JPanel {
     private final JButton botonAjustes;
 
     /**
-     * Inicializa el panel y crea los botones con sus estilos visuales.
+     * pone los botones
      */
     public Botones() {
         setLayout(new FlowLayout(FlowLayout.CENTER, 15, 8));
@@ -31,38 +30,38 @@ public class Botones extends JPanel {
     }
 
     /**
-     * Obtiene el botón para iniciar una nueva partida.
+     * Obtiene el botón para iniciar una nueva partida
      * 
-     * @return El botón de inicio.
+     * @return El botón de inicio
      */
     public JButton getBotonIniciar() {
         return botonIniciar;
     }
 
     /**
-     * Obtiene el botón para finalizar la partida actual.
+     * Obtiene el botón para finalizar la partida
      * 
-     * @return El botón de finalizar.
+     * @return El botón de finalizar
      */
     public JButton getBotonFinalizar() {
         return botonFinalizar;
     }
 
     /**
-     * Obtiene el botón para abrir el diálogo de ajustes.
+     * Obtiene el botón para abrir los ajustes
      * 
-     * @return El botón de ajustes.
+     * @return El botón de ajustes
      */
     public JButton getBotonAjustes() {
         return botonAjustes;
     }
 
     /**
-     * Crea un botón configurado con el estilo común del panel.
+     * Crea un botón con el estilo del panel
      * 
-     * @param texto El texto a mostrar en el botón.
-     * @param color El color de fondo del botón.
-     * @return Un objeto JButton configurado.
+     * @param texto El texto del botón
+     * @param color El color de fondo del botón
+     * @return Un JButton configurado
      */
     private JButton crearBoton(String texto, Color color) {
         JButton b = new JButton(texto);

@@ -8,13 +8,13 @@ import java.util.Set;
 
 /**
  * Representa el bombo físico del bingo.
- * Contiene bolas del 1 al 90 y se encarga de mezclarlas y entregarlas.
+ * Contiene bolas del 1 al 90 y se encarga de mezclarlas y sacarlas.
  */
 public class Bombo {
     /** Lista de números que todavía están dentro del bombo */
     private final List<Integer> numerosDisponibles;
 
-    /** Conjunto rápido para saber al instante si un número ya ha salido */
+    /** saber si un número ya ha salido */
     private final Set<Integer> numerosExtraidos;
 
     /**
@@ -48,7 +48,7 @@ public class Bombo {
     }
 
     /**
-     * Comprueba si un número específico ya ha salido del bombo.
+     * Comprueba si un número ya ha salido del bombo.
      * 
      * @param numero El número a comprobar.
      * @return true si el número ya ha sido extraído, false en caso contrario.
