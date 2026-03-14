@@ -66,11 +66,11 @@ public class Botones extends JPanel {
      */
     private JButton crearBoton(String texto, Color color) {
         JButton b = new JButton(texto);
-        b.setFont(new Font("Arial", Font.BOLD, 14));
+        b.setFont(new Font("Arial", Font.BOLD, 16));
         b.setBackground(color);
         b.setForeground(Color.WHITE);
         b.setFocusPainted(false);
-        b.setPreferredSize(new Dimension(180, 40));
+        b.setPreferredSize(new Dimension(220, 50));
         b.setCursor(new Cursor(Cursor.HAND_CURSOR));
         b.setBorder(BorderFactory.createRaisedBevelBorder());
         return b;

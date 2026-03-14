@@ -12,6 +12,7 @@ import java.io.InputStream;
 public class Sonido {
     private static Clip musicaFondo;
     private static Clip musicaLinea; // Clip separado para el sonido de línea
+    private static Clip musicaVictoria; // Clip separado para el sonido de victoria
     private static float volumenActual = 0.75f; // Volumen por defecto (0.0 a 1.0)
 
     /**
@@ -136,11 +137,28 @@ public class Sonido {
     }
 
     /**
+     * Detiene específicamente el sonido de victoria (Bingo) si sigue reproduciéndose.
+     */
+    public static void detenerBingo() {
+        if (musicaVictoria != null && musicaVictoria.isRunning()) {
+            musicaVictoria.stop();
+            musicaVictoria.close();
+        }
+    }
+
+    /**
      * Detiene la música de fondo y reproduce el sonido de victoria (Bingo).
      */
     public static void reproducirBingo() {
         detenerBGM();
-        reproducirSFX("/Audio_Victoria_1.wav");
+        detenerBingo(); // Por si acaso hubiera uno sonando
+        try {
+            musicaVictoria = cargarClip("/Audio_Victoria_1.wav");
+            if (musicaVictoria == null) return;
+            musicaVictoria.start();
+        } catch (Exception e) {
+            System.err.println("Error al reproducir sonido de victoria: " + e.getMessage());
+        }
     }
 
     /**

@@ -112,8 +112,8 @@ public class Cabecera extends JPanel {
      * Configura el estilo visual y el comportamiento básico del botón AUTO.
      */
     private void configurarBotonAuto() {
-        btnAuto.setFont(new Font("Arial", Font.BOLD, 14));
-        btnAuto.setPreferredSize(new Dimension(140, 34)); // Mismo tamaño que extraer
+        btnAuto.setFont(new Font("Arial", Font.BOLD, 16));
+        btnAuto.setPreferredSize(new Dimension(160, 45)); // Mismo tamaño que extraer
         btnAuto.setFocusPainted(false);
         btnAuto.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnAuto.setEnabled(false);
@@ -149,8 +149,8 @@ public class Cabecera extends JPanel {
      * Configura el estilo visual y los efectos del botón Extraer.
      */
     private void configurarBotonExtraer() {
-        botonExtraer.setFont(new Font("Arial", Font.BOLD, 14));
-        botonExtraer.setPreferredSize(new Dimension(140, 34)); // Mismo tamaño
+        botonExtraer.setFont(new Font("Arial", Font.BOLD, 16));
+        botonExtraer.setPreferredSize(new Dimension(160, 45)); // Mismo tamaño
         botonExtraer.setFocusPainted(false);
         botonExtraer.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonExtraer.setEnabled(false);

@@ -30,10 +30,10 @@ public class PanelCarton extends JPanel {
 
         this.iconoVacio = crearIcono(nombreImagen);
 
-        labelTitulo = new JLabel(titulo, SwingConstants.LEFT);
+        labelTitulo = new JLabel(titulo, SwingConstants.CENTER);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 14));
         labelTitulo.setForeground(colorBase);
-        labelTitulo.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        labelTitulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         add(labelTitulo, BorderLayout.NORTH);
 
         grid = new JPanel(new GridLayout(3, 9, 4, 4));
@@ -43,8 +43,8 @@ public class PanelCarton extends JPanel {
         celdas = new JButton[27];
         for (int i = 0; i < 27; i++) {
             celdas[i] = new JButton("");
-            celdas[i].setFont(new Font("Arial", Font.BOLD, 18));
-            celdas[i].setPreferredSize(new Dimension(55, 55));
+            celdas[i].setFont(new Font("Arial", Font.BOLD, 22));
+            celdas[i].setPreferredSize(new Dimension(65, 65));
             celdas[i].setFocusPainted(false);
             celdas[i].setBackground(Color.WHITE);
             celdas[i].setForeground(new Color(40, 40, 40));

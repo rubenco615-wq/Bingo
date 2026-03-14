@@ -1,5 +1,6 @@
 package com.daw1.Vista;
 
+import com.daw1.model.Sonido;
 import javax.swing.*;
 import java.awt.*;
 
@@ -62,6 +63,8 @@ public class PanelVictoria extends JPanel {
 
         // Al pulsar este boton, limpiamos todo y volvemos al menu de inicio
         btnMenu.addActionListener(e -> {
+            Sonido.detenerBingo();
+            Sonido.reproducirPantallaInicial();
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             if (frame != null) {
                 frame.getContentPane().removeAll();
